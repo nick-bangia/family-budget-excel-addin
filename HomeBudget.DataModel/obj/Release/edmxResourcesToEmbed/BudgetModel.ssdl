@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BudgetModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="BudgetModelStoreContainer">
+    <EntitySet Name="factLineItems" EntityType="BudgetModel.Store.factLineItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="dimMonths" EntityType="BudgetModel.Store.dimMonths" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="dimDaysOfWeeks" EntityType="BudgetModel.Store.dimDaysOfWeeks" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="dimCategories" EntityType="BudgetModel.Store.dimCategories" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="dimTypes" EntityType="BudgetModel.Store.dimTypes" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="factLineItems_dimCategories" Association="BudgetModel.Store.factLineItems_dimCategories">
+      <End Role="factLineItems" EntitySet="factLineItems" />
+      <End Role="dimCategories" EntitySet="dimCategories" />
+    </AssociationSet>
+    <AssociationSet Name="factLineItems_dimTypes" Association="BudgetModel.Store.factLineItems_dimTypes">
+      <End Role="factLineItems" EntitySet="factLineItems" />
+      <End Role="dimTypes" EntitySet="dimTypes" />
+    </AssociationSet>
+    <AssociationSet Name="factLineItems_dimMonths" Association="BudgetModel.Store.factLineItems_dimMonths">
+      <End Role="factLineItems" EntitySet="factLineItems" />
+      <End Role="dimMonths" EntitySet="dimMonths" />
+    </AssociationSet>
+    <AssociationSet Name="factLineItems_dimDaysOfWeek" Association="BudgetModel.Store.factLineItems_dimDaysOfWeek">
+      <End Role="factLineItems" EntitySet="factLineItems" />
+      <End Role="dimDaysOfWeek" EntitySet="dimDaysOfWeeks" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="factLineItems">
+    <Key>
+      <PropertyRef Name="UniqueKey" />
+    </Key>
+    <Property Name="UniqueKey" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="MonthId" Type="smallint" Nullable="false" />
+    <Property Name="DayOfMonthId" Type="smallint" Nullable="false" />
+    <Property Name="DayOfWeekId" Type="smallint" Nullable="false" />
+    <Property Name="YearId" Type="int" Nullable="false" />
+    <Property Name="CategoryKey" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="500" />
+    <Property Name="Amount" Type="decimal" Nullable="false" Precision="7" Scale="2" />
+    <Property Name="TypeId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="dimMonths">
+    <Key>
+      <PropertyRef Name="MonthId" />
+    </Key>
+    <Property Name="MonthId" Type="smallint" Nullable="false" />
+    <Property Name="MonthName" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="dimDaysOfWeeks">
+    <Key>
+      <PropertyRef Name="DayId" />
+    </Key>
+    <Property Name="DayId" Type="smallint" Nullable="false" />
+    <Property Name="DayName" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="dimCategories">
+    <Key>
+      <PropertyRef Name="CategoryKey" />
+    </Key>
+    <Property Name="CategoryKey" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="CategoryName" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="CategoryPrefix" Type="nvarchar" Nullable="false" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="dimTypes">
+    <Key>
+      <PropertyRef Name="TypeId" />
+    </Key>
+    <Property Name="TypeId" Type="int" Nullable="false" />
+    <Property Name="TypeName" Type="nvarchar" Nullable="false" MaxLength="50" />
+  </EntityType>
+  <Association Name="factLineItems_dimCategories">
+    <End Role="factLineItems" Type="BudgetModel.Store.factLineItems" Multiplicity="*" />
+    <End Role="dimCategories" Type="BudgetModel.Store.dimCategories" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="dimCategories">
+        <PropertyRef Name="CategoryKey" />
+      </Principal>
+      <Dependent Role="factLineItems">
+        <PropertyRef Name="CategoryKey" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="factLineItems_dimTypes">
+    <End Role="factLineItems" Type="BudgetModel.Store.factLineItems" Multiplicity="*" />
+    <End Role="dimTypes" Type="BudgetModel.Store.dimTypes" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="dimTypes">
+        <PropertyRef Name="TypeId" />
+      </Principal>
+      <Dependent Role="factLineItems">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="factLineItems_dimMonths">
+    <End Role="factLineItems" Type="BudgetModel.Store.factLineItems" Multiplicity="*" />
+    <End Role="dimMonths" Type="BudgetModel.Store.dimMonths" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="dimMonths">
+        <PropertyRef Name="MonthId" />
+      </Principal>
+      <Dependent Role="factLineItems">
+        <PropertyRef Name="MonthId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="factLineItems_dimDaysOfWeek">
+    <End Role="factLineItems" Type="BudgetModel.Store.factLineItems" Multiplicity="*" />
+    <End Role="dimDaysOfWeek" Type="BudgetModel.Store.dimDaysOfWeeks" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="dimDaysOfWeek">
+        <PropertyRef Name="DayId" />
+      </Principal>
+      <Dependent Role="factLineItems">
+        <PropertyRef Name="DayOfWeekId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

@@ -1,0 +1,7 @@
+C:\git-src\budget\HomeBudget.Data\obj\Release\ResolveAssemblyReference.cache
+C:\git-src\budget\HomeBudget.Data\bin\Release\HomeBudget.Data.dll
+C:\git-src\budget\HomeBudget.Data\bin\Release\HomeBudget.Data.pdb
+C:\git-src\budget\HomeBudget.Data\bin\Release\HomeBudget.DataModel.dll
+C:\git-src\budget\HomeBudget.Data\bin\Release\HomeBudget.DataModel.pdb
+C:\git-src\budget\HomeBudget.Data\obj\Release\HomeBudget.Data.dll
+C:\git-src\budget\HomeBudget.Data\obj\Release\HomeBudget.Data.pdb

@@ -1,0 +1,183 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server Compact Edition
+-- --------------------------------------------------
+-- Date Created: 07/30/2013 10:04:08
+-- Generated from EDMX file: C:\git-src\budget\HomeBudget.DataModel\BudgetModel.edmx
+-- --------------------------------------------------
+
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- NOTE: if the constraint does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimCategories];
+GO
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimTypes];
+GO
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimMonths];
+GO
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimDaysOfWeek];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- NOTE: if the table does not exist, an ignorable error will be reported.
+-- --------------------------------------------------
+
+    DROP TABLE [factLineItems];
+GO
+    DROP TABLE [dimMonths];
+GO
+    DROP TABLE [dimDaysOfWeeks];
+GO
+    DROP TABLE [dimCategories];
+GO
+    DROP TABLE [dimTypes];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'factLineItems'
+CREATE TABLE [factLineItems] (
+    [UniqueKey] uniqueidentifier  NOT NULL,
+    [MonthId] smallint  NOT NULL,
+    [DayOfMonthId] smallint  NOT NULL,
+    [DayOfWeekId] smallint  NOT NULL,
+    [YearId] int  NOT NULL,
+    [CategoryKey] uniqueidentifier  NOT NULL,
+    [Description] nvarchar(500)  NOT NULL,
+    [Amount] decimal(7,2)  NOT NULL,
+    [TypeId] int  NOT NULL
+);
+GO
+
+-- Creating table 'dimMonths'
+CREATE TABLE [dimMonths] (
+    [MonthId] smallint  NOT NULL,
+    [MonthName] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'dimDaysOfWeeks'
+CREATE TABLE [dimDaysOfWeeks] (
+    [DayId] smallint  NOT NULL,
+    [DayName] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'dimCategories'
+CREATE TABLE [dimCategories] (
+    [CategoryKey] uniqueidentifier  NOT NULL,
+    [CategoryName] nvarchar(100)  NOT NULL,
+    [CategoryPrefix] nvarchar(10)  NOT NULL
+);
+GO
+
+-- Creating table 'dimTypes'
+CREATE TABLE [dimTypes] (
+    [TypeId] int  NOT NULL,
+    [TypeName] nvarchar(50)  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [UniqueKey] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [PK_factLineItems]
+    PRIMARY KEY ([UniqueKey] );
+GO
+
+-- Creating primary key on [MonthId] in table 'dimMonths'
+ALTER TABLE [dimMonths]
+ADD CONSTRAINT [PK_dimMonths]
+    PRIMARY KEY ([MonthId] );
+GO
+
+-- Creating primary key on [DayId] in table 'dimDaysOfWeeks'
+ALTER TABLE [dimDaysOfWeeks]
+ADD CONSTRAINT [PK_dimDaysOfWeeks]
+    PRIMARY KEY ([DayId] );
+GO
+
+-- Creating primary key on [CategoryKey] in table 'dimCategories'
+ALTER TABLE [dimCategories]
+ADD CONSTRAINT [PK_dimCategories]
+    PRIMARY KEY ([CategoryKey] );
+GO
+
+-- Creating primary key on [TypeId] in table 'dimTypes'
+ALTER TABLE [dimTypes]
+ADD CONSTRAINT [PK_dimTypes]
+    PRIMARY KEY ([TypeId] );
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [CategoryKey] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [FK_factLineItems_dimCategories]
+    FOREIGN KEY ([CategoryKey])
+    REFERENCES [dimCategories]
+        ([CategoryKey])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimCategories'
+CREATE INDEX [IX_FK_factLineItems_dimCategories]
+ON [factLineItems]
+    ([CategoryKey]);
+GO
+
+-- Creating foreign key on [TypeId] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [FK_factLineItems_dimTypes]
+    FOREIGN KEY ([TypeId])
+    REFERENCES [dimTypes]
+        ([TypeId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimTypes'
+CREATE INDEX [IX_FK_factLineItems_dimTypes]
+ON [factLineItems]
+    ([TypeId]);
+GO
+
+-- Creating foreign key on [MonthId] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [FK_factLineItems_dimMonths]
+    FOREIGN KEY ([MonthId])
+    REFERENCES [dimMonths]
+        ([MonthId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimMonths'
+CREATE INDEX [IX_FK_factLineItems_dimMonths]
+ON [factLineItems]
+    ([MonthId]);
+GO
+
+-- Creating foreign key on [DayOfWeekId] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [FK_factLineItems_dimDaysOfWeek]
+    FOREIGN KEY ([DayOfWeekId])
+    REFERENCES [dimDaysOfWeeks]
+        ([DayId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimDaysOfWeek'
+CREATE INDEX [IX_FK_factLineItems_dimDaysOfWeek]
+ON [factLineItems]
+    ([DayOfWeekId]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------

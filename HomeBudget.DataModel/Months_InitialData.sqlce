@@ -1,0 +1,25 @@
+-- Query to insert the months of the year (1-12, Jan-Dec for all possibilities into the dimMonths dimension table
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (1, 'January');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (2, 'February');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (3, 'March');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (4, 'April');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (5, 'May');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (6, 'June');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (7, 'July');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (8, 'August');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (9, 'September');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (10, 'October');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (11, 'November');
+INSERT INTO dimMonths (MonthId, MonthName)
+VALUES (12, 'December');
