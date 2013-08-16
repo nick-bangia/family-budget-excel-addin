@@ -1,6 +1,6 @@
-﻿using HomeBudget.Data.Enums;
+﻿using HouseholdBudget.Data.Enums;
 
-namespace HomeBudget.Data.Domain
+namespace HouseholdBudget.Data.Domain
 {
     public class DenormalizedLineItem
     {

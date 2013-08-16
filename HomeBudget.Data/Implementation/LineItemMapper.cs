@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HomeBudget.Data.Interfaces;
-using HomeBudget.Data.Domain;
-using HomeBudget.Data.Enums;
-using HomeBudget.DataModel;
+using HouseholdBudget.Data.Interfaces;
+using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Data.Enums;
+using HouseholdBudget.DataModel;
 
-namespace HomeBudget.Data.Implementation
+namespace HouseholdBudget.Data.Implementation
 {
     public class LineItemMapper : ILineItemMapper
     {

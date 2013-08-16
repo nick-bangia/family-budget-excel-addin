@@ -18,14 +18,14 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimCategories", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HomeBudget.DataModel.factLineItems), "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HomeBudget.DataModel.dimCategories), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimTypes", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HomeBudget.DataModel.factLineItems), "dimTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HomeBudget.DataModel.dimTypes), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimMonths", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HomeBudget.DataModel.factLineItems), "dimMonths", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HomeBudget.DataModel.dimMonths), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimDaysOfWeek", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HomeBudget.DataModel.factLineItems), "dimDaysOfWeek", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HomeBudget.DataModel.dimDaysOfWeek), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimCategories", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimTypes", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimTypes), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimMonths", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimMonths", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimMonths), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimDaysOfWeek", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimDaysOfWeek", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimDaysOfWeek), true)]
 
 #endregion
 
-namespace HomeBudget.DataModel
+namespace HouseholdBudget.DataModel
 {
     #region Contexts
     

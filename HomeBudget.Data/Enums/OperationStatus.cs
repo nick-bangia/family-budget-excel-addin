@@ -1,4 +1,4 @@
-﻿namespace HomeBudget.Data.Enums
+﻿namespace HouseholdBudget.Data.Enums
 {
     public enum OperationStatus
     {

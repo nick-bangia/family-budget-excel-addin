@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 
-namespace HomeBudget.Data
+namespace HouseholdBudget.Data
 {
     public static class MapResolver
     {

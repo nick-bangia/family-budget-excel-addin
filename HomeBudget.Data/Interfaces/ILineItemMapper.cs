@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using HomeBudget.Data.Domain;
-using HomeBudget.Data.Enums;
+using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Data.Enums;
 
-namespace HomeBudget.Data.Interfaces
+namespace HouseholdBudget.Data.Interfaces
 {
     public interface ILineItemMapper
     {
