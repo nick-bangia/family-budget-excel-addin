@@ -126,6 +126,9 @@
   <data name="DataListObjectRange" xml:space="preserve">
     <value>$A$1:$H$1</value>
   </data>
+  <data name="DataListRightMostColumn" xml:space="preserve">
+    <value>$G</value>
+  </data>
   <data name="DataListTopLeftRange" xml:space="preserve">
     <value>$A$1</value>
   </data>

@@ -73,37 +73,37 @@
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HomeBudget.Data.dll" size="12800">
-      <assemblyIdentity name="HomeBudget.Data" version="1.0.13228.0" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="HomeBudget.Data" version="1.0.13233.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>uxNlGZGaPy15MFGLmqxzJs2f9R4=</dsig:DigestValue>
+        <dsig:DigestValue>/FmF+uz70V4X3EnoTlIDwdYXrug=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
     <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HomeBudget.DataModel.dll" size="31232">
-      <assemblyIdentity name="HomeBudget.DataModel" version="1.0.13228.0" language="neutral" processorArchitecture="msil" />
+      <assemblyIdentity name="HomeBudget.DataModel" version="1.0.13233.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>PoH6YveeqovpgVkuDjsIVjYWFkY=</dsig:DigestValue>
+        <dsig:DigestValue>s5HsY6Yeog1v5mOiTefW3LhKmWw=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HouseholdBudgetAddIn.dll" size="50176">
-      <assemblyIdentity name="HouseholdBudgetAddIn" version="1.0.13228.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="HouseholdBudgetAddIn.dll" size="49664">
+      <assemblyIdentity name="HouseholdBudgetAddIn" version="1.0.13233.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>Vxz8fmYVuoyO8z0nRfPx4onVt8Y=</dsig:DigestValue>
+        <dsig:DigestValue>OfFj8prdXjofi+jzU5KW3GeEzYs=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -156,7 +156,7 @@
     <vstav3:entryPointsCollection>
       <vstav3:entryPoints>
         <vstav3:entryPoint class="HouseholdBudget.UI.ThisAddIn">
-          <assemblyIdentity name="HouseholdBudgetAddIn" version="1.0.13228.0" language="neutral" processorArchitecture="msil" />
+          <assemblyIdentity name="HouseholdBudgetAddIn" version="1.0.13233.0" language="neutral" processorArchitecture="msil" />
         </vstav3:entryPoint>
       </vstav3:entryPoints>
     </vstav3:entryPointsCollection>
@@ -170,11 +170,11 @@
             <vstov4:friendlyName>HouseholdBudgetAddIn</vstov4:friendlyName>
             <vstov4:description>HouseholdBudgetAddIn</vstov4:description>
             <vstov4.1:ribbonTypes xmlns:vstov4.1="urn:schemas-microsoft-com:vsto.v4.1">
-              <vstov4.1:ribbonType name="HouseholdBudget.UI.HouseholdBudgetRibbon, HouseholdBudgetAddIn, Version=1.0.13228.0, Culture=neutral, PublicKeyToken=null" />
+              <vstov4.1:ribbonType name="HouseholdBudget.UI.HouseholdBudgetRibbon, HouseholdBudgetAddIn, Version=1.0.13233.0, Culture=neutral, PublicKeyToken=null" />
             </vstov4.1:ribbonTypes>
           </vstov4:appAddIn>
         </vstov4:customization>
       </vstov4:customizations>
     </vstav3:application>
   </vstav3:addIn>
-<publisherIdentity name="CN=COMPUMENTOR\nbangia" issuerKeyHash="753c58f63b5a4742b0ef8fd03a9f81897b7936ab" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>SZGr5L8xa6Ez5+5WG0k1bhGj390=</DigestValue></Reference></SignedInfo><SignatureValue>YLQiDKmO5KuUGrvnemcfeTaKwevDxI7o91HHLhpBluRVlUwNm7C6kcEWfvAPRFKEuBGv1h7G/AuTyl2xJsts63x3Gxtk3PJQPqkYBoHn0hke7sY1mAfUAAIorsghOAjuRXeulCZWeF2RCYbOY4jtO4YkKPU6+FFC9t4ajkxZUoc=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>vSSqkpxK5ynn+94l+gVtmmuQ/WMVUP/6edM7DgKRprrDQCY0tPqjsJaw9vEYQYfK7R0kiXkYtvgbOuSWgbN6W5kh9uXejwIiUzQj4Wad+QTXofEPdvKc6xuDATrXfeqSRPuz3/hksTD5rlWQkjC4VUNWasbesA9p+olbW1WVk+k=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="dddfa3116e35491b56eee733a16b31bfe4ab9149" Description="" Url=""><as:assemblyIdentity name="HouseholdBudgetAddIn.dll" version="1.0.0.0" publicKeyToken="c7e607fb5efb03a8" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=COMPUMENTOR\nbangia</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>xOglhSNrHfx4T1hzrduju+MgAf4=</DigestValue></Reference></SignedInfo><SignatureValue>aOtswRh7h2DM8ISdUswuZcgv0Tx5BIJxcq+YraWKY5SPJgUei74Gz7kRyrdyOLXyJqQ80OFY9ZuDNRIonKNsE2m8pXbI/RvwwdYwuv0bMhw8j/zP9R0dF2PJDLOZev2fj0Ml8sV1pN9n/8eTX7hGtXHYM/wiEozh58pSR3bmOPA=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>vSSqkpxK5ynn+94l+gVtmmuQ/WMVUP/6edM7DgKRprrDQCY0tPqjsJaw9vEYQYfK7R0kiXkYtvgbOuSWgbN6W5kh9uXejwIiUzQj4Wad+QTXofEPdvKc6xuDATrXfeqSRPuz3/hksTD5rlWQkjC4VUNWasbesA9p+olbW1WVk+k=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB5TCCAU6gAwIBAgIQdoQO/LhBYp5NTve3uynCWjANBgkqhkiG9w0BAQUFADAxMS8wLQYDVQQDHiYAQwBPAE0AUABVAE0ARQBOAFQATwBSAFwAbgBiAGEAbgBnAGkAYTAeFw0xMzA4MDkwMDAwMjRaFw0xNDA4MDkwNjAwMjRaMDExLzAtBgNVBAMeJgBDAE8ATQBQAFUATQBFAE4AVABPAFIAXABuAGIAYQBuAGcAaQBhMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9JKqSnErnKef73iX6BW2aa5D9YxVQ//p50zsOApGmusNAJjS0+qOwlrD28RhBh8rtHSSJeRi2+Bs65JaBs3pbmSH25d6PAiJTNCPhZp35BNeh8Q928pzrG4MBOtd96pJE+7Pf+GSxMPmuVZCSMLhVQ1Zqxt6wD2n6iVtbVZWT6QIDAQABMA0GCSqGSIb3DQEBBQUAA4GBADQEQP3xRstCRlYb4Wi3dLbbiBnmgSMw9wwI2I6Zuq9vPw/L4beLd9JRCG9zeOMNoWQYauaEx/TodZwKsO9RFNjZ2FV9QhNoxS0fWVs6VVpWl4wINEqI+qkyZM+q2qT7RdUblr0ntsQbCNCJD1kLquOiFdbxb7ccMBfUVYQVdU0M</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
+<publisherIdentity name="CN=COMPUMENTOR\nbangia" issuerKeyHash="753c58f63b5a4742b0ef8fd03a9f81897b7936ab" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>ZrAh88FKDSaU+yr7sk5aIo1Sjbs=</DigestValue></Reference></SignedInfo><SignatureValue>MDN1gD99QLbFqtKeZxQHAIJ/hj6Du2nM2ecqiR+ir7vV/QmTICfY1WQ7FKpWXbsUpBLNsAuUDwFTc6quagB3e1hnVaZ6sGMLZknOmrR1oL3SWDaa4lU5cBRSdPE710z+fmV9lBuOrf6doJkM0nDWSr67am11XIksd7MTGJjOWvA=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>vSSqkpxK5ynn+94l+gVtmmuQ/WMVUP/6edM7DgKRprrDQCY0tPqjsJaw9vEYQYfK7R0kiXkYtvgbOuSWgbN6W5kh9uXejwIiUzQj4Wad+QTXofEPdvKc6xuDATrXfeqSRPuz3/hksTD5rlWQkjC4VUNWasbesA9p+olbW1WVk+k=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="bb8d528d225a4eb2fb2afb94260d4ac1f321b066" Description="" Url=""><as:assemblyIdentity name="HouseholdBudgetAddIn.dll" version="1.0.0.0" publicKeyToken="c7e607fb5efb03a8" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=COMPUMENTOR\nbangia</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>S6m6U1oODWllzgyRAcmqCLMKQiE=</DigestValue></Reference></SignedInfo><SignatureValue>dJeZ4A+OsdkvrVXpb51VBDj+RJr705WlqDTCEgvC0rkdvSYsD9/sK50G9KL/xnQp/qEWgaA+wWu3DdD/+H2Gs86GqaufSTnb++MMsM6krKuJ3PT0okMw6kiaWjuc53dDGZgqF3yvLOrwIVS086ZPPh671y4Sx4YX4GiXTmrzJ8g=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>vSSqkpxK5ynn+94l+gVtmmuQ/WMVUP/6edM7DgKRprrDQCY0tPqjsJaw9vEYQYfK7R0kiXkYtvgbOuSWgbN6W5kh9uXejwIiUzQj4Wad+QTXofEPdvKc6xuDATrXfeqSRPuz3/hksTD5rlWQkjC4VUNWasbesA9p+olbW1WVk+k=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB5TCCAU6gAwIBAgIQdoQO/LhBYp5NTve3uynCWjANBgkqhkiG9w0BAQUFADAxMS8wLQYDVQQDHiYAQwBPAE0AUABVAE0ARQBOAFQATwBSAFwAbgBiAGEAbgBnAGkAYTAeFw0xMzA4MDkwMDAwMjRaFw0xNDA4MDkwNjAwMjRaMDExLzAtBgNVBAMeJgBDAE8ATQBQAFUATQBFAE4AVABPAFIAXABuAGIAYQBuAGcAaQBhMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC9JKqSnErnKef73iX6BW2aa5D9YxVQ//p50zsOApGmusNAJjS0+qOwlrD28RhBh8rtHSSJeRi2+Bs65JaBs3pbmSH25d6PAiJTNCPhZp35BNeh8Q928pzrG4MBOtd96pJE+7Pf+GSxMPmuVZCSMLhVQ1Zqxt6wD2n6iVtbVZWT6QIDAQABMA0GCSqGSIb3DQEBBQUAA4GBADQEQP3xRstCRlYb4Wi3dLbbiBnmgSMw9wwI2I6Zuq9vPw/L4beLd9JRCG9zeOMNoWQYauaEx/TodZwKsO9RFNjZ2FV9QhNoxS0fWVs6VVpWl4wINEqI+qkyZM+q2qT7RdUblr0ntsQbCNCJD1kLquOiFdbxb7ccMBfUVYQVdU0M</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

@@ -88,6 +88,15 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $G.
+        /// </summary>
+        internal static string DataListRightMostColumn {
+            get {
+                return ResourceManager.GetString("DataListRightMostColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to $A$1.
         /// </summary>
         internal static string DataListTopLeftRange {
