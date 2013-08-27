@@ -22,10 +22,8 @@ namespace HouseholdBudget
             GetDataSheet();
 
             // disable screen updating, events, & alerts
-            Globals.ThisAddIn.Application.EnableEvents = false;
-            Globals.ThisAddIn.Application.DisplayAlerts = false;
-            Globals.ThisAddIn.Application.ScreenUpdating = false;
-            
+            Controller.ToggleUpdatingAndAlerts(false);
+                        
             if (lineItemsListObject == null)
             {
                 lineItemsListObject = vstoDataSheet.Controls.AddListObject(vstoDataSheet.get_Range(Properties.Resources.DataListObjectRange),
@@ -69,25 +67,12 @@ namespace HouseholdBudget
             
             // update the data range of list object
             lineItemsListObject.DataBodyRange.Value2 = data;
-                                
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.YEAR].Value2 = lineItems[i].Year.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.MONTH].Value2 = lineItems[i].Month.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DAY].Value2 = lineItems[i].Day.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DAY_OF_WEEK].Value2 = lineItems[i].DayOfWeek.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DESCRIPTION].Value2 = lineItems[i].Description.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.CATEGORY].Value2 = lineItems[i].Category.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.AMOUNT].Value2 = lineItems[i].Amount.ToString();
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.AMOUNT].Style = "Currency";
-            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.TYPE].Value2 = lineItems[i].Type.ToString();
-            //}
-
+            
             // autofit the list object
             lineItemsListObject.Range.Columns.AutoFit();
 
             // enable screen updating, events, & alerts
-            Globals.ThisAddIn.Application.EnableEvents = true;
-            Globals.ThisAddIn.Application.DisplayAlerts = true;
-            Globals.ThisAddIn.Application.ScreenUpdating = true;
+            Controller.ToggleUpdatingAndAlerts(true);
         }
 
         public static void RemoveSheet()

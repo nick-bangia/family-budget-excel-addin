@@ -213,7 +213,12 @@ namespace HouseholdBudget
                     LineItem item = ImportResultsManager.ConvertImportResultToLineItem(e.ImportListIndex, e.ImportResultsIndex);
                     item = lineItemMapper.AddNewLineItem(item);
                     ImportResultsManager.ProcessImportResult(item, e.ImportListIndex, e.ImportResultsIndex);
-                    DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    
+                    // if the item was successfully saved, update the data sheet
+                    if (item.Status == LineItemStatus.SAVED)
+                    {
+                        DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -256,6 +261,13 @@ namespace HouseholdBudget
                     break;
                 }
             }
+        }
+
+        internal static void ToggleUpdatingAndAlerts(bool enabled)
+        {
+            Globals.ThisAddIn.Application.EnableEvents = enabled;
+            Globals.ThisAddIn.Application.DisplayAlerts = enabled;
+            Globals.ThisAddIn.Application.ScreenUpdating = enabled;
         }
                 
         private static void CloseProgressModal()
