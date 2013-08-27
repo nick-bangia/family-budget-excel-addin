@@ -21,6 +21,11 @@ namespace HouseholdBudget
             // Get the data sheet into the vstoDataSheet
             GetDataSheet();
 
+            // disable screen updating, events, & alerts
+            Globals.ThisAddIn.Application.EnableEvents = false;
+            Globals.ThisAddIn.Application.DisplayAlerts = false;
+            Globals.ThisAddIn.Application.ScreenUpdating = false;
+            
             if (lineItemsListObject == null)
             {
                 lineItemsListObject = vstoDataSheet.Controls.AddListObject(vstoDataSheet.get_Range(Properties.Resources.DataListObjectRange),
@@ -44,25 +49,94 @@ namespace HouseholdBudget
                                         Properties.Resources.DataListBottomRightRange]);
             }
 
-            // fill in data
-            for (int i = 0; i < lineItems.Count; i++)
+            // fill in data as an array
+            int rows = lineItems.Count;
+            int columns = lineItemsListObject.HeaderRowRange.Columns.Count;
+
+            var data = new object[rows, columns];
+            for (int row = 1; row <= rows; row++)
             {
-                lineItemsListObject.ListRows.AddEx();
-                int rowNum = lineItemsListObject.ListRows.Count;
-                                
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.YEAR].Value2 = lineItems[i].Year.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.MONTH].Value2 = lineItems[i].Month.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DAY].Value2 = lineItems[i].Day.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DAY_OF_WEEK].Value2 = lineItems[i].DayOfWeek.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DESCRIPTION].Value2 = lineItems[i].Description.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.CATEGORY].Value2 = lineItems[i].Category.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.AMOUNT].Value2 = lineItems[i].Amount.ToString();
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.AMOUNT].Style = "Currency";
-                lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.TYPE].Value2 = lineItems[i].Type.ToString();
+                for (int col = 1; col <= columns; col++)
+                {
+                    data[row - 1, col - 1] = GetDataValue(row - 1, col, lineItems);                    
+                }
             }
+
+            // size the list object appropriately
+            lineItemsListObject.Resize(
+                vstoDataSheet.Range[Properties.Resources.DataListTopLeftRange,
+                                    Properties.Resources.DataListRightMostColumn + "$" + (rows + 1).ToString()]);
+            
+            // update the data range of list object
+            lineItemsListObject.DataBodyRange.Value2 = data;
+                                
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.YEAR].Value2 = lineItems[i].Year.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.MONTH].Value2 = lineItems[i].Month.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DAY].Value2 = lineItems[i].Day.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DAY_OF_WEEK].Value2 = lineItems[i].DayOfWeek.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.DESCRIPTION].Value2 = lineItems[i].Description.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.CATEGORY].Value2 = lineItems[i].Category.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.AMOUNT].Value2 = lineItems[i].Amount.ToString();
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.AMOUNT].Style = "Currency";
+            //lineItemsListObject.DataBodyRange.Cells[rowNum, (int)DataColumns.TYPE].Value2 = lineItems[i].Type.ToString();
+            //}
 
             // autofit the list object
             lineItemsListObject.Range.Columns.AutoFit();
+
+            // enable screen updating, events, & alerts
+            Globals.ThisAddIn.Application.EnableEvents = true;
+            Globals.ThisAddIn.Application.DisplayAlerts = true;
+            Globals.ThisAddIn.Application.ScreenUpdating = true;
+        }
+
+        public static void RemoveSheet()
+        {
+            if (vstoDataSheet != null)
+            {
+                vstoDataSheet.Delete();
+                vstoDataSheet = null;
+                lineItemsListObject = null;
+            }
+        }
+
+        private static object GetDataValue(int index, int colNum, List<DenormalizedLineItem> lineItems)
+        {
+            object value;
+
+            // switch through the colNum, and provide the correct data point based on the row index
+            switch (colNum)
+            {
+                case (int)DataColumns.YEAR:
+                    value = lineItems[index].Year;
+                    break;
+                case (int)DataColumns.MONTH:
+                    value = lineItems[index].Month;
+                    break;
+                case (int)DataColumns.DAY:
+                    value = lineItems[index].Day;
+                    break;
+                case (int)DataColumns.DAY_OF_WEEK:
+                    value = lineItems[index].DayOfWeek;
+                    break;
+                case (int)DataColumns.DESCRIPTION:
+                    value = lineItems[index].Description;
+                    break;
+                case (int)DataColumns.CATEGORY:
+                    value = lineItems[index].Category;
+                    break;
+                case (int)DataColumns.AMOUNT:
+                    value = lineItems[index].Amount;
+                    break;
+                case (int)DataColumns.TYPE:
+                    value = lineItems[index].Type.ToString();
+                    break;
+                default:
+                    value = "N/A";
+                    break;
+            }
+
+            return value;
         }
 
         private static void GetDataSheet()

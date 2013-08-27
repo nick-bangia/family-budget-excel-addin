@@ -118,13 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DataListBottomRightRange" xml:space="preserve">
-    <value>$G$2</value>
+    <value>$H$2</value>
   </data>
   <data name="DataListObjectName" xml:space="preserve">
     <value>DATA</value>
   </data>
   <data name="DataListObjectRange" xml:space="preserve">
     <value>$A$1:$H$1</value>
+  </data>
+  <data name="DataListRightMostColumn" xml:space="preserve">
+    <value>$H</value>
   </data>
   <data name="DataListTopLeftRange" xml:space="preserve">
     <value>$A$1</value>
