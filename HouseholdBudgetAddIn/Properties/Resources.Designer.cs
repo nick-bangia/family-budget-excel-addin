@@ -88,7 +88,7 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $H.
+		///   Looks up a localized string similar to $H.
         /// </summary>
         internal static string DataListRightMostColumn {
             get {
