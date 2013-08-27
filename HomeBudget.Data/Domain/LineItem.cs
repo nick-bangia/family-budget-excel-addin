@@ -1,7 +1,7 @@
 ﻿using System;
-using HomeBudget.Data.Enums;
+using HouseholdBudget.Data.Enums;
 
-namespace HomeBudget.Data.Domain
+namespace HouseholdBudget.Data.Domain
 {
     public class LineItem
     {
@@ -36,7 +36,7 @@ namespace HomeBudget.Data.Domain
         }
 
         // sets the date from an equivalent string value
-        public void setDate(String date)
+        public void setDate(string date)
         {
             DateTime convertedDate;
             if (DateTime.TryParse(date, out convertedDate))
@@ -52,6 +52,11 @@ namespace HomeBudget.Data.Domain
         public void setDate(int year, int month, int day)
         {
             DateTime date = new DateTime(year, month, day);
+            this._date = date;
+        }
+
+        public void setDate(DateTime date)
+        {
             this._date = date;
         }
 
