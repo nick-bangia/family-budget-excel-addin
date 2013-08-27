@@ -22,10 +22,59 @@ namespace HouseholdBudget.UI
 
         private void Application_WorkbookActivate(NativeExcel.Workbook Wb)
         {
-            SetRibbonState(Wb);
+            // check whether the workbook is configured properly
+            bool validWorkbook = IsValidWorkbook(Wb);
+
+            SetRibbonState(Wb, validWorkbook);
+
+            if (validWorkbook)
+            {
+                // only update the data sheet is the workbook is configured properly
+                Controller.PopulateDataSheet();
+                Controller.ShowFirstWorksheet();
+            }            
         }
 
         private void Application_WorkbookBeforeClose(NativeExcel.Workbook Wb, ref bool Cancel)
+        {
+            bool validWorkbook = IsValidWorkbook(Wb);
+
+            if (validWorkbook)
+            {
+                // attempt to remove the ImportResults sheet, allowing the user to cancel if they want
+                Cancel = RemoveImportResults(Wb, Cancel);
+
+                // if everything is ok to close, delete the data sheet too (will be regenerated on open again)
+                if (!Cancel)
+                {
+                    RemoveData(Wb);
+                }
+            }            
+        }
+
+        private void RemoveData(NativeExcel.Workbook Wb)
+        {
+            // find the data sheet (if it exists)
+            NativeExcel.Worksheet dataSheet = null;
+            foreach (NativeExcel.Worksheet worksheet in Wb.Application.Worksheets)
+            {
+                if (worksheet.Name == Properties.Resources.DataWorksheetName)
+                {
+                    dataSheet = worksheet;
+                    break;
+                }
+            }
+
+            if (dataSheet != null)
+            {
+                // if the sheet exists, delete it w/out any notification
+                Globals.ThisAddIn.Application.DisplayAlerts = false;
+                DataManager.RemoveSheet();
+                Globals.ThisAddIn.Application.DisplayAlerts = true;
+            }
+        }
+
+        private static bool RemoveImportResults(NativeExcel.Workbook Wb, bool Cancel)
         {
             // determine if the import results worksheet is still in the workbook
             NativeExcel.Worksheet importResultSheet = null;
@@ -59,14 +108,15 @@ namespace HouseholdBudget.UI
                     Globals.ThisAddIn.Application.DisplayAlerts = true;
                 }
             }
+            return Cancel;
         }
 
-        private void Application_WorkbookOpen(NativeExcel.Workbook Wb)
+        private static void SetRibbonState(NativeExcel.Workbook Wb, bool ribbonState)
         {
-            SetRibbonState(Wb);
+            Globals.Ribbons.HouseholdBudgetRibbon.tabHouseholdBudget.Visible = ribbonState;
         }
 
-        private static void SetRibbonState(NativeExcel.Workbook Wb)
+        private static bool IsValidWorkbook(NativeExcel.Workbook Wb)
         {
             bool validWorkbook = false;
 
@@ -77,17 +127,12 @@ namespace HouseholdBudget.UI
                 {
                     if (worksheet.Cells[1, 2].Value2 == "Household Budget")
                     {
-                        Globals.Ribbons.HouseholdBudgetRibbon.tabHouseholdBudget.Visible = true;
                         validWorkbook = true;
                         break;
                     }
                 }
             }
-
-            if (!validWorkbook)
-            {
-                Globals.Ribbons.HouseholdBudgetRibbon.tabHouseholdBudget.Visible = false;
-            }
+            return validWorkbook;
         }
 
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()
@@ -106,7 +151,6 @@ namespace HouseholdBudget.UI
         {
             this.Startup += new System.EventHandler(ThisAddIn_Startup);
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
-            this.Application.WorkbookOpen += new NativeExcel.AppEvents_WorkbookOpenEventHandler(Application_WorkbookOpen);
             this.Application.WorkbookBeforeClose += new NativeExcel.AppEvents_WorkbookBeforeCloseEventHandler(Application_WorkbookBeforeClose);
             this.Application.WorkbookActivate += new NativeExcel.AppEvents_WorkbookActivateEventHandler(Application_WorkbookActivate);
         }        

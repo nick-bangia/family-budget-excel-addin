@@ -12,6 +12,7 @@ using HouseholdBudget.Events;
 using HouseholdBudget.Tools;
 using HouseholdBudget.UI;
 using Microsoft.Office.Tools.Ribbon;
+using NativeExcel = Microsoft.Office.Interop.Excel;
 
 namespace HouseholdBudget
 {
@@ -140,20 +141,23 @@ namespace HouseholdBudget
                 try
                 {
                     // if successful completion, update the workbook accordingly
+
+                    // close the modal after import is complete
+                    CloseProgressModal();
+
                     importReport = e.Result as List<LineItem>;
                     ImportResultsManager.DisplayImportResults(importReport);
                     DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    ShowWorksheetByName(Properties.Resources.ImportResultsListObjectName);
                 }
                 catch (Exception ex)
                 {
+                    // close the modal 
+                    CloseProgressModal();
+
                     MessageBox.Show("An error occurred while generating the import summary." + Environment.NewLine + Environment.NewLine +
                                     "Error Details:" + Environment.NewLine +
                                     ex.Message);
-                }
-                finally
-                {
-                    // close the modal after the workbook has been updated
-                    CloseProgressModal();
                 }
             }
         }
@@ -209,7 +213,12 @@ namespace HouseholdBudget
                     LineItem item = ImportResultsManager.ConvertImportResultToLineItem(e.ImportListIndex, e.ImportResultsIndex);
                     item = lineItemMapper.AddNewLineItem(item);
                     ImportResultsManager.ProcessImportResult(item, e.ImportListIndex, e.ImportResultsIndex);
-                    DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    
+                    // if the item was successfully saved, update the data sheet
+                    if (item.Status == LineItemStatus.SAVED)
+                    {
+                        DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    }                    
                 }
             }
             catch (Exception ex)
@@ -218,7 +227,48 @@ namespace HouseholdBudget
                                 "Error Details:" + Environment.NewLine +
                                 ex.Message);
             }
-        }                        
+        }
+
+        internal static void PopulateDataSheet()
+        {
+            DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+        }
+
+        internal static void ShowFirstWorksheet()
+        {
+            NativeExcel._Worksheet firstWorksheet = null;
+
+            foreach (NativeExcel.Worksheet worksheet in Globals.ThisAddIn.Application.Worksheets)
+            {
+                firstWorksheet = (NativeExcel._Worksheet)worksheet;
+                break;
+            }
+
+            if (firstWorksheet != null)
+            {
+                firstWorksheet.Activate();
+            }            
+        }
+
+        internal static void ShowWorksheetByName(string worksheetName)
+        {
+            foreach (NativeExcel.Worksheet worksheet in Globals.ThisAddIn.Application.Worksheets)
+            {
+                if (worksheet.Name == worksheetName)
+                {
+                    NativeExcel._Worksheet ws = (NativeExcel._Worksheet)worksheet;
+                    ws.Activate();
+                    break;
+                }
+            }
+        }
+
+        internal static void ToggleUpdatingAndAlerts(bool enabled)
+        {
+            Globals.ThisAddIn.Application.EnableEvents = enabled;
+            Globals.ThisAddIn.Application.DisplayAlerts = enabled;
+            Globals.ThisAddIn.Application.ScreenUpdating = enabled;
+        }
                 
         private static void CloseProgressModal()
         {

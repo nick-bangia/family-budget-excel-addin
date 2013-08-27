@@ -33,7 +33,6 @@ Global
 		{0E106D87-F4EE-48CE-93F0-FE039921BD14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E106D87-F4EE-48CE-93F0-FE039921BD14}.Release|Any CPU.Build.0 = Release|Any CPU
 		{098C41A5-E2FB-445C-AB43-15F8BFCE9489}.Debug|Any CPU.ActiveCfg = Debug
-		{098C41A5-E2FB-445C-AB43-15F8BFCE9489}.Debug|Any CPU.Build.0 = Debug
 		{098C41A5-E2FB-445C-AB43-15F8BFCE9489}.Release|Any CPU.ActiveCfg = Release
 		{098C41A5-E2FB-445C-AB43-15F8BFCE9489}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
@@ -41,14 +40,14 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_AssemblyInfoFilename = AssemblyVersioning.cs
-		BuildVersion_ConfigurationName = Release
-		BuildVersion_BuildAction = Both
-		BuildVersion_BuildVersioningStyle = None.None.YearDayOfYear.None
-		BuildVersion_StartDate = 2013/1/1
-		BuildVersion_IncrementBeforeBuild = False
 		BuildVersion_UseGlobalSettings = False
+		BuildVersion_IncrementBeforeBuild = False
+		BuildVersion_StartDate = 2013/1/1
+		BuildVersion_BuildVersioningStyle = None.None.YearDayOfYear.None
+		BuildVersion_BuildAction = Both
+		BuildVersion_ConfigurationName = Release
+		BuildVersion_AssemblyInfoFilename = AssemblyVersioning.cs
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
 	EndGlobalSection
 EndGlobal

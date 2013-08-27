@@ -25,11 +25,14 @@ namespace HouseholdBudget
         internal const int IMPORT_ACTION_COLUMN = 1;
         #endregion
 
-        internal static void DisplayImportResults(List<LineItem> importReport)
+        public static void DisplayImportResults(List<LineItem> importReport)
         {
             // setup the variables and add a new worksheet
             importResults = importReport;
             GetImportResultsSheet();
+
+            // disable screen updating, events, & alerts
+            Controller.ToggleUpdatingAndAlerts(false);
                         
             importResultsList = vstoImportResults.Controls.AddListObject(vstoImportResults.get_Range(Properties.Resources.ImportResultsListObjectRange),
                 Properties.Resources.ImportResultsListObjectName);
@@ -40,51 +43,72 @@ namespace HouseholdBudget
             importResultsList.HeaderRowRange[1, (int)ImportResultsColumns.DESCRIPTION].Value2 = EnumUtil.GetFriendlyName(ImportResultsColumns.DESCRIPTION);
             importResultsList.HeaderRowRange[1, (int)ImportResultsColumns.AMOUNT].Value2 = EnumUtil.GetFriendlyName(ImportResultsColumns.AMOUNT);
 
-            // fill in import results
+            // fill in data as an array
+            int rows = importReport.Count;
+            int columns = importResultsList.HeaderRowRange.Columns.Count;
+
+            var data = new object[rows, columns];
+            for (int row = 1; row <= rows; row++)
+            {
+                for (int col = 1; col <= columns; col++)
+                {
+                    data[row - 1, col - 1] = GetDataValue(row - 1, col, importReport);
+                }
+            }
+
+            // size the list object appropriately
+            importResultsList.Resize(
+                vstoImportResults.Range[Properties.Resources.ImportResultsTopLeftRange,
+                                        Properties.Resources.ImportResultsRightMostColumn + "$" + (rows + 1).ToString()]);
+                                    
+            // update data range of list object
+            importResultsList.DataBodyRange.Value2 = data;
+
+            // fill in import buttons
             for (int i = 0; i < importReport.Count; i++)
             {
-                importResultsList.ListRows.AddEx();
-                int rowNum = importResultsList.ListRows.Count;
-                importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.RESULT].Value2 = importReport[i].Status.ToString();
-                importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.DATE].Value2 = importReport[i].Date.ToShortDateString();
-                importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.DESCRIPTION].Value2 = importReport[i].Description;
-                importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.AMOUNT].Value2 = importReport[i].Amount.ToString();
-                // make the amount column a currency field
-                importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.AMOUNT].Style = "Currency";
-
                 ActionButton importActionButton = AddButtonToListObject(vstoImportResults, importResultsList, ImportResultActions.IMPORT, 
-                    i, rowNum, IMPORT_ACTION_COLUMN, Controller.importReport_ActionRequested);
+                    i, i + 1, IMPORT_ACTION_COLUMN, Controller.importReport_ActionRequested);
 
                 // add buttons to the button dictionary
-                buttons.Add(rowNum, importActionButton);
+                buttons.Add(i + 1, importActionButton);
             }
 
             // autofit the list object
             importResultsList.Range.Columns.AutoFit();
+
+            // enable screen updating, events, & alerts
+            Controller.ToggleUpdatingAndAlerts(true);
         }
 
-        private static void GetImportResultsSheet()
+        private static object GetDataValue(int index, int colNum, List<LineItem> importReport)
         {
-            NativeExcel.Worksheet importResultsSheet;
+            object value;
 
-            NativeExcel.Sheets worksheets = Globals.ThisAddIn.Application.Worksheets;
-            // delete the import results worksheet if it already exists
-            foreach (NativeExcel.Worksheet worksheet in worksheets)
+            // switch through colNum, and provide the correct data point based on the row index
+            switch (colNum)
             {
-                if (worksheet.Name == Properties.Resources.ImportResultsWorksheetName)
-                {
-                    worksheet.Delete();
+                case (int)ImportResultsColumns.RESULT:
+                    value = importReport[index].Status.ToString();
                     break;
-                }
+                case (int)ImportResultsColumns.DATE:
+                    value = importReport[index].Date.ToShortDateString();
+                    break;
+                case (int)ImportResultsColumns.DESCRIPTION:
+                    value = importReport[index].Description;
+                    break;
+                case (int)ImportResultsColumns.AMOUNT:
+                    value = importReport[index].Amount;
+                    break;
+                default:
+                    value = "N/A";
+                    break;
             }
 
-            NativeExcel.Worksheet lastWorksheet = worksheets[worksheets.Count];
-            importResultsSheet = (NativeExcel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(After: lastWorksheet);
-            importResultsSheet.Name = Properties.Resources.ImportResultsWorksheetName;
-            vstoImportResults = Globals.Factory.GetVstoObject(importResultsSheet);
+            return value;
         }
 
-        internal static LineItem ConvertImportResultToLineItem(int listIndex, int resultsIndex)
+        public static LineItem ConvertImportResultToLineItem(int listIndex, int resultsIndex)
         {
             // convert the corresponding row in the list object to a LineItem
             LineItem item = new LineItem();
@@ -101,7 +125,7 @@ namespace HouseholdBudget
             return item;
         }
 
-        internal static void ProcessImportResult(LineItem item, int listIndex, int resultsIndex)
+        public static void ProcessImportResult(LineItem item, int listIndex, int resultsIndex)
         {
             // update the status of the imported item on the list
             importResultsList.DataBodyRange.Cells[listIndex, (int)ImportResultsColumns.RESULT].Value2 = item.Status.ToString();
@@ -114,110 +138,17 @@ namespace HouseholdBudget
             ((ActionButton)vstoImportResults.Controls[buttonName]).Enabled = item.Status != LineItemStatus.SAVED;
         }
 
-        //internal static void DeleteImportResult(int listIndex, int resultsIndex)
-        //{
-        //    int totalRows = importResultsList.ListRows.Count;
-
-        //    // if the list index is within the list (not the last row), then iterate through each following row and move it up one
-        //    if (listIndex < totalRows)
-        //    {
-        //        int currentRow = listIndex + 1;
-        //        int toRow = listIndex;
-
-        //        while (currentRow <= totalRows)
-        //        {
-        //            // move the next row down up to the row being deleted
-        //            MoveRow(currentRow, toRow);
-        //            currentRow += 1;
-        //            toRow += 1;
-        //        }
-        //    }
-
-        //    // delete the last row before resizing the list object
-        //    DeleteLastRow();
-
-        //    // resize the list object to remove the last row, if more than 1 row exists
-        //    if (totalRows != 1)
-        //    {
-        //        importResultsList.Resize(
-        //            vstoImportResults.Range[Properties.Resources.ImportResultsTopLeftRange,
-        //                                    Properties.Resources.ImportResultsRightMostColumn + "$" + totalRows.ToString()]);
-        //    }
-        //    else
-        //    {
-        //        // otherwise, if only 1 row left, delete the worksheet
-        //        Globals.ThisAddIn.Application.DisplayAlerts = false;
-        //        vstoImportResults.Delete();
-        //        Globals.ThisAddIn.Application.DisplayAlerts = true;
-        //    }
-        //}
-
-        //private static void DeleteLastRow()
-        //{
-        //    int rowNum = importResultsList.ListRows.Count;
-
-        //    // null out row's content
-        //    importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.RESULT].Value2 = null;
-        //    importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.DATE].Value2 = null;
-        //    importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.DESCRIPTION].Value2 = null;
-        //    importResultsList.DataBodyRange.Cells[rowNum, (int)ImportResultsColumns.AMOUNT].Value2 = null;
-
-        //    RemoveLastRowButtons(rowNum);
-        //}
-
-        //private static void MoveRow(int currentRow, int toRow)
-        //{
-        //    // copy content from currentRow to toRow
-        //    importResultsList.DataBodyRange.Cells[toRow, (int)ImportResultsColumns.RESULT].Value2       = importResultsList.DataBodyRange.Cells[currentRow, (int)ImportResultsColumns.RESULT].Value2;
-        //    importResultsList.DataBodyRange.Cells[toRow, (int)ImportResultsColumns.DATE].Value2         = importResultsList.DataBodyRange.Cells[currentRow, (int)ImportResultsColumns.DATE].Value2;
-        //    importResultsList.DataBodyRange.Cells[toRow, (int)ImportResultsColumns.DESCRIPTION].Value2  = importResultsList.DataBodyRange.Cells[currentRow, (int)ImportResultsColumns.DESCRIPTION].Value2;
-        //    importResultsList.DataBodyRange.Cells[toRow, (int)ImportResultsColumns.AMOUNT].Value2       = importResultsList.DataBodyRange.Cells[currentRow, (int)ImportResultsColumns.AMOUNT].Value2;
-
-        //    // replace buttons in toRow with buttons from currentRow
-        //    ReassignButtons(currentRow, toRow);
-
-        //    string buttonName = "btn" + ImportResultActions.IMPORT.ToString() + (toRow - 1).ToString();
-        //    if (importResultsList.DataBodyRange.Cells[toRow, (int)ImportResultsColumns.RESULT].Value2 !=
-        //        LineItemStatus.SAVED.ToString())
-        //    {
-        //        ((ActionButton)vstoImportResults.Controls[buttonName]).Enabled = true;
-        //    }
-        //    else
-        //    {
-        //        ((ActionButton)vstoImportResults.Controls[buttonName]).Enabled = false;
-        //    }
-        //}
-
-        //private static void ReassignButtons(int currentRow, int toRow)
-        //{
-        //    // get the buttons that need to be moved
-        //    List<ActionButton> buttonsToMoveUp = buttons[currentRow];
-        //    List<ActionButton> buttonsToMoveDown = buttons[toRow];
-
-        //    // swap buttons
-        //    buttons[toRow] = buttonsToMoveUp;
-        //    buttons[currentRow] = buttonsToMoveDown;
-
-        //    // reassign the listIndex and resultIndex
-        //    foreach (ActionButton button in buttonsToMoveUp)
-        //    {
-        //        ActionButton oldButton = (buttonsToMoveDown.Where(b => b.ImportResultAction == button.ImportResultAction)).First();
-        //        button.ImportResultIndex = oldButton.ImportResultIndex;
-        //        button.ImportResultListObjectIndex = oldButton.ImportResultListObjectIndex;
-        //    }
-        //}
-
-        //private static void RemoveLastRowButtons(int rowNum)
-        //{
-        //    foreach (ActionButton button in buttons[rowNum])
-        //    {
-        //        // remove the button from the controls list
-        //        string name = "btn" + button.ImportResultAction.ToString() + (rowNum - 1).ToString();
-        //        vstoImportResults.Controls.Remove(name);
-        //    }
-        //    // delete the entry in the dictionary
-        //    buttons.Remove(rowNum);
-        //}
+        public static void RemoveSheet()
+        {
+            if (vstoImportResults != null)
+            {
+                vstoImportResults.Delete();
+                vstoImportResults = null;
+                importResultsList = null;
+                importResults = null;
+                buttons.Clear();
+            }
+        }
 
         private static ActionButton AddButtonToListObject(VstoExcel.Worksheet worksheet, 
                                                           VstoExcel.ListObject listObject, 
@@ -245,6 +176,27 @@ namespace HouseholdBudget
             actionButton.OnActionRequested += handler;
 
             return actionButton;
-        }       
+        }
+
+        private static void GetImportResultsSheet()
+        {
+            NativeExcel.Worksheet importResultsSheet;
+
+            NativeExcel.Sheets worksheets = Globals.ThisAddIn.Application.Worksheets;
+            // delete the import results worksheet if it already exists
+            foreach (NativeExcel.Worksheet worksheet in worksheets)
+            {
+                if (worksheet.Name == Properties.Resources.ImportResultsWorksheetName)
+                {
+                    worksheet.Delete();
+                    break;
+                }
+            }
+
+            NativeExcel.Worksheet lastWorksheet = worksheets[worksheets.Count];
+            importResultsSheet = (NativeExcel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(After: lastWorksheet);
+            importResultsSheet.Name = Properties.Resources.ImportResultsWorksheetName;
+            vstoImportResults = Globals.Factory.GetVstoObject(importResultsSheet);
+        }
     }
 }
