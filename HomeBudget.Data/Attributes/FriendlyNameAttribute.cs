@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace HouseholdBudget.Attributes
+namespace HouseholdBudget.Data.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]
-    internal class FriendlyNameAttribute : Attribute
+    public class FriendlyNameAttribute : Attribute
     {
         private string _friendlyName;
 

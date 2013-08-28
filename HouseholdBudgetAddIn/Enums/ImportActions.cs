@@ -1,4 +1,4 @@
-﻿using HouseholdBudget.Attributes;
+﻿using HouseholdBudget.Data.Attributes;
 
 namespace HouseholdBudget.Enums
 {

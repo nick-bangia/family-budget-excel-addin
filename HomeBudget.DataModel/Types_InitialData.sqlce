@@ -2,4 +2,6 @@
 INSERT INTO dimTypes (TypeId, TypeName)
 VALUES (0, 'DEBIT');
 INSERT INTO dimTypes (TypeId, TypeName)
-VALUES (1, 'CREDIT');
+VALUES (1, 'ALLOCATION');
+INSERT INTO dimTypes (TypeId, TypeName)
+VALUES (2, 'CREDIT');

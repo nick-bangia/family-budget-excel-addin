@@ -108,6 +108,11 @@ namespace HouseholdBudget.Data.Implementation
                         int yearId = lineItem.Date.Year;
                         // type of transaction
                         int type = (int)(lineItem.Amount < 0 ? LineItemType.DEBIT : LineItemType.CREDIT);
+                        // if the description suggests an allocation, change its type
+                        if (lineItem.Description.ToLower().Contains("alloc"))
+                        {
+                            type = (int)LineItemType.ALLOCATION;
+                        }                       
 
                         factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
                             lineItem.Description, lineItem.Amount, type);

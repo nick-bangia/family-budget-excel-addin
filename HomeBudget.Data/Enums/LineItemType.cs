@@ -1,8 +1,16 @@
-﻿namespace HouseholdBudget.Data.Enums
+﻿using HouseholdBudget.Data.Attributes;
+
+namespace HouseholdBudget.Data.Enums
 {
     public enum LineItemType
     {
+        [FriendlyName("Expense")]
         DEBIT = 0,
-        CREDIT = 1
+
+        [FriendlyName("Allocation")]
+        ALLOCATION = 1,
+
+        [FriendlyName("Credit")]
+        CREDIT = 2
     }
 }

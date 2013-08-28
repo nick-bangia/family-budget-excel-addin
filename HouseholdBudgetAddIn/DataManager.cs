@@ -114,7 +114,7 @@ namespace HouseholdBudget
                     value = lineItems[index].Amount;
                     break;
                 case (int)DataColumns.TYPE:
-                    value = lineItems[index].Type.ToString();
+                    value = EnumUtil.GetFriendlyName(lineItems[index].Type);
                     break;
                 default:
                     value = "N/A";

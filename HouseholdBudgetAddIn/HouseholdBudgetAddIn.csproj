@@ -198,7 +198,6 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="Attributes\FriendlyNameAttribute.cs" />
     <Compile Include="Controller.cs" />
     <Compile Include="../AssemblyVersioning.cs">
       <Link>Properties\SharedVersioning.cs</Link>

@@ -1,5 +1,5 @@
 ﻿using System;
-using HouseholdBudget.Attributes;
+using HouseholdBudget.Data.Attributes;
 using System.Reflection;
 
 namespace HouseholdBudget.Utilities
