@@ -20,7 +20,7 @@ namespace HouseholdBudget.UI
         {
         }
 
-        private void Application_WorkbookActivate(NativeExcel.Workbook Wb)
+        private void Application_WorkbookOpen(NativeExcel.Workbook Wb)
         {
             // check whether the workbook is configured properly
             bool validWorkbook = IsValidWorkbook(Wb);
@@ -152,7 +152,7 @@ namespace HouseholdBudget.UI
             this.Startup += new System.EventHandler(ThisAddIn_Startup);
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
             this.Application.WorkbookBeforeClose += new NativeExcel.AppEvents_WorkbookBeforeCloseEventHandler(Application_WorkbookBeforeClose);
-            this.Application.WorkbookActivate += new NativeExcel.AppEvents_WorkbookActivateEventHandler(Application_WorkbookActivate);
+            this.Application.WorkbookOpen += new NativeExcel.AppEvents_WorkbookOpenEventHandler(Application_WorkbookOpen);
         }        
         #endregion
     }
