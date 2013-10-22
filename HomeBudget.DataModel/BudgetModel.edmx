@@ -62,7 +62,8 @@
     </Key>
     <Property Name="CategoryKey" Type="uniqueidentifier" Nullable="false" />
     <Property Name="CategoryName" Type="nvarchar" Nullable="false" MaxLength="100" />
-    <Property Name="CategoryPrefix" Type="nvarchar" Nullable="false" MaxLength="10" />
+    <Property Name="SubCategoryName" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="SubCategoryPrefix" Type="nvarchar" Nullable="false" MaxLength="10" />
   </EntityType>
   <EntityType Name="dimTypes">
     <Key>
@@ -145,7 +146,7 @@
 						<End Role="factLineItems" EntitySet="factLineItems" />
 						<End Role="dimDaysOfWeek" EntitySet="dimDaysOfWeeks" />
 					</AssociationSet>
-          </EntityContainer>
+				</EntityContainer>
 				<EntityType Name="factLineItems">
 					<Key>
 						<PropertyRef Name="UniqueKey" />
@@ -185,9 +186,10 @@
 						<PropertyRef Name="CategoryKey" />
 					</Key>
 					<Property Type="Guid" Name="CategoryKey" Nullable="false" annotation:StoreGeneratedPattern="None" />
-					<Property Type="String" Name="CategoryName" Nullable="false" MaxLength="100" />
+					<Property Type="String" Name="CategoryName" Nullable="false" MaxLength="100"/>
+					<Property Type="String" Name="SubCategoryName" Nullable="false" MaxLength="100" />
 					<NavigationProperty Name="ItemsInThisCategory" Relationship="BudgetModel.factLineItems_dimCategories" FromRole="dimCategories" ToRole="factLineItems" />
-          <Property Type="String" Name="CategoryPrefix" Nullable="false" MaxLength="10" />
+					<Property Type="String" Name="SubCategoryPrefix" Nullable="false" MaxLength="10" />
 				</EntityType>
 				<EntityType Name="dimTypes">
 					<Key>
@@ -245,7 +247,7 @@
 						</Dependent>
 					</ReferentialConstraint>
 				</Association>
-        </Schema>
+			</Schema>
 		</edmx:ConceptualModels>
 		<!-- C-S mapping content -->
 		<edmx:Mappings>
@@ -287,7 +289,8 @@
         <MappingFragment StoreEntitySet="dimCategories">
           <ScalarProperty Name="CategoryKey" ColumnName="CategoryKey" />
           <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="CategoryPrefix" ColumnName="CategoryPrefix" />
+          <ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
+          <ScalarProperty Name="SubCategoryPrefix" ColumnName="SubCategoryPrefix" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -313,7 +316,7 @@
 			<DesignerInfoPropertySet>
 				<DesignerProperty Name="ValidateOnBuild" Value="true" />
 				<DesignerProperty Name="EnablePluralization" Value="False" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+				<DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
 			</DesignerInfoPropertySet>
 		</edmx:Options>
 		<!-- Diagram content (shape and connector positions) -->
@@ -322,11 +325,12 @@
 				<EntityTypeShape EntityType="BudgetModel.factLineItems" Width="1.5" PointX="5.625" PointY="2.375" Height="3.9033007812499996" />
 				<EntityTypeShape EntityType="BudgetModel.dimMonths" Width="1.5" PointX="3.75" PointY="0.5" Height="1.59568359375" />
 				<EntityTypeShape EntityType="BudgetModel.dimDaysOfWeek" Width="1.5" PointX="7.75" PointY="6.25" Height="1.5956835937499996" />
-				<EntityTypeShape EntityType="BudgetModel.dimCategories" Width="1.875" PointX="7.5" PointY="0.5" Height="1.787985026041667" />
+				<EntityTypeShape EntityType="BudgetModel.dimCategories" Width="1.875" PointX="7.5" PointY="0.5" Height="1.9802864583333335" />
 				<EntityTypeShape EntityType="BudgetModel.dimTypes" Width="1.875" PointX="3.375" PointY="6.375" Height="1.59568359375" />
 				<AssociationConnector Association="BudgetModel.factLineItems_dimCategories">
-					<ConnectorPoint PointX="7.125" PointY="2.375" />
-					<ConnectorPoint PointX="7.5" PointY="2.287985026041667" />
+					<ConnectorPoint PointX="6.406252" PointY="2.375" />
+					<ConnectorPoint PointX="6.406252" PointY="1.4901432291666668" />
+					<ConnectorPoint PointX="7.5" PointY="1.4901432291666668" />
 				</AssociationConnector>
 				<AssociationConnector Association="BudgetModel.factLineItems_dimTypes">
 					<ConnectorPoint PointX="5.625" PointY="5.8936979166666656" />
@@ -340,7 +344,7 @@
 					<ConnectorPoint PointX="7.125" PointY="5.8936979166666656" />
 					<ConnectorPoint PointX="7.75" PointY="6.25" />
 				</AssociationConnector>
-        </Diagram>
+			</Diagram>
 		</edmx:Diagrams>
 	</edmx:Designer>
 </edmx:Edmx>

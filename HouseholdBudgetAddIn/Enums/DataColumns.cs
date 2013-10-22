@@ -22,10 +22,13 @@ namespace HouseholdBudget.Enums
         [FriendlyName("Category")]
         CATEGORY = 6,
 
+        [FriendlyName("SubCategory")]
+        SUBCATEGORY = 7,
+
         [FriendlyName("Amount")]
-        AMOUNT = 7,
+        AMOUNT = 8,
 
         [FriendlyName("Line Item Type")]
-        TYPE = 8
+        TYPE = 9
     }
 }

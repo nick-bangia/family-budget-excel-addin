@@ -179,7 +179,7 @@ namespace HouseholdBudget
         private static void newCategoryForm_CategorySaved(object sender, CategoryEventArgs e)
         {
             // attempt to add a new category to the 
-            OperationStatus addedNewCategory = lineItemMapper.AddNewCategory(e.CategoryName, e.CategoryPrefix);
+            OperationStatus addedNewCategory = lineItemMapper.AddNewCategory(e.CategoryName, e.SubCategoryName, e.SubCategoryPrefix);
             if (addedNewCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new category, show a message box to that effect.

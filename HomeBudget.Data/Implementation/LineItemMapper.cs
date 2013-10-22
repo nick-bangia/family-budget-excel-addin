@@ -39,9 +39,9 @@ namespace HouseholdBudget.Data.Implementation
             return CheckForDuplicate(lineItem);
         }
 
-        public OperationStatus AddNewCategory(string name, string prefix)
+        public OperationStatus AddNewCategory(string categoryName, string subCategoryName, string subCategoryPrefix)
         {
-            return SaveCategoryToDB(dimCategories.CreatedimCategories(Guid.NewGuid(), name, prefix));
+            return SaveCategoryToDB(dimCategories.CreatedimCategories(Guid.NewGuid(), categoryName, subCategoryName, subCategoryPrefix));
         }
 
         #endregion
@@ -69,6 +69,7 @@ namespace HouseholdBudget.Data.Implementation
                         Amount = fli.Amount,
                         Description = fli.Description,
                         Category = fli.Category.CategoryName,
+                        SubCategory = fli.Category.SubCategoryName,
                         Type = (LineItemType)fli.TypeId
                     };
                     
@@ -147,7 +148,7 @@ namespace HouseholdBudget.Data.Implementation
                 var categories = from cat in ctx.dimCategories
                                  select cat;
 
-                dimCategories match = categories.FirstOrDefault(f => itemDescription.StartsWith(f.CategoryPrefix));
+                dimCategories match = categories.FirstOrDefault(f => itemDescription.StartsWith(f.SubCategoryPrefix));
                 if (match != null)
                 {
                     return match.CategoryKey;
@@ -211,7 +212,7 @@ namespace HouseholdBudget.Data.Implementation
             {
                 var categories = from cat in ctx.dimCategories
                                  where cat.CategoryName == newCategory.CategoryName &&
-                                       cat.CategoryPrefix == newCategory.CategoryPrefix
+                                       cat.SubCategoryPrefix == newCategory.SubCategoryPrefix
                                  select cat;
 
                 // if a category already exists, return failure

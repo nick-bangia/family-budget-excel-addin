@@ -10,6 +10,7 @@ namespace HouseholdBudget.Data.Domain
         public string DayOfWeek { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
+        public string SubCategory { get; set; }
         public decimal Amount { get; set; }
         public LineItemType Type { get; set; }
     }

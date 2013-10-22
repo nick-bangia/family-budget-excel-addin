@@ -31,7 +31,8 @@ namespace HouseholdBudget.UI
                 CategoryEventArgs args = new CategoryEventArgs()
                 {
                     CategoryName = txtCategoryName.Text,
-                    CategoryPrefix = txtCategoryPrefix.Text
+                    SubCategoryName = txtSubCategoryName.Text,
+                    SubCategoryPrefix = txtSubCategoryPrefix.Text
                 };
 
                 // fire saved event

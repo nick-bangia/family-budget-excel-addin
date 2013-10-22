@@ -219,13 +219,15 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         /// <param name="categoryKey">Initial value of the CategoryKey property.</param>
         /// <param name="categoryName">Initial value of the CategoryName property.</param>
-        /// <param name="categoryPrefix">Initial value of the CategoryPrefix property.</param>
-        public static dimCategories CreatedimCategories(global::System.Guid categoryKey, global::System.String categoryName, global::System.String categoryPrefix)
+        /// <param name="subCategoryName">Initial value of the SubCategoryName property.</param>
+        /// <param name="subCategoryPrefix">Initial value of the SubCategoryPrefix property.</param>
+        public static dimCategories CreatedimCategories(global::System.Guid categoryKey, global::System.String categoryName, global::System.String subCategoryName, global::System.String subCategoryPrefix)
         {
             dimCategories dimCategories = new dimCategories();
             dimCategories.CategoryKey = categoryKey;
             dimCategories.CategoryName = categoryName;
-            dimCategories.CategoryPrefix = categoryPrefix;
+            dimCategories.SubCategoryName = subCategoryName;
+            dimCategories.SubCategoryPrefix = subCategoryPrefix;
             return dimCategories;
         }
 
@@ -288,24 +290,48 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String CategoryPrefix
+        public global::System.String SubCategoryName
         {
             get
             {
-                return _CategoryPrefix;
+                return _SubCategoryName;
             }
             set
             {
-                OnCategoryPrefixChanging(value);
-                ReportPropertyChanging("CategoryPrefix");
-                _CategoryPrefix = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("CategoryPrefix");
-                OnCategoryPrefixChanged();
+                OnSubCategoryNameChanging(value);
+                ReportPropertyChanging("SubCategoryName");
+                _SubCategoryName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubCategoryName");
+                OnSubCategoryNameChanged();
             }
         }
-        private global::System.String _CategoryPrefix;
-        partial void OnCategoryPrefixChanging(global::System.String value);
-        partial void OnCategoryPrefixChanged();
+        private global::System.String _SubCategoryName;
+        partial void OnSubCategoryNameChanging(global::System.String value);
+        partial void OnSubCategoryNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SubCategoryPrefix
+        {
+            get
+            {
+                return _SubCategoryPrefix;
+            }
+            set
+            {
+                OnSubCategoryPrefixChanging(value);
+                ReportPropertyChanging("SubCategoryPrefix");
+                _SubCategoryPrefix = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubCategoryPrefix");
+                OnSubCategoryPrefixChanged();
+            }
+        }
+        private global::System.String _SubCategoryPrefix;
+        partial void OnSubCategoryPrefixChanging(global::System.String value);
+        partial void OnSubCategoryPrefixChanged();
 
         #endregion
     

@@ -12,6 +12,6 @@ namespace HouseholdBudget.Data.Interfaces
         LineItem AddNewLineItem(LineItem lineItem);
         LineItem GetLineItem(LineItem lineItem);
         List<DenormalizedLineItem> GetAllLineItems();
-        OperationStatus AddNewCategory(string name, string prefix);
+        OperationStatus AddNewCategory(string categoryName, string subCategoryName, string subCategoryPrefix);
     }
 }

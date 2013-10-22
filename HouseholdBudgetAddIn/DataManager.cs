@@ -36,6 +36,7 @@ namespace HouseholdBudget
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DAY_OF_WEEK].Value2 = EnumUtil.GetFriendlyName(DataColumns.DAY_OF_WEEK);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DESCRIPTION].Value2 = EnumUtil.GetFriendlyName(DataColumns.DESCRIPTION);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.CATEGORY].Value2 = EnumUtil.GetFriendlyName(DataColumns.CATEGORY);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.SUBCATEGORY].Value2 = EnumUtil.GetFriendlyName(DataColumns.SUBCATEGORY);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.AMOUNT].Value2 = EnumUtil.GetFriendlyName(DataColumns.AMOUNT);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.TYPE].Value2 = EnumUtil.GetFriendlyName(DataColumns.TYPE);
             }
@@ -109,6 +110,9 @@ namespace HouseholdBudget
                     break;
                 case (int)DataColumns.CATEGORY:
                     value = lineItems[index].Category;
+                    break;
+                case (int)DataColumns.SUBCATEGORY:
+                    value = lineItems[index].SubCategory;
                     break;
                 case (int)DataColumns.AMOUNT:
                     value = lineItems[index].Amount;

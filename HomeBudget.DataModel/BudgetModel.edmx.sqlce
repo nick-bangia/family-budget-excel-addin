@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server Compact Edition
 -- --------------------------------------------------
--- Date Created: 07/30/2013 10:04:08
--- Generated from EDMX file: C:\git-src\budget\HouseholdBudget.DataModel\BudgetModel.edmx
+-- Date Created: 10/16/2013 08:02:12
+-- Generated from EDMX file: C:\git-src\household-budget\HomeBudget.DataModel\BudgetModel.edmx
 -- --------------------------------------------------
 
 
@@ -73,7 +73,8 @@ GO
 CREATE TABLE [dimCategories] (
     [CategoryKey] uniqueidentifier  NOT NULL,
     [CategoryName] nvarchar(100)  NOT NULL,
-    [CategoryPrefix] nvarchar(10)  NOT NULL
+    [SubCategoryName] nvarchar(100)  NOT NULL,
+    [SubCategoryPrefix] nvarchar(10)  NOT NULL
 );
 GO
 
