@@ -170,6 +170,11 @@ namespace HouseholdBudget
             newCategoryForm.Show();
         }
 
+        internal static void btnRefresh_Click(object sender, RibbonControlEventArgs e)
+        {
+            RefreshPivotTables();
+        }
+
         private static void newCategoryForm_UserCancelled(object sender, EventArgs e)
         {
             // on user cancel, close the form
@@ -232,6 +237,21 @@ namespace HouseholdBudget
         internal static void PopulateDataSheet()
         {
             DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+        }
+
+        internal static void RefreshPivotTables()
+        {
+            foreach (NativeExcel.Worksheet sheet in Globals.ThisAddIn.Application.Worksheets)
+            {
+                // go through each sheet, and refresh any pivot table(s) it might have
+                foreach (NativeExcel.PivotTable table in sheet.PivotTables())
+                {
+                    if (!table.RefreshTable())
+                    {
+                        MessageBox.Show("Unable to refresh pivot table: " + table.Name);
+                    }
+                }
+            }
         }
 
         internal static void ShowFirstWorksheet()

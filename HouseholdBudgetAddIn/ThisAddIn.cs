@@ -31,6 +31,7 @@ namespace HouseholdBudget.UI
             {
                 // only update the data sheet is the workbook is configured properly
                 Controller.PopulateDataSheet();
+                Controller.RefreshPivotTables();
                 Controller.ShowFirstWorksheet();
             }            
         }
