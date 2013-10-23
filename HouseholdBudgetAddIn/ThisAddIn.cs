@@ -124,11 +124,12 @@ namespace HouseholdBudget.UI
             // determine if this workbook is a valid one
             foreach (NativeExcel.Worksheet worksheet in Wb.Application.Worksheets)
             {
-                if (worksheet.Name == "Configuration")
+                if (worksheet.Name == Properties.Resources.ConfigurationWorksheetName)
                 {
-                    if (worksheet.Cells[1, 2].Value2 == "Household Budget")
+                    if (worksheet.Cells[1, 2].Value2 == Properties.Resources.WorkbookNameValue)
                     {
                         validWorkbook = true;
+                        Controller.ConfigureWorkbook(worksheet, Wb.Path);
                         break;
                     }
                 }

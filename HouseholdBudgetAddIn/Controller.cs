@@ -26,6 +26,8 @@ namespace HouseholdBudget
         // importing items
         private static LineItemCSVImporter importer;
         private static List<LineItem> importReport;
+        private static string selectedFile;
+        private static string archiveDirectory;
         
         // line item mapper interface
         private static ILineItemMapper _mapper;
@@ -75,7 +77,7 @@ namespace HouseholdBudget
                 try
                 {
                     // get the file name and open a stream for it
-                    string selectedFile = fileDialog.FileName;
+                    selectedFile = fileDialog.FileName;
                     FileStream stream = new FileStream(selectedFile, FileMode.Open);
 
                     // get an instance of the line item mapper being used, and create the importer
@@ -145,6 +147,20 @@ namespace HouseholdBudget
                     // close the modal after import is complete
                     CloseProgressModal();
 
+                    // archive selected file to archive directory
+                    if (Directory.Exists(archiveDirectory))
+                    {
+                        DateTime archiveDT = DateTime.Now;
+                        string archiveDTString =
+                            archiveDT.Year.ToString() + archiveDT.Month.ToString() + archiveDT.Day.ToString() + "_" +
+                            archiveDT.Hour.ToString() + archiveDT.Minute.ToString() + archiveDT.Second.ToString();
+                        string archiveFileName = "imported_" + archiveDTString + ".csv";
+
+                        File.Copy(selectedFile, archiveDirectory + "\\" + archiveFileName);
+                        File.Delete(selectedFile);
+                    }
+
+                    // generate import results
                     importReport = e.Result as List<LineItem>;
                     ImportResultsManager.DisplayImportResults(importReport);
                     DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
@@ -313,6 +329,32 @@ namespace HouseholdBudget
                 }
 
                 newCategoryForm = null;
+            }
+        }
+
+        internal static void ConfigureWorkbook(NativeExcel.Worksheet configurationWorksheet, string workbookPath)
+        {
+            // goes through the configuration sheet, and performs any necessary actions
+            string configuredPath = configurationWorksheet.Range[Properties.Resources.ArchiveDirectoryRange].Value2.ToString();
+            configuredPath = 
+                String.IsNullOrEmpty(configuredPath) ? Properties.Resources.DefaultArchiveDirectory : configuredPath.Replace(@"/", String.Empty);
+            
+            archiveDirectory = workbookPath + "\\" + configuredPath;
+               
+            if (!Directory.Exists(archiveDirectory))
+            {
+                // attempt to create the directory if it doesn't exist yet
+                try
+                {
+                    Directory.CreateDirectory(archiveDirectory);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Unable to create the specified archive directory." + Environment.NewLine +
+                        "Please check and fix it, and restart the workbook for changes to take effect." + Environment.NewLine +
+                        "Error Details: " + Environment.NewLine + Environment.NewLine +
+                        ex.Message);
+                }
             }
         }
     }

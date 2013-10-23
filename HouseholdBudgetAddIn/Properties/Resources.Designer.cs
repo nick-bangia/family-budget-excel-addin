@@ -61,6 +61,24 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to $B$2.
+        /// </summary>
+        internal static string ArchiveDirectoryRange {
+            get {
+                return ResourceManager.GetString("ArchiveDirectoryRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configuration.
+        /// </summary>
+        internal static string ConfigurationWorksheetName {
+            get {
+                return ResourceManager.GetString("ConfigurationWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to $I$2.
         /// </summary>
         internal static string DataListBottomRightRange {
@@ -115,6 +133,15 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to archive.
+        /// </summary>
+        internal static string DefaultArchiveDirectory {
+            get {
+                return ResourceManager.GetString("DefaultArchiveDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IMPORT_RESULTS.
         /// </summary>
         internal static string ImportResultsListObjectName {
@@ -156,6 +183,15 @@ namespace HouseholdBudget.Properties {
         internal static string ImportResultsWorksheetName {
             get {
                 return ResourceManager.GetString("ImportResultsWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Household Budget.
+        /// </summary>
+        internal static string WorkbookNameValue {
+            get {
+                return ResourceManager.GetString("WorkbookNameValue", resourceCulture);
             }
         }
     }
