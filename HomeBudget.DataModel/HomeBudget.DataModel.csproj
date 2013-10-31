@@ -75,7 +75,9 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="BudgetModel.edmx.sqlce" />
     <None Include="DaysOfWeek_InitialData.sqlce" />
     <None Include="Months_InitialData.sqlce" />
