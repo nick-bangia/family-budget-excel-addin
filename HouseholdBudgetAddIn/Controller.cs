@@ -164,6 +164,7 @@ namespace HouseholdBudget
                     importReport = e.Result as List<LineItem>;
                     ImportResultsManager.DisplayImportResults(importReport);
                     DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    RefreshPivotTables();
                     ShowWorksheetByName(Properties.Resources.ImportResultsListObjectName);
                 }
                 catch (Exception ex)
