@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Linq;
+using log4net.Config;
 using NativeExcel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
 using VstoExcel = Microsoft.Office.Tools.Excel;
 using System.Windows.Forms;
+using log4net.Repository.Hierarchy;
+using log4net;
+using log4net.Appender;
+using System.IO;
 
 namespace HouseholdBudget.UI
 {
     public partial class ThisAddIn
     {
+        private static ILog logger;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
         }
@@ -23,8 +30,9 @@ namespace HouseholdBudget.UI
         private void Application_WorkbookOpen(NativeExcel.Workbook Wb)
         {
             // check whether the workbook is configured properly
-            bool validWorkbook = IsValidWorkbook(Wb);
+            bool validWorkbook = IsValidWorkbook(Wb, requiresConfiguration: true);
 
+            // based on validity, set ribbon state
             SetRibbonState(Wb, validWorkbook);
 
             if (validWorkbook)
@@ -38,10 +46,12 @@ namespace HouseholdBudget.UI
 
         private void Application_WorkbookBeforeClose(NativeExcel.Workbook Wb, ref bool Cancel)
         {
-            bool validWorkbook = IsValidWorkbook(Wb);
+            bool validWorkbook = IsValidWorkbook(Wb, requiresConfiguration: false);
 
             if (validWorkbook)
             {
+                logger.Info("Saving state and shutting down the workbook.");
+                
                 // attempt to remove the ImportResults sheet, allowing the user to cancel if they want
                 Cancel = RemoveImportResults(Wb, Cancel);
 
@@ -71,6 +81,7 @@ namespace HouseholdBudget.UI
                 // if the sheet exists, delete it w/out any notification
                 Globals.ThisAddIn.Application.DisplayAlerts = false;
                 DataManager.RemoveSheet();
+                Wb.Save();
                 Globals.ThisAddIn.Application.DisplayAlerts = true;
             }
         }
@@ -117,7 +128,7 @@ namespace HouseholdBudget.UI
             Globals.Ribbons.HouseholdBudgetRibbon.tabHouseholdBudget.Visible = ribbonState;
         }
 
-        private static bool IsValidWorkbook(NativeExcel.Workbook Wb)
+        private static bool IsValidWorkbook(NativeExcel.Workbook Wb, bool requiresConfiguration)
         {
             bool validWorkbook = false;
 
@@ -129,12 +140,32 @@ namespace HouseholdBudget.UI
                     if (worksheet.Cells[1, 2].Value2 == Properties.Resources.WorkbookNameValue)
                     {
                         validWorkbook = true;
-                        Controller.ConfigureWorkbook(worksheet, Wb.Path);
+
+                        if (requiresConfiguration)
+                        {
+                            // Configure logging if the the workbook is valid and requires configuration
+                            ConfigureLogging();
+
+                            // configure the workbook if the workbook is valid
+                            Controller.ConfigureWorkbook(worksheet, Wb.Path);
+                        }
+                        
+                        // break from the foreach loop since the workbook is valid
                         break;
                     }
                 }
             }
+
             return validWorkbook;
+        }
+
+        private static void ConfigureLogging()
+        {
+            // do most of the configuration via config file
+            XmlConfigurator.Configure();
+
+            // create the add in logger
+            logger = LogManager.GetLogger("HouseholdBudgetAddIn_Main");
         }
 
         protected override Office.IRibbonExtensibility CreateRibbonExtensibilityObject()

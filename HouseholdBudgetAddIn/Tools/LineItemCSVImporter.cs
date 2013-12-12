@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using log4net;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Interfaces;
 using LumenWorks.Framework.IO.Csv;
@@ -25,6 +26,9 @@ namespace HouseholdBudget.Tools
             DESCRIPTION = 1,
             AMOUNT = 2
         }
+
+        // ILog interface
+        private static readonly ILog logger = LogManager.GetLogger("LineItemCSVImporter");
 
         // constructor
         public LineItemCSVImporter(ILineItemMapper lineItemMapper, FileStream lineItemStream)
@@ -57,10 +61,12 @@ namespace HouseholdBudget.Tools
                 int lineItemIterator = 0;
 
                 // iterate through each line and import it into the data store
+                logger.Info("Beginning iteration through line items and saving them to the data store...");
                 while (lineItemIterator < lineItems.Count)
                 {
                     if (CancellationPending)
                     {
+                        logger.Info("CSV import cancelled by user!");
                         e.Cancel = true;
                         return;
                     }
@@ -114,6 +120,8 @@ namespace HouseholdBudget.Tools
 
             // save the report of the import and send to foreground
             e.Result = this.importReport;
+
+            logger.Info("Completed iteration through line items and saving them to the data store.");
         }
 
         #region Helper Methods
@@ -129,9 +137,10 @@ namespace HouseholdBudget.Tools
                 lineItem.Amount = decimal.Parse(line[(int)LineItemPosition.AMOUNT]);
                 lineItem.Status = LineItemStatus.IMPORTED;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // if an exception is caught while converting to a LineItem, set the status to IMPORT error
+                logger.Error("An error occurred while converting the CSV line to an object!", ex);
                 lineItem.Status = LineItemStatus.IMPORT_ERROR;
             }
 
@@ -140,6 +149,7 @@ namespace HouseholdBudget.Tools
 
         private List<string[]> ReadCSVFile(TextReader reader)
         {
+            logger.Info("Beginning CSV file read...");
             List<string[]> lineItems = new List<string[]>();
             
             // read in the first 6 lines
@@ -177,6 +187,8 @@ namespace HouseholdBudget.Tools
                 }
             }
 
+            // CSV file read completed
+            logger.Info("Completed CSV file read.");
             return lineItems;
         }
 

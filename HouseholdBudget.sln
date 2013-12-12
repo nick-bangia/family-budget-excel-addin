@@ -6,9 +6,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeBudget.DataModel", "HomeBudget.DataModel\HomeBudget.DataModel.csproj", "{A1EF9403-667B-4B74-9E7C-E1DD19FDAC26}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Properties", "Properties", "{FC85628E-DE7A-4D58-B09A-95686E0329C6}"
-	ProjectSection(SolutionItems) = preProject
-		AssemblyVersioning.cs = AssemblyVersioning.cs
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HouseholdBudgetAddIn", "HouseholdBudgetAddIn\HouseholdBudgetAddIn.csproj", "{0E106D87-F4EE-48CE-93F0-FE039921BD14}"
 EndProject

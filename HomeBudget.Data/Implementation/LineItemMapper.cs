@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using log4net;
 using HouseholdBudget.Data.Interfaces;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Enums;
@@ -11,6 +12,12 @@ namespace HouseholdBudget.Data.Implementation
 {
     public class LineItemMapper : ILineItemMapper
     {
+        #region Properties
+        
+        private static readonly ILog logger = LogManager.GetLogger("DBLineItemMapper");
+        
+        #endregion
+
         #region Constructor
 
         public LineItemMapper()
@@ -50,34 +57,48 @@ namespace HouseholdBudget.Data.Implementation
 
         private List<DenormalizedLineItem> GetAllItemsFromDB()
         {
+            // log start of method
+            logger.Info("Beginning retrieval of all items from DB...");
+
             List<DenormalizedLineItem> allLineItems = new List<DenormalizedLineItem>();
 
-            using (BudgetEntities ctx = new BudgetEntities())
+            try
             {
-                var lineItems = from fli in ctx.factLineItems
-                                select fli;
-
-                foreach (factLineItems fli in lineItems)
+                using (BudgetEntities ctx = new BudgetEntities())
                 {
-                    // convert the factLineitem to a LineItem
-                    DenormalizedLineItem lineItem = new DenormalizedLineItem()
+                    logger.Info("Getting all items from DB.");
+                    var lineItems = from fli in ctx.factLineItems
+                                    select fli;
+
+                    logger.Info("Denormalizing line items.");
+                    foreach (factLineItems fli in lineItems)
                     {
-                        Year = fli.YearId,
-                        Month = fli.Month.MonthName,
-                        Day = fli.DayOfMonthId,
-                        DayOfWeek = fli.DayOfWeek.DayName,
-                        Amount = fli.Amount,
-                        Description = fli.Description,
-                        Category = fli.Category.CategoryName,
-                        SubCategory = fli.Category.SubCategoryName,
-                        Type = (LineItemType)fli.TypeId
-                    };
-                    
-                    // save to the final list
-                    allLineItems.Add(lineItem);
+                        // convert the factLineitem to a LineItem
+                        DenormalizedLineItem lineItem = new DenormalizedLineItem()
+                        {
+                            Year = fli.YearId,
+                            Month = fli.Month.MonthName,
+                            Day = fli.DayOfMonthId,
+                            DayOfWeek = fli.DayOfWeek.DayName,
+                            Amount = fli.Amount,
+                            Description = fli.Description,
+                            Category = fli.Category.CategoryName,
+                            SubCategory = fli.Category.SubCategoryName,
+                            Type = (LineItemType)fli.TypeId
+                        };
+
+                        // save to the final list
+                        allLineItems.Add(lineItem);
+                    }
                 }
             }
-
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while retreiving denormalized line items.", ex);
+                throw ex;
+            }
+            
+            logger.Info("Completed retrieval of all line items from DB.");
             return allLineItems;
         }
 
@@ -87,7 +108,6 @@ namespace HouseholdBudget.Data.Implementation
             {
                 if (CheckForDuplicate(lineItem) == null)
                 {
-                    // no duplicate, go on to save the line item
                     using (BudgetEntities cxt = new BudgetEntities())
                     {
                         /* extract the IDs of the fields that need to be mapped */
@@ -132,9 +152,10 @@ namespace HouseholdBudget.Data.Implementation
                     return LineItemStatus.DUPLICATE;
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 // if an exception is caught when attempting to save the item, return the SAVE_ERROR enum
+                logger.Error("An exception was caught while saving a line item!", ex);
                 return LineItemStatus.SAVE_ERROR;
             }
         }
@@ -218,6 +239,7 @@ namespace HouseholdBudget.Data.Implementation
                 // if a category already exists, return failure
                 if (categories.Count() > 0)
                 {
+                    logger.Info("Attempted to add a new category that already exists!");
                     return OperationStatus.FAILURE;
                 }
                                
