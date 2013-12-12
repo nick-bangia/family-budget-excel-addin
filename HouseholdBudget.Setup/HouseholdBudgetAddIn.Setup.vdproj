@@ -16,19 +16,19 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_41FBF73237D5AF89F26D03ACB6534660"
-        "OwnerKey" = "8:_D31F1484EC9D42B98885E0DED44B2129"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_4F26636A3B095D634E0DA09ACE8E440D"
+        "MsmKey" = "8:_3BD253F370BD5D65F90E0E85326181D7"
         "OwnerKey" = "8:_41FBF73237D5AF89F26D03ACB6534660"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_4F26636A3B095D634E0DA09ACE8E440D"
+        "MsmKey" = "8:_3BD253F370BD5D65F90E0E85326181D7"
+        "OwnerKey" = "8:_D31F1484EC9D42B98885E0DED44B2129"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_41FBF73237D5AF89F26D03ACB6534660"
         "OwnerKey" = "8:_D31F1484EC9D42B98885E0DED44B2129"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -118,6 +118,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_E5725FD650867B3F822892421F188BC0"
+        "OwnerKey" = "8:_D31F1484EC9D42B98885E0DED44B2129"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E5725FD650867B3F822892421F188BC0"
+        "OwnerKey" = "8:_41FBF73237D5AF89F26D03ACB6534660"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_EABD7E03E641921E60076716F8C2D4DD"
         "OwnerKey" = "8:_D31F1484EC9D42B98885E0DED44B2129"
         "MsmSig" = "8:_UNDEFINED"
@@ -126,6 +138,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D31F1484EC9D42B98885E0DED44B2129"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_41FBF73237D5AF89F26D03ACB6534660"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3BD253F370BD5D65F90E0E85326181D7"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -173,13 +197,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_41FBF73237D5AF89F26D03ACB6534660"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_4F26636A3B095D634E0DA09ACE8E440D"
+        "OwnerKey" = "8:_E5725FD650867B3F822892421F188BC0"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -257,6 +275,11 @@
                     "Name" = "8:Microsoft .NET Framework 4 Client Profile (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.0,Profile=Client"
                     }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.SQL.Server.Compact.3.5"
+                    {
+                    "Name" = "8:SQL Server Compact 3.5 SP2"
+                    "ProductCode" = "8:Microsoft.SQL.Server.Compact.3.5"
+                    }
                     "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.VSTORuntime.4.0"
                     {
                     "Name" = "8:Microsoft Visual Studio 2010 Tools for Office Runtime (x86 and x64)"
@@ -298,20 +321,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_41FBF73237D5AF89F26D03ACB6534660"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3BD253F370BD5D65F90E0E85326181D7"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HomeBudget.Data, Version=1.0.13233.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HouseholdBudget.DataModel, Version=1.1.13319.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_41FBF73237D5AF89F26D03ACB6534660"
+                    "_3BD253F370BD5D65F90E0E85326181D7"
                     {
-                    "Name" = "8:HomeBudget.Data.dll"
+                    "Name" = "8:HouseholdBudget.DataModel.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:HomeBudget.Data.dll"
+            "SourcePath" = "8:HouseholdBudget.DataModel.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_5C01220DC8084528A6C1E46A99081747"
@@ -329,20 +352,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4F26636A3B095D634E0DA09ACE8E440D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_41FBF73237D5AF89F26D03ACB6534660"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HomeBudget.DataModel, Version=1.0.13233.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HomeBudget.Data, Version=1.1.13319.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_4F26636A3B095D634E0DA09ACE8E440D"
+                    "_41FBF73237D5AF89F26D03ACB6534660"
                     {
-                    "Name" = "8:HomeBudget.DataModel.dll"
+                    "Name" = "8:HomeBudget.Data.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:HomeBudget.DataModel.dll"
+            "SourcePath" = "8:HomeBudget.Data.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_5C01220DC8084528A6C1E46A99081747"
@@ -617,6 +640,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E5725FD650867B3F822892421F188BC0"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:log4net, Version=1.2.12.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_E5725FD650867B3F822892421F188BC0"
+                    {
+                    "Name" = "8:log4net.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:log4net.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_5C01220DC8084528A6C1E46A99081747"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EABD7E03E641921E60076716F8C2D4DD"
             {
             "AssemblyRegister" = "3:1"
@@ -754,7 +808,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HouseholdBudgetAddIn"
         "ProductCode" = "8:{CAECC284-7DA9-41F0-9D44-5FBC5E4701DA}"
-        "PackageCode" = "8:{4561EA11-E5BE-4247-95C1-6C6C46389F88}"
+        "PackageCode" = "8:{579D0175-F5EF-4401-9955-617AC1A1F774}"
         "UpgradeCode" = "8:{D5FD4735-95E2-480C-BAAF-01ADB87FEFEE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

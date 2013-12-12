@@ -11,6 +11,7 @@ using HouseholdBudget.Events;
 using HouseholdBudget.Enums;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Utilities;
+using log4net;
 
 namespace HouseholdBudget
 {
@@ -23,10 +24,14 @@ namespace HouseholdBudget
         internal static Dictionary<int, ActionButton> buttons = new Dictionary<int, ActionButton>();
         internal const int NUM_HEADER_ROWS = 1;
         internal const int IMPORT_ACTION_COLUMN = 1;
+        
+        private static readonly ILog logger = LogManager.GetLogger("HouseholdBudgetAddIn_ImportResultsManager");
         #endregion
 
         public static void DisplayImportResults(List<LineItem> importReport)
         {
+            logger.Info("Beginning import of results into workbook...");
+            
             // setup the variables and add a new worksheet
             importResults = importReport;
             GetImportResultsSheet();
@@ -38,12 +43,14 @@ namespace HouseholdBudget
                 Properties.Resources.ImportResultsListObjectName);
 
             // set up headers for the new list object
+            logger.Info("Setting up headers.");
             importResultsList.HeaderRowRange[1, (int)ImportResultsColumns.RESULT].Value2 = EnumUtil.GetFriendlyName(ImportResultsColumns.RESULT);
             importResultsList.HeaderRowRange[1, (int)ImportResultsColumns.DATE].Value2 = EnumUtil.GetFriendlyName(ImportResultsColumns.DATE);
             importResultsList.HeaderRowRange[1, (int)ImportResultsColumns.DESCRIPTION].Value2 = EnumUtil.GetFriendlyName(ImportResultsColumns.DESCRIPTION);
             importResultsList.HeaderRowRange[1, (int)ImportResultsColumns.AMOUNT].Value2 = EnumUtil.GetFriendlyName(ImportResultsColumns.AMOUNT);
 
             // fill in data as an array
+            logger.Info("Creating data matrix.");
             int rows = importReport.Count;
             int columns = importResultsList.HeaderRowRange.Columns.Count;
 
@@ -56,15 +63,31 @@ namespace HouseholdBudget
                 }
             }
 
+            // if there is only 1 row, increase it by 1, to avoid a null data body range
+            bool oneRow = false;
+            if (rows == 1)
+            {
+                rows += 1;
+                oneRow = true;
+            }            
+
             // size the list object appropriately
             importResultsList.Resize(
                 vstoImportResults.Range[Properties.Resources.ImportResultsTopLeftRange,
                                         Properties.Resources.ImportResultsRightMostColumn + "$" + (rows + 1).ToString()]);
                                     
             // update data range of list object
+            logger.Info("Applying data to worksheet.");
             importResultsList.DataBodyRange.Value2 = data;
 
+            // delete the last row, if only 1 row was entered
+            if (oneRow)
+            {
+                vstoImportResults.Rows[rows + 1].Delete();
+            }
+            
             // fill in import buttons
+            logger.Info("Creating import buttons for all line items.");
             for (int i = 0; i < importReport.Count; i++)
             {
                 ActionButton importActionButton = AddButtonToListObject(vstoImportResults, importResultsList, ImportResultActions.IMPORT, 
@@ -79,6 +102,9 @@ namespace HouseholdBudget
 
             // enable screen updating, events, & alerts
             Controller.ToggleUpdatingAndAlerts(true);
+
+            // log completion
+            logger.Info("Completed importing results into workbook."); 
         }
 
         private static object GetDataValue(int index, int colNum, List<LineItem> importReport)

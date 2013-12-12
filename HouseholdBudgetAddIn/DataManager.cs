@@ -6,6 +6,7 @@ using HouseholdBudget.UI;
 using HouseholdBudget.Enums;
 using HouseholdBudget.Utilities;
 using System;
+using log4net;
 
 namespace HouseholdBudget
 {
@@ -14,10 +15,14 @@ namespace HouseholdBudget
         #region Properties
         private static VstoExcel.Worksheet vstoDataSheet = null;
         private static VstoExcel.ListObject lineItemsListObject = null;
+        private static readonly ILog logger = LogManager.GetLogger("HouseholdBudgetAddIn_DataManager");
         #endregion
 
         public static void PopulateDataSheet(List<DenormalizedLineItem> lineItems)
         {
+            // log the status
+            logger.Info("Beginning population of data sheet...");
+
             // Get the data sheet into the vstoDataSheet
             GetDataSheet();
 
@@ -30,6 +35,8 @@ namespace HouseholdBudget
                     Properties.Resources.DataListObjectName);
 
                 // set up headers for list object
+                logger.Info("Setting up headers.");
+
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.YEAR].Value2 = EnumUtil.GetFriendlyName(DataColumns.YEAR);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.MONTH].Value2 = EnumUtil.GetFriendlyName(DataColumns.MONTH);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DAY].Value2 = EnumUtil.GetFriendlyName(DataColumns.DAY);
@@ -42,6 +49,8 @@ namespace HouseholdBudget
             }
             else
             {
+                logger.Info("Clearing current data.");
+
                 lineItemsListObject.DataBodyRange.Clear();
                 lineItemsListObject.Resize(
                     vstoDataSheet.Range[Properties.Resources.DataListTopLeftRange,
@@ -49,9 +58,11 @@ namespace HouseholdBudget
             }
 
             // fill in data as an array
+            logger.Info("Creating data matrix.");
+            
             int rows = lineItems.Count;
             int columns = lineItemsListObject.HeaderRowRange.Columns.Count;
-
+                        
             var data = new object[rows, columns];
             for (int row = 1; row <= rows; row++)
             {
@@ -67,6 +78,7 @@ namespace HouseholdBudget
                                     Properties.Resources.DataListRightMostColumn + "$" + (rows + 1).ToString()]);
             
             // update the data range of list object
+            logger.Info("Applying data to worksheet.");
             lineItemsListObject.DataBodyRange.Value2 = data;
             
             // autofit the list object
@@ -74,6 +86,9 @@ namespace HouseholdBudget
 
             // enable screen updating, events, & alerts
             Controller.ToggleUpdatingAndAlerts(true);
+
+            // log completion
+            logger.Info("Completed population of data sheet.");
         }
 
         public static void RemoveSheet()

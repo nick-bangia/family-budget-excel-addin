@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Forms;
+using log4net;
+using log4net.Config;
 using HouseholdBudget.Data;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Enums;
@@ -59,6 +61,9 @@ namespace HouseholdBudget
             Tools = 3,
             Data = 4
         }    
+
+        // logger
+        private static readonly ILog logger = LogManager.GetLogger("HouseholdBudgetAddIn_Controller");
         #endregion
 
         internal static void btnImportStatement_Click(object sender, RibbonControlEventArgs e)
@@ -127,7 +132,10 @@ namespace HouseholdBudget
                 // if errored out, close the modal and output a message to the user
                 CloseProgressModal();
 
-                // if an exception occurred during the run, report it to the UI
+                // log the error before reporting it to the UI
+                logger.Error("Error occurred while importing transactions.", e.Error);
+
+                // report it to the UI
                 MessageBox.Show("An error occurred while importing transactions." + Environment.NewLine +
                     "Please review the error and retry. If you continue to recieve this exception," + Environment.NewLine +
                     "contact the application developer for assistance." + Environment.NewLine + Environment.NewLine +
@@ -143,11 +151,13 @@ namespace HouseholdBudget
                 try
                 {
                     // if successful completion, update the workbook accordingly
+                    logger.Info("Successfully completed import. Finishing up.");
 
                     // close the modal after import is complete
                     CloseProgressModal();
 
                     // archive selected file to archive directory
+                    logger.Info("Archiving the imported statement.");
                     if (Directory.Exists(archiveDirectory))
                     {
                         DateTime archiveDT = DateTime.Now;
@@ -161,6 +171,7 @@ namespace HouseholdBudget
                     }
 
                     // generate import results
+                    logger.Info("Generating import summary.");
                     importReport = e.Result as List<LineItem>;
                     ImportResultsManager.DisplayImportResults(importReport);
                     DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
@@ -172,6 +183,10 @@ namespace HouseholdBudget
                     // close the modal 
                     CloseProgressModal();
 
+                    // log the exception
+                    logger.Error("An error occurred when generating the import summary.", ex);
+
+                    // show the exception to the UI
                     MessageBox.Show("An error occurred while generating the import summary." + Environment.NewLine + Environment.NewLine +
                                     "Error Details:" + Environment.NewLine +
                                     ex.Message);
@@ -201,15 +216,18 @@ namespace HouseholdBudget
         private static void newCategoryForm_CategorySaved(object sender, CategoryEventArgs e)
         {
             // attempt to add a new category to the 
+            logger.Info("Adding a new category to the DB.");
             OperationStatus addedNewCategory = lineItemMapper.AddNewCategory(e.CategoryName, e.SubCategoryName, e.SubCategoryPrefix);
             if (addedNewCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new category, show a message box to that effect.
-                MessageBox.Show("An error occurred while attempting to add a new category to the DB:" + Environment.NewLine +
-                                "Check that:" + Environment.NewLine +
-                                "\t1) The new category is not already in the DB." + Environment.NewLine +
-                                "\t2) The DB exists." + Environment.NewLine +
-                                "\t3) The required system files for this workbook are present.");
+                string errorText =  "An error occurred while attempting to add a new category to the DB:" + Environment.NewLine +
+                                    "Check that:" + Environment.NewLine +
+                                    "\t1) The new category is not already in the DB." + Environment.NewLine +
+                                    "\t2) The DB exists." + Environment.NewLine +
+                                    "\t3) The required system files for this workbook are present.";
+                logger.Error(errorText);
+                MessageBox.Show(errorText);
             }
 
             // close the form, regardless.
@@ -230,6 +248,7 @@ namespace HouseholdBudget
             try
             {
                 // if IMPORT, then attempt to re-import the (hopefully) modified line item
+                logger.Info("Attempting to import a single line item...");
                 if (e.ImportAction == ImportResultActions.IMPORT)
                 {
                     LineItem item = ImportResultsManager.ConvertImportResultToLineItem(e.ImportListIndex, e.ImportResultsIndex);
@@ -237,6 +256,7 @@ namespace HouseholdBudget
                     ImportResultsManager.ProcessImportResult(item, e.ImportListIndex, e.ImportResultsIndex);
                     
                     // if the item was successfully saved, update the data sheet
+                    logger.Info("The line item's status is: " + item.Status.ToString());
                     if (item.Status == LineItemStatus.SAVED)
                     {
                         DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
@@ -245,6 +265,9 @@ namespace HouseholdBudget
             }
             catch (Exception ex)
             {
+                // log the exception
+                logger.Error("An error occurred while attempting to import a line item.", ex);
+
                 MessageBox.Show("An error occurred while attempting to import this line item." + Environment.NewLine + Environment.NewLine +
                                 "Error Details:" + Environment.NewLine +
                                 ex.Message);
@@ -253,11 +276,13 @@ namespace HouseholdBudget
 
         internal static void PopulateDataSheet()
         {
+            logger.Info("Populating the data sheet.");
             DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
         }
 
         internal static void RefreshPivotTables()
         {
+            logger.Info("Refreshing pivot tables!");
             foreach (NativeExcel.Worksheet sheet in Globals.ThisAddIn.Application.Worksheets)
             {
                 // go through each sheet, and refresh any pivot table(s) it might have
@@ -335,6 +360,9 @@ namespace HouseholdBudget
 
         internal static void ConfigureWorkbook(NativeExcel.Worksheet configurationWorksheet, string workbookPath)
         {
+            // log that configuration is being completed
+            logger.Info("Configuring the workbook.");
+
             // goes through the configuration sheet, and performs any necessary actions
             string configuredPath = configurationWorksheet.Range[Properties.Resources.ArchiveDirectoryRange].Value2.ToString();
             configuredPath = 
@@ -347,10 +375,14 @@ namespace HouseholdBudget
                 // attempt to create the directory if it doesn't exist yet
                 try
                 {
+                    logger.Info("Archive Directory specified does not exist. Creating it now.");
                     Directory.CreateDirectory(archiveDirectory);
                 }
                 catch (Exception ex)
                 {
+                    // log error
+                    logger.Error("An error occurred while attempting to create the archive directory.", ex);
+
                     MessageBox.Show("Unable to create the specified archive directory." + Environment.NewLine +
                         "Please check and fix it, and restart the workbook for changes to take effect." + Environment.NewLine +
                         "Error Details: " + Environment.NewLine + Environment.NewLine +
