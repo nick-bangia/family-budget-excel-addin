@@ -117,49 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ArchiveDirectoryRange" xml:space="preserve">
-    <value>$B$2</value>
-  </data>
-  <data name="ConfigurationWorksheetName" xml:space="preserve">
-    <value>Configuration</value>
-  </data>
-  <data name="DataListBottomRightRange" xml:space="preserve">
-    <value>$K$2</value>
-  </data>
-  <data name="DataListObjectName" xml:space="preserve">
-    <value>DATA</value>
-  </data>
-  <data name="DataListObjectRange" xml:space="preserve">
-    <value>$A$1:$K$1</value>
-  </data>
-  <data name="DataListRightMostColumn" xml:space="preserve">
-    <value>$K</value>
-  </data>
-  <data name="DataListTopLeftRange" xml:space="preserve">
-    <value>$A$1</value>
-  </data>
-  <data name="DataWorksheetName" xml:space="preserve">
-    <value>DATA</value>
-  </data>
-  <data name="DefaultArchiveDirectory" xml:space="preserve">
-    <value>archive</value>
-  </data>
-  <data name="ImportResultsListObjectName" xml:space="preserve">
-    <value>IMPORT_RESULTS</value>
-  </data>
-  <data name="ImportResultsListObjectRange" xml:space="preserve">
-    <value>$B$1:$E$1</value>
-  </data>
-  <data name="ImportResultsRightMostColumn" xml:space="preserve">
-    <value>$E</value>
-  </data>
-  <data name="ImportResultsTopLeftRange" xml:space="preserve">
-    <value>$B$1</value>
-  </data>
-  <data name="ImportResultsWorksheetName" xml:space="preserve">
-    <value>IMPORT RESULTS</value>
-  </data>
-  <data name="WorkbookNameValue" xml:space="preserve">
-    <value>Household Budget</value>
-  </data>
+  <metadata name="categoryBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

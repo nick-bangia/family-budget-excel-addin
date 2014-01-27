@@ -9,6 +9,7 @@ using HouseholdBudget.Data;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Data.Interfaces;
+using HouseholdBudget.Data.Protocol;
 using HouseholdBudget.Enums;
 using HouseholdBudget.Events;
 using HouseholdBudget.Tools;
@@ -24,6 +25,7 @@ namespace HouseholdBudget
         // modals
         private static ProgressModal progressModal;
         private static frmNewCategory newCategoryForm;
+        private static frmUpdateCategories updateCategoriesForm;
 
         // importing items
         private static LineItemCSVImporter importer;
@@ -32,28 +34,54 @@ namespace HouseholdBudget
         private static string archiveDirectory;
         
         // line item mapper interface
-        private static ILineItemMapper _mapper;
+        private static ILineItemMapper _lineItemMapper;
         private static ILineItemMapper lineItemMapper
         {
             get
             {
-                if (_mapper == null)
+                if (_lineItemMapper == null)
                 {
                     // get the configured name of the interface to use to import line items to the DB
                     Type mapperType = MapResolver.ResolveTypeForInterface(typeof(ILineItemMapper));
                     if (mapperType != null)
                     {
-                        _mapper = (ILineItemMapper)Activator.CreateInstance(mapperType);
+                        _lineItemMapper = (ILineItemMapper)Activator.CreateInstance(mapperType);
                     }
                     else
                     {
-                        _mapper = null;
+                        _lineItemMapper = null;
                     }
                 }
 
-                return _mapper;
+                return _lineItemMapper;
             }
         }
+        
+        // category mapper interface
+        private static ICategoryMapper _categoryMapper;
+        private static ICategoryMapper categoryMapper
+        {
+            get
+            {
+                if (_categoryMapper == null)
+                {
+                    // get the configured name of the interface to use to import line items to the DB
+                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(ICategoryMapper));
+                    if (mapperType != null)
+                    {
+                        _categoryMapper = (ICategoryMapper)Activator.CreateInstance(mapperType);
+                    }
+                    else
+                    {
+                        _categoryMapper = null;
+                    }
+                }
+
+                return _categoryMapper;
+            }
+        }
+
+        // excel helpers
         private enum DefaultWorksheets
         {
             Views = 1,
@@ -202,6 +230,12 @@ namespace HouseholdBudget
             newCategoryForm.Show();
         }
 
+        internal static void btnUpdateCategories_Click(object sender, RibbonControlEventArgs e)
+        {
+            updateCategoriesForm = new frmUpdateCategories();
+            updateCategoriesForm.Show();
+        }
+
         internal static void btnRefresh_Click(object sender, RibbonControlEventArgs e)
         {
             RefreshPivotTables();
@@ -217,7 +251,7 @@ namespace HouseholdBudget
         {
             // attempt to add a new category to the 
             logger.Info("Adding a new category to the DB.");
-            OperationStatus addedNewCategory = lineItemMapper.AddNewCategory(e.CategoryName, e.SubCategoryName, e.SubCategoryPrefix);
+            OperationStatus addedNewCategory = categoryMapper.AddNewCategory(e.CategoryName, e.SubCategoryName, e.SubCategoryPrefix, true);
             if (addedNewCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new category, show a message box to that effect.
@@ -389,6 +423,11 @@ namespace HouseholdBudget
                         ex.Message);
                 }
             }
+        }
+
+        internal static LiveDataObject GetCategories()
+        {
+            return categoryMapper.GetCategories();
         }
     }
 }

@@ -79,7 +79,7 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $I$2.
+        ///   Looks up a localized string similar to $K$2.
         /// </summary>
         internal static string DataListBottomRightRange {
             get {
@@ -97,7 +97,7 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $A$1:$I$1.
+        ///   Looks up a localized string similar to $A$1:$K$1.
         /// </summary>
         internal static string DataListObjectRange {
             get {
@@ -106,7 +106,7 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $I.
+        ///   Looks up a localized string similar to $K.
         /// </summary>
         internal static string DataListRightMostColumn {
             get {

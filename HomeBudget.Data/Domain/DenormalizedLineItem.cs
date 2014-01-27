@@ -13,5 +13,7 @@ namespace HouseholdBudget.Data.Domain
         public string SubCategory { get; set; }
         public decimal Amount { get; set; }
         public LineItemType Type { get; set; }
+        public LineItemSubType SubType { get; set; }
+        public Quarters Quarter { get; set; }
     }
 }

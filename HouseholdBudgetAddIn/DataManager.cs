@@ -5,7 +5,6 @@ using NativeExcel = Microsoft.Office.Interop.Excel;
 using HouseholdBudget.UI;
 using HouseholdBudget.Enums;
 using HouseholdBudget.Utilities;
-using System;
 using log4net;
 
 namespace HouseholdBudget
@@ -39,6 +38,7 @@ namespace HouseholdBudget
 
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.YEAR].Value2 = EnumUtil.GetFriendlyName(DataColumns.YEAR);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.MONTH].Value2 = EnumUtil.GetFriendlyName(DataColumns.MONTH);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.QUARTER].Value2 = EnumUtil.GetFriendlyName(DataColumns.QUARTER);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DAY].Value2 = EnumUtil.GetFriendlyName(DataColumns.DAY);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DAY_OF_WEEK].Value2 = EnumUtil.GetFriendlyName(DataColumns.DAY_OF_WEEK);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DESCRIPTION].Value2 = EnumUtil.GetFriendlyName(DataColumns.DESCRIPTION);
@@ -46,6 +46,7 @@ namespace HouseholdBudget
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.SUBCATEGORY].Value2 = EnumUtil.GetFriendlyName(DataColumns.SUBCATEGORY);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.AMOUNT].Value2 = EnumUtil.GetFriendlyName(DataColumns.AMOUNT);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.TYPE].Value2 = EnumUtil.GetFriendlyName(DataColumns.TYPE);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.SUBTYPE].Value2 = EnumUtil.GetFriendlyName(DataColumns.SUBTYPE);
             }
             else
             {
@@ -114,6 +115,9 @@ namespace HouseholdBudget
                 case (int)DataColumns.MONTH:
                     value = lineItems[index].Month;
                     break;
+                case (int)DataColumns.QUARTER:
+                    value = EnumUtil.GetFriendlyName(lineItems[index].Quarter);
+                    break;
                 case (int)DataColumns.DAY:
                     value = lineItems[index].Day;
                     break;
@@ -134,6 +138,9 @@ namespace HouseholdBudget
                     break;
                 case (int)DataColumns.TYPE:
                     value = EnumUtil.GetFriendlyName(lineItems[index].Type);
+                    break;
+                case (int)DataColumns.SUBTYPE:
+                    value = EnumUtil.GetFriendlyName(lineItems[index].SubType);
                     break;
                 default:
                     value = "N/A";

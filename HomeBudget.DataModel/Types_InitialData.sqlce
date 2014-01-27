@@ -1,7 +1,5 @@
 -- Query to insert the types of transactions
 INSERT INTO dimTypes (TypeId, TypeName)
-VALUES (0, 'DEBIT');
+VALUES (0, 'EXPENSE');
 INSERT INTO dimTypes (TypeId, TypeName)
 VALUES (1, 'ALLOCATION');
-INSERT INTO dimTypes (TypeId, TypeName)
-VALUES (2, 'CREDIT');

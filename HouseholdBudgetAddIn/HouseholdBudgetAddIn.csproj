@@ -27,7 +27,8 @@
     <RootNamespace>HouseholdBudget</RootNamespace>
     <AssemblyName>HouseholdBudgetAddIn</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <DefineConstants>VSTO40</DefineConstants>
     <IsWebBootstrapper>False</IsWebBootstrapper>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -157,6 +158,7 @@
     <Reference Include="Microsoft.Office.Tools.Excel.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -246,6 +248,12 @@
     <Compile Include="UI\ProgressModal.designer.cs">
       <DependentUpon>ProgressModal.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\UpdateCategoryModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\UpdateCategoryModal.Designer.cs">
+      <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities\EnumUtil.cs" />
     <Compile Include="ImportResultsManager.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -265,11 +273,15 @@
       <DependentUpon>ProgressModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\UpdateCategoryModal.resx">
+      <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="App.config" />
     <None Include="HouseholdBudgetAddIn_TemporaryKey.pfx" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.Category.datasource" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>

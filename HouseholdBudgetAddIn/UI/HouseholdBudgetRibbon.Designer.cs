@@ -41,6 +41,7 @@ namespace HouseholdBudget.UI
             this.btnImportStatement = this.Factory.CreateRibbonButton();
             this.btnAddCategory = this.Factory.CreateRibbonButton();
             this.btnRefresh = this.Factory.CreateRibbonButton();
+            this.btnUpdateCategories = this.Factory.CreateRibbonButton();
             this.tabHouseholdBudget.SuspendLayout();
             this.grpTools.SuspendLayout();
             // 
@@ -56,6 +57,7 @@ namespace HouseholdBudget.UI
             this.grpTools.Items.Add(this.btnImportStatement);
             this.grpTools.Items.Add(this.btnAddCategory);
             this.grpTools.Items.Add(this.btnRefresh);
+            this.grpTools.Items.Add(this.btnUpdateCategories);
             this.grpTools.Label = "Tools";
             this.grpTools.Name = "grpTools";
             // 
@@ -83,6 +85,14 @@ namespace HouseholdBudget.UI
             this.btnRefresh.OfficeImageId = "Refresh";
             this.btnRefresh.ShowImage = true;
             // 
+            // btnUpdateCategories
+            // 
+            this.btnUpdateCategories.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnUpdateCategories.Label = "Update Categories";
+            this.btnUpdateCategories.Name = "btnUpdateCategories";
+            this.btnUpdateCategories.OfficeImageId = "EditItem";
+            this.btnUpdateCategories.ShowImage = true;
+            // 
             // HouseholdBudgetRibbon
             // 
             this.Name = "HouseholdBudgetRibbon";
@@ -103,6 +113,7 @@ namespace HouseholdBudget.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImportStatement;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddCategory;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRefresh;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdateCategories;
     }
 
     partial class ThisRibbonCollection

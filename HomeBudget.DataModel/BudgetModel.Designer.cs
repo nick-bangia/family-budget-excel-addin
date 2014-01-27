@@ -18,10 +18,11 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimCategories", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimTypes", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimTypes), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimMonths", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimMonths", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimMonths), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "factLineItems_dimDaysOfWeek", "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), "dimDaysOfWeek", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimDaysOfWeek), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimCategories", "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimDaysOfWeeks), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimMonths", "dimMonths", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimMonths), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimTypes", "dimTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "dimSubTypesfactLineItems", "dimSubTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimSubTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 
 #endregion
 
@@ -76,50 +77,18 @@ namespace HouseholdBudget.DataModel
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<factLineItems> factLineItems
+        public ObjectSet<dimSubTypes> dimSubTypes
         {
             get
             {
-                if ((_factLineItems == null))
+                if ((_dimSubTypes == null))
                 {
-                    _factLineItems = base.CreateObjectSet<factLineItems>("factLineItems");
+                    _dimSubTypes = base.CreateObjectSet<dimSubTypes>("dimSubTypes");
                 }
-                return _factLineItems;
+                return _dimSubTypes;
             }
         }
-        private ObjectSet<factLineItems> _factLineItems;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<dimMonths> dimMonths
-        {
-            get
-            {
-                if ((_dimMonths == null))
-                {
-                    _dimMonths = base.CreateObjectSet<dimMonths>("dimMonths");
-                }
-                return _dimMonths;
-            }
-        }
-        private ObjectSet<dimMonths> _dimMonths;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<dimDaysOfWeek> dimDaysOfWeeks
-        {
-            get
-            {
-                if ((_dimDaysOfWeeks == null))
-                {
-                    _dimDaysOfWeeks = base.CreateObjectSet<dimDaysOfWeek>("dimDaysOfWeeks");
-                }
-                return _dimDaysOfWeeks;
-            }
-        }
-        private ObjectSet<dimDaysOfWeek> _dimDaysOfWeeks;
+        private ObjectSet<dimSubTypes> _dimSubTypes;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -140,6 +109,38 @@ namespace HouseholdBudget.DataModel
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<dimDaysOfWeeks> dimDaysOfWeeks
+        {
+            get
+            {
+                if ((_dimDaysOfWeeks == null))
+                {
+                    _dimDaysOfWeeks = base.CreateObjectSet<dimDaysOfWeeks>("dimDaysOfWeeks");
+                }
+                return _dimDaysOfWeeks;
+            }
+        }
+        private ObjectSet<dimDaysOfWeeks> _dimDaysOfWeeks;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<dimMonths> dimMonths
+        {
+            get
+            {
+                if ((_dimMonths == null))
+                {
+                    _dimMonths = base.CreateObjectSet<dimMonths>("dimMonths");
+                }
+                return _dimMonths;
+            }
+        }
+        private ObjectSet<dimMonths> _dimMonths;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<dimTypes> dimTypes
         {
             get
@@ -152,32 +153,32 @@ namespace HouseholdBudget.DataModel
             }
         }
         private ObjectSet<dimTypes> _dimTypes;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<factLineItems> factLineItems
+        {
+            get
+            {
+                if ((_factLineItems == null))
+                {
+                    _factLineItems = base.CreateObjectSet<factLineItems>("factLineItems");
+                }
+                return _factLineItems;
+            }
+        }
+        private ObjectSet<factLineItems> _factLineItems;
 
         #endregion
         #region AddTo Methods
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the factLineItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the dimSubTypes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddTofactLineItems(factLineItems factLineItems)
+        public void AddTodimSubTypes(dimSubTypes dimSubTypes)
         {
-            base.AddObject("factLineItems", factLineItems);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the dimMonths EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddTodimMonths(dimMonths dimMonths)
-        {
-            base.AddObject("dimMonths", dimMonths);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the dimDaysOfWeeks EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddTodimDaysOfWeeks(dimDaysOfWeek dimDaysOfWeek)
-        {
-            base.AddObject("dimDaysOfWeeks", dimDaysOfWeek);
+            base.AddObject("dimSubTypes", dimSubTypes);
         }
     
         /// <summary>
@@ -189,11 +190,35 @@ namespace HouseholdBudget.DataModel
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the dimDaysOfWeeks EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTodimDaysOfWeeks(dimDaysOfWeeks dimDaysOfWeeks)
+        {
+            base.AddObject("dimDaysOfWeeks", dimDaysOfWeeks);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the dimMonths EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTodimMonths(dimMonths dimMonths)
+        {
+            base.AddObject("dimMonths", dimMonths);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the dimTypes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddTodimTypes(dimTypes dimTypes)
         {
             base.AddObject("dimTypes", dimTypes);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the factLineItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTofactLineItems(factLineItems factLineItems)
+        {
+            base.AddObject("factLineItems", factLineItems);
         }
 
         #endregion
@@ -221,13 +246,15 @@ namespace HouseholdBudget.DataModel
         /// <param name="categoryName">Initial value of the CategoryName property.</param>
         /// <param name="subCategoryName">Initial value of the SubCategoryName property.</param>
         /// <param name="subCategoryPrefix">Initial value of the SubCategoryPrefix property.</param>
-        public static dimCategories CreatedimCategories(global::System.Guid categoryKey, global::System.String categoryName, global::System.String subCategoryName, global::System.String subCategoryPrefix)
+        /// <param name="isActive">Initial value of the IsActive property.</param>
+        public static dimCategories CreatedimCategories(global::System.Guid categoryKey, global::System.String categoryName, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive)
         {
             dimCategories dimCategories = new dimCategories();
             dimCategories.CategoryKey = categoryKey;
             dimCategories.CategoryName = categoryName;
             dimCategories.SubCategoryName = subCategoryName;
             dimCategories.SubCategoryPrefix = subCategoryPrefix;
+            dimCategories.IsActive = isActive;
             return dimCategories;
         }
 
@@ -332,6 +359,30 @@ namespace HouseholdBudget.DataModel
         private global::System.String _SubCategoryPrefix;
         partial void OnSubCategoryPrefixChanging(global::System.String value);
         partial void OnSubCategoryPrefixChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsActive
+        {
+            get
+            {
+                return _IsActive;
+            }
+            set
+            {
+                OnIsActiveChanging(value);
+                ReportPropertyChanging("IsActive");
+                _IsActive = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsActive");
+                OnIsActiveChanged();
+            }
+        }
+        private global::System.Boolean _IsActive;
+        partial void OnIsActiveChanging(global::System.Boolean value);
+        partial void OnIsActiveChanged();
 
         #endregion
     
@@ -343,18 +394,18 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimCategories", "factLineItems")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimCategories", "factLineItems")]
         public EntityCollection<factLineItems> ItemsInThisCategory
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimCategories", "factLineItems");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimCategories", "factLineItems");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimCategories", "factLineItems", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimCategories", "factLineItems", value);
                 }
             }
         }
@@ -365,24 +416,24 @@ namespace HouseholdBudget.DataModel
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimDaysOfWeek")]
+    [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimDaysOfWeeks")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class dimDaysOfWeek : EntityObject
+    public partial class dimDaysOfWeeks : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new dimDaysOfWeek object.
+        /// Create a new dimDaysOfWeeks object.
         /// </summary>
         /// <param name="dayId">Initial value of the DayId property.</param>
         /// <param name="dayName">Initial value of the DayName property.</param>
-        public static dimDaysOfWeek CreatedimDaysOfWeek(global::System.Int16 dayId, global::System.String dayName)
+        public static dimDaysOfWeeks CreatedimDaysOfWeeks(global::System.Int16 dayId, global::System.String dayName)
         {
-            dimDaysOfWeek dimDaysOfWeek = new dimDaysOfWeek();
-            dimDaysOfWeek.DayId = dayId;
-            dimDaysOfWeek.DayName = dayName;
-            return dimDaysOfWeek;
+            dimDaysOfWeeks dimDaysOfWeeks = new dimDaysOfWeeks();
+            dimDaysOfWeeks.DayId = dayId;
+            dimDaysOfWeeks.DayName = dayName;
+            return dimDaysOfWeeks;
         }
 
         #endregion
@@ -449,18 +500,18 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimDaysOfWeek", "factLineItems")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimDaysOfWeek", "factLineItems")]
         public EntityCollection<factLineItems> ItemsForThisDay
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimDaysOfWeek", "factLineItems");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimDaysOfWeek", "factLineItems");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimDaysOfWeek", "factLineItems", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimDaysOfWeek", "factLineItems", value);
                 }
             }
         }
@@ -555,18 +606,124 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimMonths", "factLineItems")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimMonths", "factLineItems")]
         public EntityCollection<factLineItems> ItemsInThisMonth
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimMonths", "factLineItems");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimMonths", "factLineItems");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimMonths", "factLineItems", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimMonths", "factLineItems", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimSubTypes")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class dimSubTypes : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new dimSubTypes object.
+        /// </summary>
+        /// <param name="subTypeId">Initial value of the SubTypeId property.</param>
+        /// <param name="subTypeName">Initial value of the SubTypeName property.</param>
+        public static dimSubTypes CreatedimSubTypes(global::System.Int16 subTypeId, global::System.String subTypeName)
+        {
+            dimSubTypes dimSubTypes = new dimSubTypes();
+            dimSubTypes.SubTypeId = subTypeId;
+            dimSubTypes.SubTypeName = subTypeName;
+            return dimSubTypes;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 SubTypeId
+        {
+            get
+            {
+                return _SubTypeId;
+            }
+            set
+            {
+                if (_SubTypeId != value)
+                {
+                    OnSubTypeIdChanging(value);
+                    ReportPropertyChanging("SubTypeId");
+                    _SubTypeId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("SubTypeId");
+                    OnSubTypeIdChanged();
+                }
+            }
+        }
+        private global::System.Int16 _SubTypeId;
+        partial void OnSubTypeIdChanging(global::System.Int16 value);
+        partial void OnSubTypeIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SubTypeName
+        {
+            get
+            {
+                return _SubTypeName;
+            }
+            set
+            {
+                OnSubTypeNameChanging(value);
+                ReportPropertyChanging("SubTypeName");
+                _SubTypeName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubTypeName");
+                OnSubTypeNameChanged();
+            }
+        }
+        private global::System.String _SubTypeName;
+        partial void OnSubTypeNameChanging(global::System.String value);
+        partial void OnSubTypeNameChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "dimSubTypesfactLineItems", "factLineItems")]
+        public EntityCollection<factLineItems> ItemsOfThisSubType
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.dimSubTypesfactLineItems", "factLineItems");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.dimSubTypesfactLineItems", "factLineItems", value);
                 }
             }
         }
@@ -661,18 +818,18 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimTypes", "factLineItems")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimTypes", "factLineItems")]
         public EntityCollection<factLineItems> ItemsOfThisType
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimTypes", "factLineItems");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimTypes", "factLineItems");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.factLineItems_dimTypes", "factLineItems", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimTypes", "factLineItems", value);
                 }
             }
         }
@@ -702,7 +859,9 @@ namespace HouseholdBudget.DataModel
         /// <param name="description">Initial value of the Description property.</param>
         /// <param name="amount">Initial value of the Amount property.</param>
         /// <param name="typeId">Initial value of the TypeId property.</param>
-        public static factLineItems CreatefactLineItems(global::System.Guid uniqueKey, global::System.Int16 monthId, global::System.Int16 dayOfMonthId, global::System.Int16 dayOfWeekId, global::System.Int32 yearId, global::System.Guid categoryKey, global::System.String description, global::System.Decimal amount, global::System.Int32 typeId)
+        /// <param name="quarterId">Initial value of the QuarterId property.</param>
+        /// <param name="subTypeId">Initial value of the SubTypeId property.</param>
+        public static factLineItems CreatefactLineItems(global::System.Guid uniqueKey, global::System.Int16 monthId, global::System.Int16 dayOfMonthId, global::System.Int16 dayOfWeekId, global::System.Int32 yearId, global::System.Guid categoryKey, global::System.String description, global::System.Decimal amount, global::System.Int32 typeId, global::System.Int16 quarterId, global::System.Int16 subTypeId)
         {
             factLineItems factLineItems = new factLineItems();
             factLineItems.UniqueKey = uniqueKey;
@@ -714,6 +873,8 @@ namespace HouseholdBudget.DataModel
             factLineItems.Description = description;
             factLineItems.Amount = amount;
             factLineItems.TypeId = typeId;
+            factLineItems.QuarterId = quarterId;
+            factLineItems.SubTypeId = subTypeId;
             return factLineItems;
         }
 
@@ -938,6 +1099,54 @@ namespace HouseholdBudget.DataModel
         private global::System.Int32 _TypeId;
         partial void OnTypeIdChanging(global::System.Int32 value);
         partial void OnTypeIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 QuarterId
+        {
+            get
+            {
+                return _QuarterId;
+            }
+            set
+            {
+                OnQuarterIdChanging(value);
+                ReportPropertyChanging("QuarterId");
+                _QuarterId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("QuarterId");
+                OnQuarterIdChanged();
+            }
+        }
+        private global::System.Int16 _QuarterId;
+        partial void OnQuarterIdChanging(global::System.Int16 value);
+        partial void OnQuarterIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 SubTypeId
+        {
+            get
+            {
+                return _SubTypeId;
+            }
+            set
+            {
+                OnSubTypeIdChanging(value);
+                ReportPropertyChanging("SubTypeId");
+                _SubTypeId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SubTypeId");
+                OnSubTypeIdChanged();
+            }
+        }
+        private global::System.Int16 _SubTypeId;
+        partial void OnSubTypeIdChanging(global::System.Int16 value);
+        partial void OnSubTypeIdChanged();
 
         #endregion
     
@@ -949,16 +1158,16 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimCategories", "dimCategories")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimCategories", "dimCategories")]
         public dimCategories Category
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.factLineItems_dimCategories", "dimCategories").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.factLineItems_dimCategories", "dimCategories").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories").Value = value;
             }
         }
         /// <summary>
@@ -970,13 +1179,13 @@ namespace HouseholdBudget.DataModel
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.factLineItems_dimCategories", "dimCategories");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimCategories>("BudgetModel.factLineItems_dimCategories", "dimCategories", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories", value);
                 }
             }
         }
@@ -987,16 +1196,16 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimTypes", "dimTypes")]
-        public dimTypes Type
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks")]
+        public dimDaysOfWeeks DayOfWeek
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimTypes>("BudgetModel.factLineItems_dimTypes", "dimTypes").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimDaysOfWeeks>("BudgetModel.FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimTypes>("BudgetModel.factLineItems_dimTypes", "dimTypes").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimDaysOfWeeks>("BudgetModel.FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks").Value = value;
             }
         }
         /// <summary>
@@ -1004,17 +1213,17 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<dimTypes> TypeReference
+        public EntityReference<dimDaysOfWeeks> DayOfWeekReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimTypes>("BudgetModel.factLineItems_dimTypes", "dimTypes");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimDaysOfWeeks>("BudgetModel.FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimTypes>("BudgetModel.factLineItems_dimTypes", "dimTypes", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimDaysOfWeeks>("BudgetModel.FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks", value);
                 }
             }
         }
@@ -1025,16 +1234,16 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimMonths", "dimMonths")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimMonths", "dimMonths")]
         public dimMonths Month
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimMonths>("BudgetModel.factLineItems_dimMonths", "dimMonths").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimMonths>("BudgetModel.FK_factLineItems_dimMonths", "dimMonths").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimMonths>("BudgetModel.factLineItems_dimMonths", "dimMonths").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimMonths>("BudgetModel.FK_factLineItems_dimMonths", "dimMonths").Value = value;
             }
         }
         /// <summary>
@@ -1046,13 +1255,13 @@ namespace HouseholdBudget.DataModel
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimMonths>("BudgetModel.factLineItems_dimMonths", "dimMonths");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimMonths>("BudgetModel.FK_factLineItems_dimMonths", "dimMonths");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimMonths>("BudgetModel.factLineItems_dimMonths", "dimMonths", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimMonths>("BudgetModel.FK_factLineItems_dimMonths", "dimMonths", value);
                 }
             }
         }
@@ -1063,16 +1272,16 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "factLineItems_dimDaysOfWeek", "dimDaysOfWeek")]
-        public dimDaysOfWeek DayOfWeek
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimTypes", "dimTypes")]
+        public dimTypes Type
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimDaysOfWeek>("BudgetModel.factLineItems_dimDaysOfWeek", "dimDaysOfWeek").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimTypes>("BudgetModel.FK_factLineItems_dimTypes", "dimTypes").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimDaysOfWeek>("BudgetModel.factLineItems_dimDaysOfWeek", "dimDaysOfWeek").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimTypes>("BudgetModel.FK_factLineItems_dimTypes", "dimTypes").Value = value;
             }
         }
         /// <summary>
@@ -1080,17 +1289,55 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<dimDaysOfWeek> DayOfWeekReference
+        public EntityReference<dimTypes> TypeReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimDaysOfWeek>("BudgetModel.factLineItems_dimDaysOfWeek", "dimDaysOfWeek");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimTypes>("BudgetModel.FK_factLineItems_dimTypes", "dimTypes");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimDaysOfWeek>("BudgetModel.factLineItems_dimDaysOfWeek", "dimDaysOfWeek", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimTypes>("BudgetModel.FK_factLineItems_dimTypes", "dimTypes", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "dimSubTypesfactLineItems", "dimSubTypes")]
+        public dimSubTypes SubType
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<dimSubTypes> SubTypeReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes", value);
                 }
             }
         }

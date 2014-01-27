@@ -10,25 +10,31 @@ namespace HouseholdBudget.Enums
         [FriendlyName("Month")]
         MONTH = 2,
 
+        [FriendlyName("Quarter")]
+        QUARTER = 3,
+
         [FriendlyName("Day Of Month")]
-        DAY = 3,
+        DAY = 4,
 
         [FriendlyName("Day of Week")]
-        DAY_OF_WEEK = 4,
+        DAY_OF_WEEK = 5,
 
         [FriendlyName("Description")]
-        DESCRIPTION = 5,
+        DESCRIPTION = 6,
 
         [FriendlyName("Category")]
-        CATEGORY = 6,
+        CATEGORY = 7,
 
         [FriendlyName("SubCategory")]
-        SUBCATEGORY = 7,
+        SUBCATEGORY = 8,
 
         [FriendlyName("Amount")]
-        AMOUNT = 8,
+        AMOUNT = 9,
 
         [FriendlyName("Line Item Type")]
-        TYPE = 9
+        TYPE = 10,
+
+        [FriendlyName("Financial Type")]
+        SUBTYPE = 11
     }
 }

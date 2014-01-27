@@ -8,7 +8,7 @@
     <ProjectGuid>{5A76D072-DD00-4248-8690-3CD76C7AB776}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HomeBudget.Data</RootNamespace>
+    <RootNamespace>HouseholdBudget.Data</RootNamespace>
     <AssemblyName>HomeBudget.Data</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -60,11 +60,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\FriendlyNameAttribute.cs" />
+    <Compile Include="Domain\Category.cs" />
     <Compile Include="Domain\DenormalizedLineItem.cs" />
     <Compile Include="Domain\LineItem.cs" />
+    <Compile Include="Enums\LineItemSubType.cs" />
     <Compile Include="Enums\OperationStatus.cs" />
     <Compile Include="Enums\LineItemStatus.cs" />
     <Compile Include="Enums\LineItemType.cs" />
+    <Compile Include="Enums\Quarters.cs" />
+    <Compile Include="Implementation\CategoryMapper.cs" />
+    <Compile Include="Interfaces\ICategoryMapper.cs" />
     <Compile Include="Interfaces\ILineItemMapper.cs" />
     <Compile Include="Implementation\LineItemMapper.cs" />
     <Compile Include="MapResolver.cs" />
@@ -72,6 +77,7 @@
     <Compile Include="../AssemblyVersioning.cs">
       <Link>Properties\AssemblyVersioning.cs</Link>
     </Compile>
+    <Compile Include="Protocol\LiveDataObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -101,6 +107,7 @@
       <Name>HomeBudget.DataModel</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>

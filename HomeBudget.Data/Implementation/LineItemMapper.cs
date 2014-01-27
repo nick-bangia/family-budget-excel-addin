@@ -7,6 +7,7 @@ using HouseholdBudget.Data.Interfaces;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.DataModel;
+using System.ComponentModel;
 
 namespace HouseholdBudget.Data.Implementation
 {
@@ -46,11 +47,6 @@ namespace HouseholdBudget.Data.Implementation
             return CheckForDuplicate(lineItem);
         }
 
-        public OperationStatus AddNewCategory(string categoryName, string subCategoryName, string subCategoryPrefix)
-        {
-            return SaveCategoryToDB(dimCategories.CreatedimCategories(Guid.NewGuid(), categoryName, subCategoryName, subCategoryPrefix));
-        }
-
         #endregion
 
         #region Private Methods
@@ -58,7 +54,7 @@ namespace HouseholdBudget.Data.Implementation
         private List<DenormalizedLineItem> GetAllItemsFromDB()
         {
             // log start of method
-            logger.Info("Beginning retrieval of all items from DB...");
+            logger.Info("Beginning retrieval of all items for active categories from DB...");
 
             List<DenormalizedLineItem> allLineItems = new List<DenormalizedLineItem>();
 
@@ -68,6 +64,7 @@ namespace HouseholdBudget.Data.Implementation
                 {
                     logger.Info("Getting all items from DB.");
                     var lineItems = from fli in ctx.factLineItems
+                                    where fli.Category.IsActive
                                     select fli;
 
                     logger.Info("Denormalizing line items.");
@@ -84,7 +81,9 @@ namespace HouseholdBudget.Data.Implementation
                             Description = fli.Description,
                             Category = fli.Category.CategoryName,
                             SubCategory = fli.Category.SubCategoryName,
-                            Type = (LineItemType)fli.TypeId
+                            Type = (LineItemType)fli.TypeId,
+                            SubType = (LineItemSubType)fli.SubTypeId,
+                            Quarter = (Quarters)fli.QuarterId
                         };
 
                         // save to the final list
@@ -128,15 +127,18 @@ namespace HouseholdBudget.Data.Implementation
                         // year
                         int yearId = lineItem.Date.Year;
                         // type of transaction
-                        int type = (int)(lineItem.Amount < 0 ? LineItemType.DEBIT : LineItemType.CREDIT);
+                        // default to EXPENSE
+                        int type = (int)LineItemType.EXPENSE;
+                        short subType = (short)(lineItem.Amount < 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT);
                         // if the description suggests an allocation, change its type
                         if (lineItem.Description.ToLower().Contains("alloc"))
                         {
                             type = (int)LineItemType.ALLOCATION;
-                        }                       
+                        }
+                        short quarterId = (short)GetQuarterForMonth(monthId);
 
                         factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
-                            lineItem.Description, lineItem.Amount, type);
+                            lineItem.Description, lineItem.Amount, type, quarterId, subType);
 
                         // save to DB
                         cxt.factLineItems.AddObject(fact);
@@ -158,6 +160,42 @@ namespace HouseholdBudget.Data.Implementation
                 logger.Error("An exception was caught while saving a line item!", ex);
                 return LineItemStatus.SAVE_ERROR;
             }
+        }
+
+        private Quarters GetQuarterForMonth(short monthId)
+        {
+            Quarters quarter;
+
+            switch (monthId)
+            {
+                case 1:
+                case 2:
+                case 3:
+                    quarter = Quarters.Q1;
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                    quarter = Quarters.Q2;
+                    break;
+                case 7:
+                case 8:
+                case 9:
+                    quarter = Quarters.Q3;
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                    quarter = Quarters.Q4;
+                    break;
+                default:
+                    // default to Q1 - this shouldn't ever happen
+                    quarter = Quarters.Q1;
+                    break;
+            }
+
+
+            return quarter;
         }
 
         private Guid GetCategoryKeyFor(string itemDescription)
@@ -224,34 +262,6 @@ namespace HouseholdBudget.Data.Implementation
 
                 // if code reaches here, there is no sign of a duplicate item
                 return null;
-            }
-        }
-
-        private OperationStatus SaveCategoryToDB(dimCategories newCategory)
-        {
-            using (BudgetEntities ctx = new BudgetEntities())
-            {
-                var categories = from cat in ctx.dimCategories
-                                 where cat.CategoryName == newCategory.CategoryName &&
-                                       cat.SubCategoryPrefix == newCategory.SubCategoryPrefix
-                                 select cat;
-
-                // if a category already exists, return failure
-                if (categories.Count() > 0)
-                {
-                    logger.Info("Attempted to add a new category that already exists!");
-                    return OperationStatus.FAILURE;
-                }
-                               
-                // otherwise, add to the DB
-                // add object to context
-                ctx.dimCategories.AddObject(newCategory);
-
-                // save changes to DB
-                ctx.SaveChanges();
-
-                // return success operation
-                return OperationStatus.SUCCESS;
             }
         }
 
