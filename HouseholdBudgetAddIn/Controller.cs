@@ -25,6 +25,7 @@ namespace HouseholdBudget
         // modals
         private static ProgressModal progressModal;
         private static frmNewCategory newCategoryForm;
+        private static frmNewSubCategory newSubCategoryForm;
         private static frmUpdateCategories updateCategoriesForm;
 
         // importing items
@@ -94,7 +95,7 @@ namespace HouseholdBudget
         private static readonly ILog logger = LogManager.GetLogger("HouseholdBudgetAddIn_Controller");
         #endregion
 
-        internal static void btnImportStatement_Click(object sender, RibbonControlEventArgs e)
+        internal static void btnImport_Click(object sender, RibbonControlEventArgs e)
         {
             // get the open file dialog
             System.Windows.Forms.OpenFileDialog fileDialog = new OpenFileDialog();
@@ -222,11 +223,19 @@ namespace HouseholdBudget
             }
         }
 
+        internal static void btnAddSubCategory_Click(object sender, RibbonControlEventArgs e)
+        {
+            newSubCategoryForm = new frmNewSubCategory();
+            newSubCategoryForm.SubCategorySaved += new EventHandler<SubCategoryEventArgs>(newSubCategoryForm_SubCategorySaved);
+            newSubCategoryForm.UserCancelled += new EventHandler<CategoryControlEventArgs>(categoryForm_UserCancelled);
+            newSubCategoryForm.Show();
+        }
+
         internal static void btnAddCategory_Click(object sender, RibbonControlEventArgs e)
         {
             newCategoryForm = new frmNewCategory();
             newCategoryForm.CategorySaved += new EventHandler<CategoryEventArgs>(newCategoryForm_CategorySaved);
-            newCategoryForm.UserCancelled += new EventHandler(newCategoryForm_UserCancelled);
+            newCategoryForm.UserCancelled += new EventHandler<CategoryControlEventArgs>(categoryForm_UserCancelled);
             newCategoryForm.Show();
         }
 
@@ -238,26 +247,58 @@ namespace HouseholdBudget
 
         internal static void btnRefresh_Click(object sender, RibbonControlEventArgs e)
         {
+            RebuildDataSheet();
             RefreshPivotTables();
+            ShowFirstWorksheet();
         }
 
-        private static void newCategoryForm_UserCancelled(object sender, EventArgs e)
+        private static void categoryForm_UserCancelled(object sender, CategoryControlEventArgs e)
         {
-            // on user cancel, close the form
-            CloseNewCategoryForm();            
+            if (e.formType == CategoryFormType.ParentCategory)
+            {
+                // on user request to cancel the New Category form, close the form
+                CloseNewCategoryForm();            
+            }
+            else if (e.formType == CategoryFormType.SubCategory)
+            {
+                // on user request to cancel the New SubCategory form, close the form
+                CloseNewSubCategoryForm();
+            }
+            
+        }
+
+        private static void newSubCategoryForm_SubCategorySaved(object sender, SubCategoryEventArgs e)
+        {
+            // attempt to add a new SubCategory to the DB
+            logger.Info("Adding a new SubCategory to the DB.");
+            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.CategoryKey, e.SubCategoryName, e.SubCategoryPrefix, e.IsActive);
+            if (addedNewSubCategory == OperationStatus.FAILURE)
+            {
+                // if an error occurred while attempting to write the new subcategory, show a message box to that effect.
+                string errorText =  "An error occurred while attempting to add a new SubCategory to the DB:" + Environment.NewLine +
+                                    "Check that:" + Environment.NewLine +
+                                    "\t1) The new SubCategory is not already in the DB." + Environment.NewLine +
+                                    "\t2) The DB exists." + Environment.NewLine +
+                                    "\t3) The required system files for this workbook are present.";
+                logger.Error(errorText);
+                MessageBox.Show(errorText);
+            }
+
+            // close the form, regardless.
+            CloseNewSubCategoryForm();
         }
 
         private static void newCategoryForm_CategorySaved(object sender, CategoryEventArgs e)
         {
-            // attempt to add a new category to the 
-            logger.Info("Adding a new category to the DB.");
-            OperationStatus addedNewCategory = categoryMapper.AddNewCategory(e.CategoryName, e.SubCategoryName, e.SubCategoryPrefix, true);
+            // attempt to add a new Category to the DB
+            logger.Info("Adding a new Category to the DB.");
+            OperationStatus addedNewCategory = categoryMapper.AddNewCategory(e.CategoryName);
             if (addedNewCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new category, show a message box to that effect.
-                string errorText =  "An error occurred while attempting to add a new category to the DB:" + Environment.NewLine +
+                string errorText =  "An error occurred while attempting to add a new Category to the DB:" + Environment.NewLine +
                                     "Check that:" + Environment.NewLine +
-                                    "\t1) The new category is not already in the DB." + Environment.NewLine +
+                                    "\t1) The new Category is not already in the DB." + Environment.NewLine +
                                     "\t2) The DB exists." + Environment.NewLine +
                                     "\t3) The required system files for this workbook are present.";
                 logger.Error(errorText);
@@ -306,6 +347,14 @@ namespace HouseholdBudget
                                 "Error Details:" + Environment.NewLine +
                                 ex.Message);
             }
+        }
+
+        internal static void RebuildDataSheet()
+        {
+            Globals.ThisAddIn.Application.DisplayAlerts = false;
+            DataManager.RemoveSheet();
+            Globals.ThisAddIn.Application.DisplayAlerts = true;
+            PopulateDataSheet();
         }
 
         internal static void PopulateDataSheet()
@@ -392,6 +441,19 @@ namespace HouseholdBudget
             }
         }
 
+        private static void CloseNewSubCategoryForm()
+        {
+            if (newSubCategoryForm != null)
+            {
+                if (!newSubCategoryForm.IsDisposed)
+                {
+                    newSubCategoryForm.Close();
+                }
+
+                newSubCategoryForm = null;
+            }
+        }
+
         internal static void ConfigureWorkbook(NativeExcel.Worksheet configurationWorksheet, string workbookPath)
         {
             // log that configuration is being completed
@@ -428,6 +490,16 @@ namespace HouseholdBudget
         internal static LiveDataObject GetCategories()
         {
             return categoryMapper.GetCategories();
+        }
+
+        internal static LiveDataObject GetSubCategories()
+        {
+            return categoryMapper.GetSubCategories();
+        }
+
+        internal static LiveDataObject GetFilteredSubCategories(Guid categoryKey)
+        {
+            return categoryMapper.GetFilteredSubCategories(categoryKey);
         }
     }
 }

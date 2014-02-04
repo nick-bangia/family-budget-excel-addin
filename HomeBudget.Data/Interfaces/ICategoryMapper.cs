@@ -11,7 +11,10 @@ namespace HouseholdBudget.Data.Interfaces
     public interface ICategoryMapper
     {
         LiveDataObject GetCategories();
-        OperationStatus AddNewCategory(string categoryName, string subCategoryName, string subCategoryPrefix, bool isActive);
-        OperationStatus SetCategoryActiveState(Guid categoryId, bool activeState);
+        LiveDataObject GetSubCategories();
+        LiveDataObject GetFilteredSubCategories(Guid categoryKey);
+        OperationStatus AddNewCategory(string categoryName);
+        OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, bool isActive);
+        OperationStatus SetCategoryActiveState(Guid categoryId, bool activeState);        
     }
 }

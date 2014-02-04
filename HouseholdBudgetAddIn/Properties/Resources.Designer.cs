@@ -69,6 +69,13 @@ namespace HouseholdBudget.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap arrow_refresh {
+            get {
+                object obj = ResourceManager.GetObject("arrow_refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Configuration.
         /// </summary>

@@ -29,55 +29,33 @@
         private void InitializeComponent()
         {
             this.lblSubCategoryName = new System.Windows.Forms.Label();
-            this.lblSubCategoryPrefix = new System.Windows.Forms.Label();
-            this.txtSubCategoryName = new System.Windows.Forms.TextBox();
-            this.txtSubCategoryPrefix = new System.Windows.Forms.TextBox();
+            this.txtCategoryName = new System.Windows.Forms.TextBox();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
-            this.txtCategoryName = new System.Windows.Forms.TextBox();
-            this.lblCategoryName = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblSubCategoryName
             // 
             this.lblSubCategoryName.AutoSize = true;
             this.lblSubCategoryName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubCategoryName.Location = new System.Drawing.Point(12, 70);
+            this.lblSubCategoryName.Location = new System.Drawing.Point(12, 14);
             this.lblSubCategoryName.Name = "lblSubCategoryName";
-            this.lblSubCategoryName.Size = new System.Drawing.Size(136, 19);
+            this.lblSubCategoryName.Size = new System.Drawing.Size(113, 19);
             this.lblSubCategoryName.TabIndex = 0;
-            this.lblSubCategoryName.Text = "SubCategory Name:";
+            this.lblSubCategoryName.Text = "Category Name:";
             // 
-            // lblSubCategoryPrefix
+            // txtCategoryName
             // 
-            this.lblSubCategoryPrefix.AutoSize = true;
-            this.lblSubCategoryPrefix.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubCategoryPrefix.Location = new System.Drawing.Point(12, 121);
-            this.lblSubCategoryPrefix.Name = "lblSubCategoryPrefix";
-            this.lblSubCategoryPrefix.Size = new System.Drawing.Size(134, 19);
-            this.lblSubCategoryPrefix.TabIndex = 1;
-            this.lblSubCategoryPrefix.Text = "SubCategory Prefix:";
-            // 
-            // txtSubCategoryName
-            // 
-            this.txtSubCategoryName.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSubCategoryName.Location = new System.Drawing.Point(16, 92);
-            this.txtSubCategoryName.Name = "txtSubCategoryName";
-            this.txtSubCategoryName.Size = new System.Drawing.Size(211, 26);
-            this.txtSubCategoryName.TabIndex = 2;
-            // 
-            // txtSubCategoryPrefix
-            // 
-            this.txtSubCategoryPrefix.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSubCategoryPrefix.Location = new System.Drawing.Point(16, 143);
-            this.txtSubCategoryPrefix.Name = "txtSubCategoryPrefix";
-            this.txtSubCategoryPrefix.Size = new System.Drawing.Size(211, 26);
-            this.txtSubCategoryPrefix.TabIndex = 3;
+            this.txtCategoryName.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtCategoryName.Location = new System.Drawing.Point(16, 36);
+            this.txtCategoryName.Name = "txtCategoryName";
+            this.txtCategoryName.Size = new System.Drawing.Size(211, 26);
+            this.txtCategoryName.TabIndex = 2;
             // 
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(259, 49);
+            this.btnSave.Location = new System.Drawing.Point(71, 78);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 34);
             this.btnSave.TabIndex = 4;
@@ -87,48 +65,26 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(259, 89);
+            this.btnCancel.Location = new System.Drawing.Point(152, 78);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 35);
             this.btnCancel.TabIndex = 5;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             // 
-            // txtCategoryName
-            // 
-            this.txtCategoryName.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCategoryName.Location = new System.Drawing.Point(16, 41);
-            this.txtCategoryName.Name = "txtCategoryName";
-            this.txtCategoryName.Size = new System.Drawing.Size(211, 26);
-            this.txtCategoryName.TabIndex = 7;
-            // 
-            // lblCategoryName
-            // 
-            this.lblCategoryName.AutoSize = true;
-            this.lblCategoryName.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCategoryName.Location = new System.Drawing.Point(12, 18);
-            this.lblCategoryName.Name = "lblCategoryName";
-            this.lblCategoryName.Size = new System.Drawing.Size(113, 19);
-            this.lblCategoryName.TabIndex = 6;
-            this.lblCategoryName.Text = "Category Name:";
-            // 
             // frmNewCategory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(369, 184);
-            this.Controls.Add(this.txtCategoryName);
-            this.Controls.Add(this.lblCategoryName);
+            this.ClientSize = new System.Drawing.Size(242, 127);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.txtSubCategoryPrefix);
-            this.Controls.Add(this.txtSubCategoryName);
-            this.Controls.Add(this.lblSubCategoryPrefix);
+            this.Controls.Add(this.txtCategoryName);
             this.Controls.Add(this.lblSubCategoryName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "frmNewCategory";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Add a New Budget Category";
+            this.Text = "Add a New Category";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -137,12 +93,8 @@
         #endregion
 
         private System.Windows.Forms.Label lblSubCategoryName;
-        private System.Windows.Forms.Label lblSubCategoryPrefix;
-        private System.Windows.Forms.TextBox txtSubCategoryName;
-        private System.Windows.Forms.TextBox txtSubCategoryPrefix;
+        private System.Windows.Forms.TextBox txtCategoryName;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCancel;
-        private System.Windows.Forms.TextBox txtCategoryName;
-        private System.Windows.Forms.Label lblCategoryName;
     }
 }

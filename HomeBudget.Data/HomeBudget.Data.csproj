@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Attributes\FriendlyNameAttribute.cs" />
     <Compile Include="Domain\Category.cs" />
+    <Compile Include="Domain\SubCategory.cs" />
     <Compile Include="Domain\DenormalizedLineItem.cs" />
     <Compile Include="Domain\LineItem.cs" />
     <Compile Include="Enums\LineItemSubType.cs" />

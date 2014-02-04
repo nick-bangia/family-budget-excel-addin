@@ -37,37 +37,55 @@ namespace HouseholdBudget.UI
         private void InitializeComponent()
         {
             this.tabHouseholdBudget = this.Factory.CreateRibbonTab();
-            this.grpTools = this.Factory.CreateRibbonGroup();
-            this.btnImportStatement = this.Factory.CreateRibbonButton();
-            this.btnAddCategory = this.Factory.CreateRibbonButton();
+            this.grpData = this.Factory.CreateRibbonGroup();
+            this.grpCategories = this.Factory.CreateRibbonGroup();
+            this.btnImport = this.Factory.CreateRibbonButton();
             this.btnRefresh = this.Factory.CreateRibbonButton();
+            this.btnAddCategory = this.Factory.CreateRibbonButton();
+            this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
             this.tabHouseholdBudget.SuspendLayout();
-            this.grpTools.SuspendLayout();
+            this.grpData.SuspendLayout();
+            this.grpCategories.SuspendLayout();
             // 
             // tabHouseholdBudget
             // 
-            this.tabHouseholdBudget.Groups.Add(this.grpTools);
+            this.tabHouseholdBudget.Groups.Add(this.grpData);
+            this.tabHouseholdBudget.Groups.Add(this.grpCategories);
             this.tabHouseholdBudget.Label = "Household Budget";
             this.tabHouseholdBudget.Name = "tabHouseholdBudget";
             this.tabHouseholdBudget.Visible = false;
             // 
-            // grpTools
+            // grpData
             // 
-            this.grpTools.Items.Add(this.btnImportStatement);
-            this.grpTools.Items.Add(this.btnAddCategory);
-            this.grpTools.Items.Add(this.btnRefresh);
-            this.grpTools.Items.Add(this.btnUpdateCategories);
-            this.grpTools.Label = "Tools";
-            this.grpTools.Name = "grpTools";
+            this.grpData.Items.Add(this.btnImport);
+            this.grpData.Items.Add(this.btnRefresh);
+            this.grpData.Label = "Data";
+            this.grpData.Name = "grpData";
             // 
-            // btnImportStatement
+            // grpCategories
             // 
-            this.btnImportStatement.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnImportStatement.Label = "Import Statement";
-            this.btnImportStatement.Name = "btnImportStatement";
-            this.btnImportStatement.OfficeImageId = "ImportTextFile";
-            this.btnImportStatement.ShowImage = true;
+            this.grpCategories.Items.Add(this.btnAddCategory);
+            this.grpCategories.Items.Add(this.btnAddSubCategory);
+            this.grpCategories.Items.Add(this.btnUpdateCategories);
+            this.grpCategories.Label = "Categories";
+            this.grpCategories.Name = "grpCategories";
+            // 
+            // btnImport
+            // 
+            this.btnImport.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnImport.Label = "Import ";
+            this.btnImport.Name = "btnImport";
+            this.btnImport.OfficeImageId = "ImportTextFile";
+            this.btnImport.ShowImage = true;
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnRefresh.Label = "Refresh";
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.OfficeImageId = "Refresh";
+            this.btnRefresh.ShowImage = true;
             // 
             // btnAddCategory
             // 
@@ -77,13 +95,13 @@ namespace HouseholdBudget.UI
             this.btnAddCategory.OfficeImageId = "AddAccount";
             this.btnAddCategory.ShowImage = true;
             // 
-            // btnRefresh
+            // btnAddSubCategory
             // 
-            this.btnRefresh.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnRefresh.Label = "Refresh Data";
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.OfficeImageId = "Refresh";
-            this.btnRefresh.ShowImage = true;
+            this.btnAddSubCategory.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnAddSubCategory.Label = "New SubCategory";
+            this.btnAddSubCategory.Name = "btnAddSubCategory";
+            this.btnAddSubCategory.OfficeImageId = "AddAccount";
+            this.btnAddSubCategory.ShowImage = true;
             // 
             // btnUpdateCategories
             // 
@@ -101,19 +119,23 @@ namespace HouseholdBudget.UI
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.HouseholdBudgetRibbon_Load);
             this.tabHouseholdBudget.ResumeLayout(false);
             this.tabHouseholdBudget.PerformLayout();
-            this.grpTools.ResumeLayout(false);
-            this.grpTools.PerformLayout();
+            this.grpData.ResumeLayout(false);
+            this.grpData.PerformLayout();
+            this.grpCategories.ResumeLayout(false);
+            this.grpCategories.PerformLayout();
 
         }
 
         #endregion
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tabHouseholdBudget;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpTools;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImportStatement;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpData;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImport;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddCategory;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRefresh;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdateCategories;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpCategories;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddSubCategory;
     }
 
     partial class ThisRibbonCollection

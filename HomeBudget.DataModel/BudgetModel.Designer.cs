@@ -18,11 +18,12 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimCategories", "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimSubCategories", "dimSubCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimSubCategories), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimDaysOfWeeks), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimMonths", "dimMonths", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimMonths), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimTypes", "dimTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "dimSubTypesfactLineItems", "dimSubTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimSubTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_dimSubCategories_dimCategories", "dimSubCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.dimSubCategories), "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), true)]
 
 #endregion
 
@@ -89,6 +90,22 @@ namespace HouseholdBudget.DataModel
             }
         }
         private ObjectSet<dimSubTypes> _dimSubTypes;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<dimSubCategories> dimSubCategories
+        {
+            get
+            {
+                if ((_dimSubCategories == null))
+                {
+                    _dimSubCategories = base.CreateObjectSet<dimSubCategories>("dimSubCategories");
+                }
+                return _dimSubCategories;
+            }
+        }
+        private ObjectSet<dimSubCategories> _dimSubCategories;
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -182,6 +199,14 @@ namespace HouseholdBudget.DataModel
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the dimSubCategories EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTodimSubCategories(dimSubCategories dimSubCategories)
+        {
+            base.AddObject("dimSubCategories", dimSubCategories);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the dimCategories EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddTodimCategories(dimCategories dimCategories)
@@ -244,17 +269,11 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         /// <param name="categoryKey">Initial value of the CategoryKey property.</param>
         /// <param name="categoryName">Initial value of the CategoryName property.</param>
-        /// <param name="subCategoryName">Initial value of the SubCategoryName property.</param>
-        /// <param name="subCategoryPrefix">Initial value of the SubCategoryPrefix property.</param>
-        /// <param name="isActive">Initial value of the IsActive property.</param>
-        public static dimCategories CreatedimCategories(global::System.Guid categoryKey, global::System.String categoryName, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive)
+        public static dimCategories CreatedimCategories(global::System.Guid categoryKey, global::System.String categoryName)
         {
             dimCategories dimCategories = new dimCategories();
             dimCategories.CategoryKey = categoryKey;
             dimCategories.CategoryName = categoryName;
-            dimCategories.SubCategoryName = subCategoryName;
-            dimCategories.SubCategoryPrefix = subCategoryPrefix;
-            dimCategories.IsActive = isActive;
             return dimCategories;
         }
 
@@ -311,78 +330,6 @@ namespace HouseholdBudget.DataModel
         private global::System.String _CategoryName;
         partial void OnCategoryNameChanging(global::System.String value);
         partial void OnCategoryNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String SubCategoryName
-        {
-            get
-            {
-                return _SubCategoryName;
-            }
-            set
-            {
-                OnSubCategoryNameChanging(value);
-                ReportPropertyChanging("SubCategoryName");
-                _SubCategoryName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SubCategoryName");
-                OnSubCategoryNameChanged();
-            }
-        }
-        private global::System.String _SubCategoryName;
-        partial void OnSubCategoryNameChanging(global::System.String value);
-        partial void OnSubCategoryNameChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String SubCategoryPrefix
-        {
-            get
-            {
-                return _SubCategoryPrefix;
-            }
-            set
-            {
-                OnSubCategoryPrefixChanging(value);
-                ReportPropertyChanging("SubCategoryPrefix");
-                _SubCategoryPrefix = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("SubCategoryPrefix");
-                OnSubCategoryPrefixChanged();
-            }
-        }
-        private global::System.String _SubCategoryPrefix;
-        partial void OnSubCategoryPrefixChanging(global::System.String value);
-        partial void OnSubCategoryPrefixChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Boolean IsActive
-        {
-            get
-            {
-                return _IsActive;
-            }
-            set
-            {
-                OnIsActiveChanging(value);
-                ReportPropertyChanging("IsActive");
-                _IsActive = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("IsActive");
-                OnIsActiveChanged();
-            }
-        }
-        private global::System.Boolean _IsActive;
-        partial void OnIsActiveChanging(global::System.Boolean value);
-        partial void OnIsActiveChanged();
 
         #endregion
     
@@ -394,18 +341,18 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimCategories", "factLineItems")]
-        public EntityCollection<factLineItems> ItemsInThisCategory
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_dimSubCategories_dimCategories", "dimSubCategories")]
+        public EntityCollection<dimSubCategories> SubCategoriesInThisCategory
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimCategories", "factLineItems");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<dimSubCategories>("BudgetModel.FK_dimSubCategories_dimCategories", "dimSubCategories");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimCategories", "factLineItems", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<dimSubCategories>("BudgetModel.FK_dimSubCategories_dimCategories", "dimSubCategories", value);
                 }
             }
         }
@@ -618,6 +565,228 @@ namespace HouseholdBudget.DataModel
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimMonths", "factLineItems", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimSubCategories")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class dimSubCategories : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new dimSubCategories object.
+        /// </summary>
+        /// <param name="subCategoryKey">Initial value of the SubCategoryKey property.</param>
+        /// <param name="categoryKey">Initial value of the CategoryKey property.</param>
+        /// <param name="subCategoryName">Initial value of the SubCategoryName property.</param>
+        /// <param name="subCategoryPrefix">Initial value of the SubCategoryPrefix property.</param>
+        /// <param name="isActive">Initial value of the IsActive property.</param>
+        public static dimSubCategories CreatedimSubCategories(global::System.Guid subCategoryKey, global::System.Guid categoryKey, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive)
+        {
+            dimSubCategories dimSubCategories = new dimSubCategories();
+            dimSubCategories.SubCategoryKey = subCategoryKey;
+            dimSubCategories.CategoryKey = categoryKey;
+            dimSubCategories.SubCategoryName = subCategoryName;
+            dimSubCategories.SubCategoryPrefix = subCategoryPrefix;
+            dimSubCategories.IsActive = isActive;
+            return dimSubCategories;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid SubCategoryKey
+        {
+            get
+            {
+                return _SubCategoryKey;
+            }
+            set
+            {
+                if (_SubCategoryKey != value)
+                {
+                    OnSubCategoryKeyChanging(value);
+                    ReportPropertyChanging("SubCategoryKey");
+                    _SubCategoryKey = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("SubCategoryKey");
+                    OnSubCategoryKeyChanged();
+                }
+            }
+        }
+        private global::System.Guid _SubCategoryKey;
+        partial void OnSubCategoryKeyChanging(global::System.Guid value);
+        partial void OnSubCategoryKeyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid CategoryKey
+        {
+            get
+            {
+                return _CategoryKey;
+            }
+            set
+            {
+                OnCategoryKeyChanging(value);
+                ReportPropertyChanging("CategoryKey");
+                _CategoryKey = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CategoryKey");
+                OnCategoryKeyChanged();
+            }
+        }
+        private global::System.Guid _CategoryKey;
+        partial void OnCategoryKeyChanging(global::System.Guid value);
+        partial void OnCategoryKeyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SubCategoryName
+        {
+            get
+            {
+                return _SubCategoryName;
+            }
+            set
+            {
+                OnSubCategoryNameChanging(value);
+                ReportPropertyChanging("SubCategoryName");
+                _SubCategoryName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubCategoryName");
+                OnSubCategoryNameChanged();
+            }
+        }
+        private global::System.String _SubCategoryName;
+        partial void OnSubCategoryNameChanging(global::System.String value);
+        partial void OnSubCategoryNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String SubCategoryPrefix
+        {
+            get
+            {
+                return _SubCategoryPrefix;
+            }
+            set
+            {
+                OnSubCategoryPrefixChanging(value);
+                ReportPropertyChanging("SubCategoryPrefix");
+                _SubCategoryPrefix = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("SubCategoryPrefix");
+                OnSubCategoryPrefixChanged();
+            }
+        }
+        private global::System.String _SubCategoryPrefix;
+        partial void OnSubCategoryPrefixChanging(global::System.String value);
+        partial void OnSubCategoryPrefixChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsActive
+        {
+            get
+            {
+                return _IsActive;
+            }
+            set
+            {
+                OnIsActiveChanging(value);
+                ReportPropertyChanging("IsActive");
+                _IsActive = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsActive");
+                OnIsActiveChanged();
+            }
+        }
+        private global::System.Boolean _IsActive;
+        partial void OnIsActiveChanging(global::System.Boolean value);
+        partial void OnIsActiveChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimSubCategories", "factLineItems")]
+        public EntityCollection<factLineItems> ItemsInThisCategory
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimSubCategories", "factLineItems");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimSubCategories", "factLineItems", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_dimSubCategories_dimCategories", "dimCategories")]
+        public dimCategories ParentCategory
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_dimSubCategories_dimCategories", "dimCategories").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_dimSubCategories_dimCategories", "dimCategories").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<dimCategories> ParentCategoryReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_dimSubCategories_dimCategories", "dimCategories");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimCategories>("BudgetModel.FK_dimSubCategories_dimCategories", "dimCategories", value);
                 }
             }
         }
@@ -1158,16 +1327,16 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimCategories", "dimCategories")]
-        public dimCategories Category
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimSubCategories", "dimSubCategories")]
+        public dimSubCategories Category
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubCategories>("BudgetModel.FK_factLineItems_dimSubCategories", "dimSubCategories").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubCategories>("BudgetModel.FK_factLineItems_dimSubCategories", "dimSubCategories").Value = value;
             }
         }
         /// <summary>
@@ -1175,17 +1344,17 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<dimCategories> CategoryReference
+        public EntityReference<dimSubCategories> CategoryReference
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubCategories>("BudgetModel.FK_factLineItems_dimSubCategories", "dimSubCategories");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimCategories>("BudgetModel.FK_factLineItems_dimCategories", "dimCategories", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimSubCategories>("BudgetModel.FK_factLineItems_dimSubCategories", "dimSubCategories", value);
                 }
             }
         }

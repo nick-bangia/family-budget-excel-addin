@@ -208,6 +208,7 @@
       <Link>Properties\SharedVersioning.cs</Link>
     </Compile>
     <Compile Include="DataManager.cs" />
+    <Compile Include="Enums\CategoryFormType.cs" />
     <Compile Include="Enums\DataColumns.cs" />
     <Compile Include="Enums\ImportActions.cs" />
     <Compile Include="Enums\ImportResultsColumns.cs" />
@@ -227,6 +228,12 @@
     </Compile>
     <Compile Include="EventArgs\CategoryEventArgs.cs" />
     <Compile Include="EventArgs\ImportActionEventArgs.cs" />
+    <Compile Include="UI\NewCategoryModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\NewCategoryModal.Designer.cs">
+      <DependentUpon>NewCategoryModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\HouseholdBudgetRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -236,11 +243,11 @@
     <Compile Include="UI\ImportActionButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\NewCategoryModal.cs">
+    <Compile Include="UI\NewSubCategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\NewCategoryModal.Designer.cs">
-      <DependentUpon>NewCategoryModal.cs</DependentUpon>
+    <Compile Include="UI\NewSubCategoryModal.Designer.cs">
+      <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ProgressModal.cs">
       <SubType>Form</SubType>
@@ -261,12 +268,16 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\NewCategoryModal.resx">
+      <DependentUpon>NewCategoryModal.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\HouseholdBudgetRibbon.resx">
       <DependentUpon>HouseholdBudgetRibbon.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\NewCategoryModal.resx">
-      <DependentUpon>NewCategoryModal.cs</DependentUpon>
+    <EmbeddedResource Include="UI\NewSubCategoryModal.resx">
+      <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ProgressModal.resx">
@@ -282,6 +293,7 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.Category.datasource" />
+    <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.SubCategory.datasource" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
     </None>
@@ -295,6 +307,9 @@
       <Project>{5A76D072-DD00-4248-8690-3CD76C7AB776}</Project>
       <Name>HomeBudget.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\arrow_refresh.png" />
   </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -79,7 +79,7 @@ namespace HouseholdBudget.Data.Implementation
                             DayOfWeek = fli.DayOfWeek.DayName,
                             Amount = fli.Amount,
                             Description = fli.Description,
-                            Category = fli.Category.CategoryName,
+                            Category = fli.Category.ParentCategory.CategoryName,
                             SubCategory = fli.Category.SubCategoryName,
                             Type = (LineItemType)fli.TypeId,
                             SubType = (LineItemSubType)fli.SubTypeId,
@@ -204,13 +204,13 @@ namespace HouseholdBudget.Data.Implementation
             {
                 // find the category key for a given description by matching the prefix with
                 // the beginning of the description. First match wins.
-                var categories = from cat in ctx.dimCategories
-                                 select cat;
+                var subCategories = from subCat in ctx.dimSubCategories
+                                 select subCat;
 
-                dimCategories match = categories.FirstOrDefault(f => itemDescription.StartsWith(f.SubCategoryPrefix));
+                dimSubCategories match = subCategories.FirstOrDefault(f => itemDescription.StartsWith(f.SubCategoryPrefix));
                 if (match != null)
                 {
-                    return match.CategoryKey;
+                    return match.SubCategoryKey;
                 }
                 else
                 {
