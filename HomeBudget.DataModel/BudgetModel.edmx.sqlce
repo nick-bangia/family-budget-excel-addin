@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server Compact Edition
 -- --------------------------------------------------
--- Date Created: 10/16/2013 08:02:12
+-- Date Created: 02/05/2014 13:25:16
 -- Generated from EDMX file: C:\git-src\household-budget\HomeBudget.DataModel\BudgetModel.edmx
 -- --------------------------------------------------
 
@@ -12,13 +12,17 @@
 -- NOTE: if the constraint does not exist, an ignorable error will be reported.
 -- --------------------------------------------------
 
-    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimCategories];
+    ALTER TABLE [dimSubCategories] DROP CONSTRAINT [FK_dimSubCategories_dimCategories];
 GO
-    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimTypes];
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimDaysOfWeek];
 GO
     ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimMonths];
 GO
-    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimDaysOfWeek];
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimPaymentMethods];
+GO
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimSubCategories];
+GO
+    ALTER TABLE [factLineItems] DROP CONSTRAINT [FK_factLineItems_dimTypes];
 GO
 
 -- --------------------------------------------------
@@ -26,20 +30,71 @@ GO
 -- NOTE: if the table does not exist, an ignorable error will be reported.
 -- --------------------------------------------------
 
-    DROP TABLE [factLineItems];
-GO
-    DROP TABLE [dimMonths];
+    DROP TABLE [dimCategories];
 GO
     DROP TABLE [dimDaysOfWeeks];
 GO
-    DROP TABLE [dimCategories];
+    DROP TABLE [dimMonths];
+GO
+    DROP TABLE [dimPaymentMethods];
+GO
+    DROP TABLE [dimSubCategories];
+GO
+    DROP TABLE [dimSubTypes];
 GO
     DROP TABLE [dimTypes];
+GO
+    DROP TABLE [factLineItems];
 GO
 
 -- --------------------------------------------------
 -- Creating all tables
 -- --------------------------------------------------
+
+-- Creating table 'dimSubTypes'
+CREATE TABLE [dimSubTypes] (
+    [SubTypeId] smallint  NOT NULL,
+    [SubTypeName] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'dimSubCategories'
+CREATE TABLE [dimSubCategories] (
+    [SubCategoryKey] uniqueidentifier  NOT NULL,
+    [CategoryKey] uniqueidentifier  NOT NULL,
+    [SubCategoryName] nvarchar(100)  NOT NULL,
+    [SubCategoryPrefix] nvarchar(10)  NOT NULL,
+    [IsActive] bit  NOT NULL
+);
+GO
+
+-- Creating table 'dimCategories'
+CREATE TABLE [dimCategories] (
+    [CategoryKey] uniqueidentifier  NOT NULL,
+    [CategoryName] nvarchar(100)  NOT NULL
+);
+GO
+
+-- Creating table 'dimDaysOfWeeks'
+CREATE TABLE [dimDaysOfWeeks] (
+    [DayId] smallint  NOT NULL,
+    [DayName] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'dimMonths'
+CREATE TABLE [dimMonths] (
+    [MonthId] smallint  NOT NULL,
+    [MonthName] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'dimTypes'
+CREATE TABLE [dimTypes] (
+    [TypeId] int  NOT NULL,
+    [TypeName] nvarchar(50)  NOT NULL
+);
+GO
 
 -- Creating table 'factLineItems'
 CREATE TABLE [factLineItems] (
@@ -51,37 +106,18 @@ CREATE TABLE [factLineItems] (
     [CategoryKey] uniqueidentifier  NOT NULL,
     [Description] nvarchar(500)  NOT NULL,
     [Amount] decimal(7,2)  NOT NULL,
-    [TypeId] int  NOT NULL
-);
-GO
-
--- Creating table 'dimMonths'
-CREATE TABLE [dimMonths] (
-    [MonthId] smallint  NOT NULL,
-    [MonthName] nvarchar(50)  NOT NULL
-);
-GO
-
--- Creating table 'dimDaysOfWeeks'
-CREATE TABLE [dimDaysOfWeeks] (
-    [DayId] smallint  NOT NULL,
-    [DayName] nvarchar(50)  NOT NULL
-);
-GO
-
--- Creating table 'dimCategories'
-CREATE TABLE [dimCategories] (
-    [CategoryKey] uniqueidentifier  NOT NULL,
-    [CategoryName] nvarchar(100)  NOT NULL,
-    [SubCategoryName] nvarchar(100)  NOT NULL,
-    [SubCategoryPrefix] nvarchar(10)  NOT NULL
-);
-GO
-
--- Creating table 'dimTypes'
-CREATE TABLE [dimTypes] (
     [TypeId] int  NOT NULL,
-    [TypeName] nvarchar(50)  NOT NULL
+    [QuarterId] smallint  NOT NULL,
+    [SubTypeId] smallint  NOT NULL,
+    [PaymentMethodId] uniqueidentifier  NOT NULL
+);
+GO
+
+-- Creating table 'dimPaymentMethods'
+CREATE TABLE [dimPaymentMethods] (
+    [PaymentMethodKey] uniqueidentifier  NOT NULL,
+    [PaymentMethod] nvarchar(100)  NOT NULL,
+    [IsActive] bit  NOT NULL
 );
 GO
 
@@ -89,22 +125,16 @@ GO
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
 
--- Creating primary key on [UniqueKey] in table 'factLineItems'
-ALTER TABLE [factLineItems]
-ADD CONSTRAINT [PK_factLineItems]
-    PRIMARY KEY ([UniqueKey] );
+-- Creating primary key on [SubTypeId] in table 'dimSubTypes'
+ALTER TABLE [dimSubTypes]
+ADD CONSTRAINT [PK_dimSubTypes]
+    PRIMARY KEY ([SubTypeId] );
 GO
 
--- Creating primary key on [MonthId] in table 'dimMonths'
-ALTER TABLE [dimMonths]
-ADD CONSTRAINT [PK_dimMonths]
-    PRIMARY KEY ([MonthId] );
-GO
-
--- Creating primary key on [DayId] in table 'dimDaysOfWeeks'
-ALTER TABLE [dimDaysOfWeeks]
-ADD CONSTRAINT [PK_dimDaysOfWeeks]
-    PRIMARY KEY ([DayId] );
+-- Creating primary key on [SubCategoryKey] in table 'dimSubCategories'
+ALTER TABLE [dimSubCategories]
+ADD CONSTRAINT [PK_dimSubCategories]
+    PRIMARY KEY ([SubCategoryKey] );
 GO
 
 -- Creating primary key on [CategoryKey] in table 'dimCategories'
@@ -113,10 +143,34 @@ ADD CONSTRAINT [PK_dimCategories]
     PRIMARY KEY ([CategoryKey] );
 GO
 
+-- Creating primary key on [DayId] in table 'dimDaysOfWeeks'
+ALTER TABLE [dimDaysOfWeeks]
+ADD CONSTRAINT [PK_dimDaysOfWeeks]
+    PRIMARY KEY ([DayId] );
+GO
+
+-- Creating primary key on [MonthId] in table 'dimMonths'
+ALTER TABLE [dimMonths]
+ADD CONSTRAINT [PK_dimMonths]
+    PRIMARY KEY ([MonthId] );
+GO
+
 -- Creating primary key on [TypeId] in table 'dimTypes'
 ALTER TABLE [dimTypes]
 ADD CONSTRAINT [PK_dimTypes]
     PRIMARY KEY ([TypeId] );
+GO
+
+-- Creating primary key on [UniqueKey] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [PK_factLineItems]
+    PRIMARY KEY ([UniqueKey] );
+GO
+
+-- Creating primary key on [PaymentMethodKey] in table 'dimPaymentMethods'
+ALTER TABLE [dimPaymentMethods]
+ADD CONSTRAINT [PK_dimPaymentMethods]
+    PRIMARY KEY ([PaymentMethodKey] );
 GO
 
 -- --------------------------------------------------
@@ -125,30 +179,30 @@ GO
 
 -- Creating foreign key on [CategoryKey] in table 'factLineItems'
 ALTER TABLE [factLineItems]
-ADD CONSTRAINT [FK_factLineItems_dimCategories]
+ADD CONSTRAINT [FK_factLineItems_dimSubCategories]
     FOREIGN KEY ([CategoryKey])
-    REFERENCES [dimCategories]
-        ([CategoryKey])
+    REFERENCES [dimSubCategories]
+        ([SubCategoryKey])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimCategories'
-CREATE INDEX [IX_FK_factLineItems_dimCategories]
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimSubCategories'
+CREATE INDEX [IX_FK_factLineItems_dimSubCategories]
 ON [factLineItems]
     ([CategoryKey]);
 GO
 
--- Creating foreign key on [TypeId] in table 'factLineItems'
+-- Creating foreign key on [DayOfWeekId] in table 'factLineItems'
 ALTER TABLE [factLineItems]
-ADD CONSTRAINT [FK_factLineItems_dimTypes]
-    FOREIGN KEY ([TypeId])
-    REFERENCES [dimTypes]
-        ([TypeId])
+ADD CONSTRAINT [FK_factLineItems_dimDaysOfWeek]
+    FOREIGN KEY ([DayOfWeekId])
+    REFERENCES [dimDaysOfWeeks]
+        ([DayId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimTypes'
-CREATE INDEX [IX_FK_factLineItems_dimTypes]
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimDaysOfWeek'
+CREATE INDEX [IX_FK_factLineItems_dimDaysOfWeek]
 ON [factLineItems]
-    ([TypeId]);
+    ([DayOfWeekId]);
 GO
 
 -- Creating foreign key on [MonthId] in table 'factLineItems'
@@ -165,18 +219,60 @@ ON [factLineItems]
     ([MonthId]);
 GO
 
--- Creating foreign key on [DayOfWeekId] in table 'factLineItems'
+-- Creating foreign key on [TypeId] in table 'factLineItems'
 ALTER TABLE [factLineItems]
-ADD CONSTRAINT [FK_factLineItems_dimDaysOfWeek]
-    FOREIGN KEY ([DayOfWeekId])
-    REFERENCES [dimDaysOfWeeks]
-        ([DayId])
+ADD CONSTRAINT [FK_factLineItems_dimTypes]
+    FOREIGN KEY ([TypeId])
+    REFERENCES [dimTypes]
+        ([TypeId])
     ON DELETE NO ACTION ON UPDATE NO ACTION;
 
--- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimDaysOfWeek'
-CREATE INDEX [IX_FK_factLineItems_dimDaysOfWeek]
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimTypes'
+CREATE INDEX [IX_FK_factLineItems_dimTypes]
 ON [factLineItems]
-    ([DayOfWeekId]);
+    ([TypeId]);
+GO
+
+-- Creating foreign key on [SubTypeId] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [FK_factLineItems_dimSubTypes]
+    FOREIGN KEY ([SubTypeId])
+    REFERENCES [dimSubTypes]
+        ([SubTypeId])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimSubTypes'
+CREATE INDEX [IX_FK_factLineItems_dimSubTypes]
+ON [factLineItems]
+    ([SubTypeId]);
+GO
+
+-- Creating foreign key on [CategoryKey] in table 'dimSubCategories'
+ALTER TABLE [dimSubCategories]
+ADD CONSTRAINT [FK_dimSubCategories_dimCategories]
+    FOREIGN KEY ([CategoryKey])
+    REFERENCES [dimCategories]
+        ([CategoryKey])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_dimSubCategories_dimCategories'
+CREATE INDEX [IX_FK_dimSubCategories_dimCategories]
+ON [dimSubCategories]
+    ([CategoryKey]);
+GO
+
+-- Creating foreign key on [PaymentMethodId] in table 'factLineItems'
+ALTER TABLE [factLineItems]
+ADD CONSTRAINT [FK_factLineItems_dimPaymentMethods]
+    FOREIGN KEY ([PaymentMethodId])
+    REFERENCES [dimPaymentMethods]
+        ([PaymentMethodKey])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_factLineItems_dimPaymentMethods'
+CREATE INDEX [IX_FK_factLineItems_dimPaymentMethods]
+ON [factLineItems]
+    ([PaymentMethodId]);
 GO
 
 -- --------------------------------------------------

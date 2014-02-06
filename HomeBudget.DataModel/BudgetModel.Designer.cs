@@ -22,8 +22,9 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimDaysOfWeek", "dimDaysOfWeeks", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimDaysOfWeeks), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimMonths", "dimMonths", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimMonths), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimTypes", "dimTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
-[assembly: EdmRelationshipAttribute("BudgetModel", "dimSubTypesfactLineItems", "dimSubTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimSubTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimSubTypes", "dimSubTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimSubTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_dimSubCategories_dimCategories", "dimSubCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.dimSubCategories), "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimPaymentMethods", "dimPaymentMethods", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimPaymentMethods), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 
 #endregion
 
@@ -186,6 +187,22 @@ namespace HouseholdBudget.DataModel
             }
         }
         private ObjectSet<factLineItems> _factLineItems;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<dimPaymentMethods> dimPaymentMethods
+        {
+            get
+            {
+                if ((_dimPaymentMethods == null))
+                {
+                    _dimPaymentMethods = base.CreateObjectSet<dimPaymentMethods>("dimPaymentMethods");
+                }
+                return _dimPaymentMethods;
+            }
+        }
+        private ObjectSet<dimPaymentMethods> _dimPaymentMethods;
 
         #endregion
         #region AddTo Methods
@@ -244,6 +261,14 @@ namespace HouseholdBudget.DataModel
         public void AddTofactLineItems(factLineItems factLineItems)
         {
             base.AddObject("factLineItems", factLineItems);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the dimPaymentMethods EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTodimPaymentMethods(dimPaymentMethods dimPaymentMethods)
+        {
+            base.AddObject("dimPaymentMethods", dimPaymentMethods);
         }
 
         #endregion
@@ -575,6 +600,138 @@ namespace HouseholdBudget.DataModel
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimPaymentMethods")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class dimPaymentMethods : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new dimPaymentMethods object.
+        /// </summary>
+        /// <param name="paymentMethodKey">Initial value of the PaymentMethodKey property.</param>
+        /// <param name="paymentMethod">Initial value of the PaymentMethod property.</param>
+        /// <param name="isActive">Initial value of the IsActive property.</param>
+        public static dimPaymentMethods CreatedimPaymentMethods(global::System.Guid paymentMethodKey, global::System.String paymentMethod, global::System.Boolean isActive)
+        {
+            dimPaymentMethods dimPaymentMethods = new dimPaymentMethods();
+            dimPaymentMethods.PaymentMethodKey = paymentMethodKey;
+            dimPaymentMethods.PaymentMethod = paymentMethod;
+            dimPaymentMethods.IsActive = isActive;
+            return dimPaymentMethods;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid PaymentMethodKey
+        {
+            get
+            {
+                return _PaymentMethodKey;
+            }
+            set
+            {
+                if (_PaymentMethodKey != value)
+                {
+                    OnPaymentMethodKeyChanging(value);
+                    ReportPropertyChanging("PaymentMethodKey");
+                    _PaymentMethodKey = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("PaymentMethodKey");
+                    OnPaymentMethodKeyChanged();
+                }
+            }
+        }
+        private global::System.Guid _PaymentMethodKey;
+        partial void OnPaymentMethodKeyChanging(global::System.Guid value);
+        partial void OnPaymentMethodKeyChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String PaymentMethod
+        {
+            get
+            {
+                return _PaymentMethod;
+            }
+            set
+            {
+                OnPaymentMethodChanging(value);
+                ReportPropertyChanging("PaymentMethod");
+                _PaymentMethod = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PaymentMethod");
+                OnPaymentMethodChanged();
+            }
+        }
+        private global::System.String _PaymentMethod;
+        partial void OnPaymentMethodChanging(global::System.String value);
+        partial void OnPaymentMethodChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsActive
+        {
+            get
+            {
+                return _IsActive;
+            }
+            set
+            {
+                OnIsActiveChanging(value);
+                ReportPropertyChanging("IsActive");
+                _IsActive = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsActive");
+                OnIsActiveChanged();
+            }
+        }
+        private global::System.Boolean _IsActive;
+        partial void OnIsActiveChanging(global::System.Boolean value);
+        partial void OnIsActiveChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimPaymentMethods", "factLineItems")]
+        public EntityCollection<factLineItems> ItemsPaidWithThisMethod
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimPaymentMethods", "factLineItems");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimPaymentMethods", "factLineItems", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
     [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimSubCategories")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
@@ -881,18 +1038,18 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "dimSubTypesfactLineItems", "factLineItems")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimSubTypes", "factLineItems")]
         public EntityCollection<factLineItems> ItemsOfThisSubType
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.dimSubTypesfactLineItems", "factLineItems");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimSubTypes", "factLineItems");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.dimSubTypesfactLineItems", "factLineItems", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimSubTypes", "factLineItems", value);
                 }
             }
         }
@@ -1030,7 +1187,8 @@ namespace HouseholdBudget.DataModel
         /// <param name="typeId">Initial value of the TypeId property.</param>
         /// <param name="quarterId">Initial value of the QuarterId property.</param>
         /// <param name="subTypeId">Initial value of the SubTypeId property.</param>
-        public static factLineItems CreatefactLineItems(global::System.Guid uniqueKey, global::System.Int16 monthId, global::System.Int16 dayOfMonthId, global::System.Int16 dayOfWeekId, global::System.Int32 yearId, global::System.Guid categoryKey, global::System.String description, global::System.Decimal amount, global::System.Int32 typeId, global::System.Int16 quarterId, global::System.Int16 subTypeId)
+        /// <param name="paymentMethodId">Initial value of the PaymentMethodId property.</param>
+        public static factLineItems CreatefactLineItems(global::System.Guid uniqueKey, global::System.Int16 monthId, global::System.Int16 dayOfMonthId, global::System.Int16 dayOfWeekId, global::System.Int32 yearId, global::System.Guid categoryKey, global::System.String description, global::System.Decimal amount, global::System.Int32 typeId, global::System.Int16 quarterId, global::System.Int16 subTypeId, global::System.Guid paymentMethodId)
         {
             factLineItems factLineItems = new factLineItems();
             factLineItems.UniqueKey = uniqueKey;
@@ -1044,6 +1202,7 @@ namespace HouseholdBudget.DataModel
             factLineItems.TypeId = typeId;
             factLineItems.QuarterId = quarterId;
             factLineItems.SubTypeId = subTypeId;
+            factLineItems.PaymentMethodId = paymentMethodId;
             return factLineItems;
         }
 
@@ -1316,6 +1475,30 @@ namespace HouseholdBudget.DataModel
         private global::System.Int16 _SubTypeId;
         partial void OnSubTypeIdChanging(global::System.Int16 value);
         partial void OnSubTypeIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Guid PaymentMethodId
+        {
+            get
+            {
+                return _PaymentMethodId;
+            }
+            set
+            {
+                OnPaymentMethodIdChanging(value);
+                ReportPropertyChanging("PaymentMethodId");
+                _PaymentMethodId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PaymentMethodId");
+                OnPaymentMethodIdChanged();
+            }
+        }
+        private global::System.Guid _PaymentMethodId;
+        partial void OnPaymentMethodIdChanging(global::System.Guid value);
+        partial void OnPaymentMethodIdChanged();
 
         #endregion
     
@@ -1479,16 +1662,16 @@ namespace HouseholdBudget.DataModel
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "dimSubTypesfactLineItems", "dimSubTypes")]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimSubTypes", "dimSubTypes")]
         public dimSubTypes SubType
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.FK_factLineItems_dimSubTypes", "dimSubTypes").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.FK_factLineItems_dimSubTypes", "dimSubTypes").Value = value;
             }
         }
         /// <summary>
@@ -1500,13 +1683,51 @@ namespace HouseholdBudget.DataModel
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimSubTypes>("BudgetModel.FK_factLineItems_dimSubTypes", "dimSubTypes");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimSubTypes>("BudgetModel.dimSubTypesfactLineItems", "dimSubTypes", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimSubTypes>("BudgetModel.FK_factLineItems_dimSubTypes", "dimSubTypes", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimPaymentMethods", "dimPaymentMethods")]
+        public dimPaymentMethods PaymentMethod
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimPaymentMethods>("BudgetModel.FK_factLineItems_dimPaymentMethods", "dimPaymentMethods").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimPaymentMethods>("BudgetModel.FK_factLineItems_dimPaymentMethods", "dimPaymentMethods").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<dimPaymentMethods> PaymentMethodReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimPaymentMethods>("BudgetModel.FK_factLineItems_dimPaymentMethods", "dimPaymentMethods");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimPaymentMethods>("BudgetModel.FK_factLineItems_dimPaymentMethods", "dimPaymentMethods", value);
                 }
             }
         }

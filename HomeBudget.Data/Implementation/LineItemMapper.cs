@@ -138,7 +138,7 @@ namespace HouseholdBudget.Data.Implementation
                         short quarterId = (short)GetQuarterForMonth(monthId);
 
                         factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
-                            lineItem.Description, lineItem.Amount, type, quarterId, subType);
+                            lineItem.Description, lineItem.Amount, type, quarterId, subType, Guid.Parse("b1c6ae6a-e56b-4c75-8948-255099ec78fe"));
 
                         // save to DB
                         cxt.factLineItems.AddObject(fact);
