@@ -228,37 +228,43 @@
     </Compile>
     <Compile Include="EventArgs\CategoryEventArgs.cs" />
     <Compile Include="EventArgs\ImportActionEventArgs.cs" />
-    <Compile Include="UI\NewCategoryModal.cs">
+    <Compile Include="UI\Categories\NewCategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\NewCategoryModal.Designer.cs">
+    <Compile Include="UI\Categories\NewCategoryModal.Designer.cs">
       <DependentUpon>NewCategoryModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\HouseholdBudgetRibbon.cs">
+    <Compile Include="UI\PaymentMethods\PaymentMethodModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\PaymentMethods\PaymentMethodModal.Designer.cs">
+      <DependentUpon>PaymentMethodModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Ribbon\HouseholdBudgetRibbon.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\HouseholdBudgetRibbon.Designer.cs">
+    <Compile Include="UI\Ribbon\HouseholdBudgetRibbon.Designer.cs">
       <DependentUpon>HouseholdBudgetRibbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ImportActionButton.cs">
+    <Compile Include="UI\Import\ImportActionButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\NewSubCategoryModal.cs">
+    <Compile Include="UI\Categories\NewSubCategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\NewSubCategoryModal.Designer.cs">
+    <Compile Include="UI\Categories\NewSubCategoryModal.Designer.cs">
       <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ProgressModal.cs">
+    <Compile Include="UI\Progress\ProgressModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\ProgressModal.designer.cs">
+    <Compile Include="UI\Progress\ProgressModal.designer.cs">
       <DependentUpon>ProgressModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\UpdateCategoryModal.cs">
+    <Compile Include="UI\Categories\UpdateCategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\UpdateCategoryModal.Designer.cs">
+    <Compile Include="UI\Categories\UpdateCategoryModal.Designer.cs">
       <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\EnumUtil.cs" />
@@ -268,23 +274,26 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\NewCategoryModal.resx">
+    <EmbeddedResource Include="UI\Categories\NewCategoryModal.resx">
       <DependentUpon>NewCategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\HouseholdBudgetRibbon.resx">
+    <EmbeddedResource Include="UI\PaymentMethods\PaymentMethodModal.resx">
+      <DependentUpon>PaymentMethodModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Ribbon\HouseholdBudgetRibbon.resx">
       <DependentUpon>HouseholdBudgetRibbon.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\NewSubCategoryModal.resx">
+    <EmbeddedResource Include="UI\Categories\NewSubCategoryModal.resx">
       <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\ProgressModal.resx">
+    <EmbeddedResource Include="UI\Progress\ProgressModal.resx">
       <DependentUpon>ProgressModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\UpdateCategoryModal.resx">
+    <EmbeddedResource Include="UI\Categories\UpdateCategoryModal.resx">
       <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="App.config" />
@@ -293,6 +302,7 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.Category.datasource" />
+    <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.PaymentMethod.datasource" />
     <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.SubCategory.datasource" />
     <None Include="ThisAddIn.Designer.xml">
       <DependentUpon>ThisAddIn.cs</DependentUpon>
@@ -311,6 +321,7 @@
   <ItemGroup>
     <None Include="Resources\arrow_refresh.png" />
   </ItemGroup>
+  <ItemGroup />
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->

@@ -60,19 +60,30 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\FriendlyNameAttribute.cs" />
-    <Compile Include="Domain\Category.cs" />
-    <Compile Include="Domain\SubCategory.cs" />
-    <Compile Include="Domain\DenormalizedLineItem.cs" />
-    <Compile Include="Domain\LineItem.cs" />
+    <Compile Include="Domain\Category.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\DenormalizedLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\LineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\PaymentMethod.cs" />
+    <Compile Include="Domain\SubCategory.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Enums\LineItemSubType.cs" />
     <Compile Include="Enums\OperationStatus.cs" />
     <Compile Include="Enums\LineItemStatus.cs" />
     <Compile Include="Enums\LineItemType.cs" />
     <Compile Include="Enums\Quarters.cs" />
     <Compile Include="Implementation\CategoryMapper.cs" />
+    <Compile Include="Implementation\PaymentMethodMapper.cs" />
     <Compile Include="Interfaces\ICategoryMapper.cs" />
     <Compile Include="Interfaces\ILineItemMapper.cs" />
     <Compile Include="Implementation\LineItemMapper.cs" />
+    <Compile Include="Interfaces\IPaymentMethodMapper.cs" />
     <Compile Include="MapResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="../AssemblyVersioning.cs">

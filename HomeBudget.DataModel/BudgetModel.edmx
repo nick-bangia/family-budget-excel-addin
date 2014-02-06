@@ -110,7 +110,7 @@
       <PropertyRef Name="PaymentMethodKey" />
     </Key>
     <Property Name="PaymentMethodKey" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="PaymentMethod" Type="nvarchar" Nullable="false" MaxLength="100" />
+    <Property Name="PaymentMethodName" Type="nvarchar" Nullable="false" MaxLength="100" />
     <Property Name="IsActive" Type="bit" Nullable="false" />
   </EntityType>
   <Association Name="FK_factLineItems_dimSubCategories">
@@ -391,7 +391,7 @@
             <PropertyRef Name="PaymentMethodKey" />
           </Key>
           <Property Type="Guid" Name="PaymentMethodKey" Nullable="false" />
-          <Property Type="String" Name="PaymentMethod" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PaymentMethodName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsActive" Nullable="false" />
           <NavigationProperty Name="ItemsPaidWithThisMethod" Relationship="BudgetModel.FK_factLineItems_dimPaymentMethods" FromRole="dimPaymentMethods" ToRole="factLineItems" />
         </EntityType>
@@ -486,7 +486,7 @@
       <EntityTypeMapping TypeName="IsTypeOf(BudgetModel.dimPaymentMethods)">
         <MappingFragment StoreEntitySet="dimPaymentMethods">
           <ScalarProperty Name="PaymentMethodKey" ColumnName="PaymentMethodKey" />
-          <ScalarProperty Name="PaymentMethod" ColumnName="PaymentMethod" />
+          <ScalarProperty Name="PaymentMethodName" ColumnName="PaymentMethodName" />
           <ScalarProperty Name="IsActive" ColumnName="IsActive" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -542,10 +542,10 @@
 					<ConnectorPoint PointX="12" PointY="4.422841796875" />
 					<ConnectorPoint PointX="12.75" PointY="4.422841796875" />
 				</AssociationConnector>
-        <EntityTypeShape EntityType="BudgetModel.dimPaymentMethods" Width="1.5" PointX="7.625" PointY="0.5" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="BudgetModel.dimPaymentMethods" Width="1.875" PointX="7.625" PointY="0.5" Height="1.7879850260416674" />
         <AssociationConnector Association="BudgetModel.FK_factLineItems_dimPaymentMethods" >
-          <ConnectorPoint PointX="8.375" PointY="2.2879850260416674" />
-          <ConnectorPoint PointX="8.375" PointY="3" />
+          <ConnectorPoint PointX="8.5625" PointY="2.2879850260416674" />
+          <ConnectorPoint PointX="8.5625" PointY="3" />
         </AssociationConnector>
 			</Diagram>
 		</edmx:Diagrams>

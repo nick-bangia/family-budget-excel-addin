@@ -27,6 +27,7 @@ namespace HouseholdBudget
         private static frmNewCategory newCategoryForm;
         private static frmNewSubCategory newSubCategoryForm;
         private static frmUpdateCategories updateCategoriesForm;
+        private static frmPaymentMethods paymentMethodsForm;
 
         // importing items
         private static LineItemCSVImporter importer;
@@ -82,6 +83,30 @@ namespace HouseholdBudget
             }
         }
 
+        // paymentMethod mapper interface
+        private static IPaymentMethodMapper _paymentMethodMapper;
+        private static IPaymentMethodMapper paymentMethodMapper
+        {
+            get
+            {
+                if (_paymentMethodMapper == null)
+                {
+                    // get the configured name of the interface to manage payment methods
+                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(IPaymentMethodMapper));
+                    if (mapperType != null)
+                    {
+                        _paymentMethodMapper = (IPaymentMethodMapper)Activator.CreateInstance(mapperType);
+                    }
+                    else
+                    {
+                        _paymentMethodMapper = null;
+                    }
+                }
+
+                return _paymentMethodMapper;
+            }
+        }
+        
         // excel helpers
         private enum DefaultWorksheets
         {
@@ -252,6 +277,12 @@ namespace HouseholdBudget
             ShowFirstWorksheet();
         }
 
+        internal static void btnManagePaymentMethods_Click(object sender, RibbonControlEventArgs e)
+        {
+            paymentMethodsForm = new frmPaymentMethods();
+            paymentMethodsForm.Show();
+        }
+
         private static void categoryForm_UserCancelled(object sender, CategoryControlEventArgs e)
         {
             if (e.formType == CategoryFormType.ParentCategory)
@@ -271,7 +302,7 @@ namespace HouseholdBudget
         {
             // attempt to add a new SubCategory to the DB
             logger.Info("Adding a new SubCategory to the DB.");
-            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.CategoryKey, e.SubCategoryName, e.SubCategoryPrefix, e.IsActive);
+            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.IsActive);
             if (addedNewSubCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new subcategory, show a message box to that effect.
@@ -292,7 +323,7 @@ namespace HouseholdBudget
         {
             // attempt to add a new Category to the DB
             logger.Info("Adding a new Category to the DB.");
-            OperationStatus addedNewCategory = categoryMapper.AddNewCategory(e.CategoryName);
+            OperationStatus addedNewCategory = categoryMapper.AddNewCategory(e.category.CategoryName);
             if (addedNewCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new category, show a message box to that effect.
@@ -500,6 +531,16 @@ namespace HouseholdBudget
         internal static LiveDataObject GetFilteredSubCategories(Guid categoryKey)
         {
             return categoryMapper.GetFilteredSubCategories(categoryKey);
+        }
+
+        internal static LiveDataObject GetPaymentMethods()
+        {
+            return paymentMethodMapper.GetPaymentMethods();
+        }
+
+        internal static OperationStatus AddNewPaymentMethod(string methodName, bool isActive)
+        {
+            return paymentMethodMapper.AddNewPaymentMethod(methodName, isActive);
         }
     }
 }

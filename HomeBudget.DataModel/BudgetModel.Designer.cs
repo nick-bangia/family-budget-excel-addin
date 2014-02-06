@@ -611,13 +611,13 @@ namespace HouseholdBudget.DataModel
         /// Create a new dimPaymentMethods object.
         /// </summary>
         /// <param name="paymentMethodKey">Initial value of the PaymentMethodKey property.</param>
-        /// <param name="paymentMethod">Initial value of the PaymentMethod property.</param>
+        /// <param name="paymentMethodName">Initial value of the PaymentMethodName property.</param>
         /// <param name="isActive">Initial value of the IsActive property.</param>
-        public static dimPaymentMethods CreatedimPaymentMethods(global::System.Guid paymentMethodKey, global::System.String paymentMethod, global::System.Boolean isActive)
+        public static dimPaymentMethods CreatedimPaymentMethods(global::System.Guid paymentMethodKey, global::System.String paymentMethodName, global::System.Boolean isActive)
         {
             dimPaymentMethods dimPaymentMethods = new dimPaymentMethods();
             dimPaymentMethods.PaymentMethodKey = paymentMethodKey;
-            dimPaymentMethods.PaymentMethod = paymentMethod;
+            dimPaymentMethods.PaymentMethodName = paymentMethodName;
             dimPaymentMethods.IsActive = isActive;
             return dimPaymentMethods;
         }
@@ -657,24 +657,24 @@ namespace HouseholdBudget.DataModel
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String PaymentMethod
+        public global::System.String PaymentMethodName
         {
             get
             {
-                return _PaymentMethod;
+                return _PaymentMethodName;
             }
             set
             {
-                OnPaymentMethodChanging(value);
-                ReportPropertyChanging("PaymentMethod");
-                _PaymentMethod = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("PaymentMethod");
-                OnPaymentMethodChanged();
+                OnPaymentMethodNameChanging(value);
+                ReportPropertyChanging("PaymentMethodName");
+                _PaymentMethodName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("PaymentMethodName");
+                OnPaymentMethodNameChanged();
             }
         }
-        private global::System.String _PaymentMethod;
-        partial void OnPaymentMethodChanging(global::System.String value);
-        partial void OnPaymentMethodChanged();
+        private global::System.String _PaymentMethodName;
+        partial void OnPaymentMethodNameChanging(global::System.String value);
+        partial void OnPaymentMethodNameChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
