@@ -15,6 +15,6 @@ namespace HouseholdBudget.Data.Interfaces
         LiveDataObject GetFilteredSubCategories(Guid categoryKey);
         OperationStatus AddNewCategory(string categoryName);
         OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, bool isActive);
-        OperationStatus SetCategoryActiveState(Guid categoryId, bool activeState);        
+        //OperationStatus SetCategoryActiveState(Guid categoryId, bool activeState);        
     }
 }

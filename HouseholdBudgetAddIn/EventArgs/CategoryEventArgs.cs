@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using HouseholdBudget.Enums;
+using HouseholdBudget.Data.Domain;
 
 namespace HouseholdBudget.Events
 {
     internal class CategoryEventArgs : EventArgs
     {
-        public string CategoryName { get; set; }
+        public Category category { get; set; }
     }
 
     internal class SubCategoryEventArgs : EventArgs
     {
-        public Guid CategoryKey { get; set; }
-        public string SubCategoryName { get; set; }
-        public string SubCategoryPrefix { get; set; }
-        public bool IsActive { get; set; }
+        public SubCategory subCategory { get; set; }
     }
 
     internal class CategoryControlEventArgs : EventArgs

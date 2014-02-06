@@ -21,6 +21,7 @@ namespace HouseholdBudget.UI
             this.btnAddSubCategory.Click += new RibbonControlEventHandler(Controller.btnAddSubCategory_Click);
             this.btnRefresh.Click += new RibbonControlEventHandler(Controller.btnRefresh_Click);
             this.btnUpdateCategories.Click += new RibbonControlEventHandler(Controller.btnUpdateCategories_Click);
+            this.btnManagePaymentMethods.Click += new RibbonControlEventHandler(Controller.btnManagePaymentMethods_Click);
         }
     }
 }

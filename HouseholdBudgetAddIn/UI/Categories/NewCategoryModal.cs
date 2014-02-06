@@ -2,47 +2,39 @@
 using System.Windows.Forms;
 using HouseholdBudget.Events;
 using HouseholdBudget.Data.Protocol;
+using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Enums;
 
 namespace HouseholdBudget.UI
 {
-    internal partial class frmNewSubCategory : Form
+    internal partial class frmNewCategory : Form
     {
-        internal event EventHandler<SubCategoryEventArgs> SubCategorySaved;
+        internal event EventHandler<CategoryEventArgs> CategorySaved;
         internal event EventHandler<CategoryControlEventArgs> UserCancelled;
-        private LiveDataObject categoryDataObject;
 
-        internal frmNewSubCategory()
+        internal frmNewCategory()
         {
             InitializeComponent();
             this.btnSave.Click += new EventHandler(btnSave_Click);
             this.btnCancel.Click += new EventHandler(btnCancel_Click);
         }
 
-        private void frmNewCategory_Load(object sender, EventArgs e)
-        {
-            categoryDataObject = Controller.GetCategories();
-            cbParentCategory.DataSource = categoryDataObject.dataSource;
-            cbParentCategory.DisplayMember = "CategoryName";
-            cbParentCategory.ValueMember = "CategoryKey";
-        }
-
         private void btnSave_Click(object sender, EventArgs e)
         {
             // if there is at least one subscriber to the saved event, fire the event
             // else, report error
-            if (SubCategorySaved != null)
+            if (CategorySaved != null)
             {
-                SubCategoryEventArgs args = new SubCategoryEventArgs()
+                CategoryEventArgs args = new CategoryEventArgs()
                 {
-                    CategoryKey = (Guid)cbParentCategory.SelectedValue,
-                    SubCategoryName = txtSubCategoryName.Text,
-                    SubCategoryPrefix = txtSubCategoryPrefix.Text,
-                    IsActive = chkEnabled.Checked
+                    category = new Category()
+                    {
+                        CategoryName = txtCategoryName.Text
+                    }
                 };
 
                 // fire saved event
-                SubCategorySaved(this, args);
+                CategorySaved(this, args);
             }
             else
             {
@@ -57,7 +49,7 @@ namespace HouseholdBudget.UI
             // if there is at least one subscriber, fire the event, otherwise, report error
             if (UserCancelled != null)
             {
-                UserCancelled(this, new CategoryControlEventArgs() { formType = CategoryFormType.SubCategory });
+                UserCancelled(this, new CategoryControlEventArgs() { formType =  CategoryFormType.ParentCategory });
             }
             else
             {

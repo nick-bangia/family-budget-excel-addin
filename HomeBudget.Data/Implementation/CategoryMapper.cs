@@ -54,11 +54,6 @@ namespace HouseholdBudget.Data.Implementation
             return SaveSubCategoryToDB(dimSubCategories.CreatedimSubCategories(Guid.NewGuid(), categoryKey, subCategoryName, subCategoryPrefix, isActive));
         }
 
-        public OperationStatus SetCategoryActiveState(Guid categoryId, bool activeState)
-        {
-            return OperationStatus.SUCCESS;
-        }
-
         #endregion
 
         #region Private Methods
@@ -80,6 +75,7 @@ namespace HouseholdBudget.Data.Implementation
 
                 // otherwise, add to the DB
                 // add object to context
+                logger.Info(String.Format("Adding a new Category: {0}.", newCategory.CategoryName));
                 ctx.dimCategories.AddObject(newCategory);
 
                 // save changes to DB
@@ -108,6 +104,7 @@ namespace HouseholdBudget.Data.Implementation
 
                 // otherwise, add to the DB
                 // add object to context
+                logger.Info(String.Format("Adding a new SubCategory: {0}/{1}.", newSubCategory.CategoryKey, newSubCategory.SubCategoryName));
                 ctx.dimSubCategories.AddObject(newSubCategory);
 
                 // save changes to DB

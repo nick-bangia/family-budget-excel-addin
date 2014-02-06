@@ -38,20 +38,21 @@ namespace HouseholdBudget.UI
         {
             this.tabHouseholdBudget = this.Factory.CreateRibbonTab();
             this.grpData = this.Factory.CreateRibbonGroup();
-            this.grpCategories = this.Factory.CreateRibbonGroup();
             this.btnImport = this.Factory.CreateRibbonButton();
             this.btnRefresh = this.Factory.CreateRibbonButton();
+            this.grpManage = this.Factory.CreateRibbonGroup();
             this.btnAddCategory = this.Factory.CreateRibbonButton();
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
+            this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
             this.tabHouseholdBudget.SuspendLayout();
             this.grpData.SuspendLayout();
-            this.grpCategories.SuspendLayout();
+            this.grpManage.SuspendLayout();
             // 
             // tabHouseholdBudget
             // 
             this.tabHouseholdBudget.Groups.Add(this.grpData);
-            this.tabHouseholdBudget.Groups.Add(this.grpCategories);
+            this.tabHouseholdBudget.Groups.Add(this.grpManage);
             this.tabHouseholdBudget.Label = "Household Budget";
             this.tabHouseholdBudget.Name = "tabHouseholdBudget";
             this.tabHouseholdBudget.Visible = false;
@@ -62,14 +63,6 @@ namespace HouseholdBudget.UI
             this.grpData.Items.Add(this.btnRefresh);
             this.grpData.Label = "Data";
             this.grpData.Name = "grpData";
-            // 
-            // grpCategories
-            // 
-            this.grpCategories.Items.Add(this.btnAddCategory);
-            this.grpCategories.Items.Add(this.btnAddSubCategory);
-            this.grpCategories.Items.Add(this.btnUpdateCategories);
-            this.grpCategories.Label = "Categories";
-            this.grpCategories.Name = "grpCategories";
             // 
             // btnImport
             // 
@@ -86,6 +79,15 @@ namespace HouseholdBudget.UI
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.OfficeImageId = "Refresh";
             this.btnRefresh.ShowImage = true;
+            // 
+            // grpManage
+            // 
+            this.grpManage.Items.Add(this.btnAddCategory);
+            this.grpManage.Items.Add(this.btnAddSubCategory);
+            this.grpManage.Items.Add(this.btnUpdateCategories);
+            this.grpManage.Items.Add(this.btnManagePaymentMethods);
+            this.grpManage.Label = "Manage";
+            this.grpManage.Name = "grpManage";
             // 
             // btnAddCategory
             // 
@@ -111,6 +113,14 @@ namespace HouseholdBudget.UI
             this.btnUpdateCategories.OfficeImageId = "EditItem";
             this.btnUpdateCategories.ShowImage = true;
             // 
+            // btnManagePaymentMethods
+            // 
+            this.btnManagePaymentMethods.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnManagePaymentMethods.Label = "Payment Methods";
+            this.btnManagePaymentMethods.Name = "btnManagePaymentMethods";
+            this.btnManagePaymentMethods.OfficeImageId = "AccountingFormat";
+            this.btnManagePaymentMethods.ShowImage = true;
+            // 
             // HouseholdBudgetRibbon
             // 
             this.Name = "HouseholdBudgetRibbon";
@@ -121,8 +131,8 @@ namespace HouseholdBudget.UI
             this.tabHouseholdBudget.PerformLayout();
             this.grpData.ResumeLayout(false);
             this.grpData.PerformLayout();
-            this.grpCategories.ResumeLayout(false);
-            this.grpCategories.PerformLayout();
+            this.grpManage.ResumeLayout(false);
+            this.grpManage.PerformLayout();
 
         }
 
@@ -134,8 +144,9 @@ namespace HouseholdBudget.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddCategory;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRefresh;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdateCategories;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpCategories;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpManage;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddSubCategory;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnManagePaymentMethods;
     }
 
     partial class ThisRibbonCollection
