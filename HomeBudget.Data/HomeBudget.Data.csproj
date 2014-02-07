@@ -73,6 +73,7 @@
     <Compile Include="Domain\SubCategory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\LineItemStatus2.cs" />
     <Compile Include="Enums\LineItemSubType.cs" />
     <Compile Include="Enums\OperationStatus.cs" />
     <Compile Include="Enums\LineItemStatus.cs" />

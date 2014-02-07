@@ -128,16 +128,16 @@
     <value>Configuration</value>
   </data>
   <data name="DataListBottomRightRange" xml:space="preserve">
-    <value>$L$2</value>
+    <value>$M$2</value>
   </data>
   <data name="DataListObjectName" xml:space="preserve">
     <value>DATA</value>
   </data>
   <data name="DataListObjectRange" xml:space="preserve">
-    <value>$A$1:$L$1</value>
+    <value>$A$1:$M$1</value>
   </data>
   <data name="DataListRightMostColumn" xml:space="preserve">
-    <value>$L</value>
+    <value>$M</value>
   </data>
   <data name="DataListTopLeftRange" xml:space="preserve">
     <value>$A$1</value>

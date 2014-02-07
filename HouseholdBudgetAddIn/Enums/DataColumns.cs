@@ -38,6 +38,9 @@ namespace HouseholdBudget.Enums
         SUBTYPE = 11,
 
         [FriendlyName("Payment Method")]
-        PAYMENT_METHOD = 12
+        PAYMENT_METHOD = 12,
+
+        [FriendlyName("Status")]
+        STATUS = 13
     }
 }

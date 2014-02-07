@@ -25,6 +25,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimSubTypes", "dimSubTypes", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimSubTypes), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_dimSubCategories_dimCategories", "dimSubCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.dimSubCategories), "dimCategories", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimCategories), true)]
 [assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimPaymentMethods", "dimPaymentMethods", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimPaymentMethods), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
+[assembly: EdmRelationshipAttribute("BudgetModel", "FK_factLineItems_dimStatus", "dimStatus", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(HouseholdBudget.DataModel.dimStatus), "factLineItems", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(HouseholdBudget.DataModel.factLineItems), true)]
 
 #endregion
 
@@ -175,22 +176,6 @@ namespace HouseholdBudget.DataModel
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<factLineItems> factLineItems
-        {
-            get
-            {
-                if ((_factLineItems == null))
-                {
-                    _factLineItems = base.CreateObjectSet<factLineItems>("factLineItems");
-                }
-                return _factLineItems;
-            }
-        }
-        private ObjectSet<factLineItems> _factLineItems;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<dimPaymentMethods> dimPaymentMethods
         {
             get
@@ -203,6 +188,38 @@ namespace HouseholdBudget.DataModel
             }
         }
         private ObjectSet<dimPaymentMethods> _dimPaymentMethods;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<dimStatus> dimStatus
+        {
+            get
+            {
+                if ((_dimStatus == null))
+                {
+                    _dimStatus = base.CreateObjectSet<dimStatus>("dimStatus");
+                }
+                return _dimStatus;
+            }
+        }
+        private ObjectSet<dimStatus> _dimStatus;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<factLineItems> factLineItems
+        {
+            get
+            {
+                if ((_factLineItems == null))
+                {
+                    _factLineItems = base.CreateObjectSet<factLineItems>("factLineItems");
+                }
+                return _factLineItems;
+            }
+        }
+        private ObjectSet<factLineItems> _factLineItems;
 
         #endregion
         #region AddTo Methods
@@ -256,19 +273,27 @@ namespace HouseholdBudget.DataModel
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the factLineItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddTofactLineItems(factLineItems factLineItems)
-        {
-            base.AddObject("factLineItems", factLineItems);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the dimPaymentMethods EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddTodimPaymentMethods(dimPaymentMethods dimPaymentMethods)
         {
             base.AddObject("dimPaymentMethods", dimPaymentMethods);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the dimStatus EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTodimStatus(dimStatus dimStatus)
+        {
+            base.AddObject("dimStatus", dimStatus);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the factLineItems EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddTofactLineItems(factLineItems factLineItems)
+        {
+            base.AddObject("factLineItems", factLineItems);
         }
 
         #endregion
@@ -722,6 +747,112 @@ namespace HouseholdBudget.DataModel
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimPaymentMethods", "factLineItems", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BudgetModel", Name="dimStatus")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class dimStatus : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new dimStatus object.
+        /// </summary>
+        /// <param name="statusId">Initial value of the StatusId property.</param>
+        /// <param name="statusName">Initial value of the StatusName property.</param>
+        public static dimStatus CreatedimStatus(global::System.Int16 statusId, global::System.String statusName)
+        {
+            dimStatus dimStatus = new dimStatus();
+            dimStatus.StatusId = statusId;
+            dimStatus.StatusName = statusName;
+            return dimStatus;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 StatusId
+        {
+            get
+            {
+                return _StatusId;
+            }
+            set
+            {
+                if (_StatusId != value)
+                {
+                    OnStatusIdChanging(value);
+                    ReportPropertyChanging("StatusId");
+                    _StatusId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("StatusId");
+                    OnStatusIdChanged();
+                }
+            }
+        }
+        private global::System.Int16 _StatusId;
+        partial void OnStatusIdChanging(global::System.Int16 value);
+        partial void OnStatusIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String StatusName
+        {
+            get
+            {
+                return _StatusName;
+            }
+            set
+            {
+                OnStatusNameChanging(value);
+                ReportPropertyChanging("StatusName");
+                _StatusName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("StatusName");
+                OnStatusNameChanged();
+            }
+        }
+        private global::System.String _StatusName;
+        partial void OnStatusNameChanging(global::System.String value);
+        partial void OnStatusNameChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimStatus", "factLineItems")]
+        public EntityCollection<factLineItems> ItemsOfThisStatus
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimStatus", "factLineItems");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<factLineItems>("BudgetModel.FK_factLineItems_dimStatus", "factLineItems", value);
                 }
             }
         }
@@ -1188,7 +1319,8 @@ namespace HouseholdBudget.DataModel
         /// <param name="quarterId">Initial value of the QuarterId property.</param>
         /// <param name="subTypeId">Initial value of the SubTypeId property.</param>
         /// <param name="paymentMethodId">Initial value of the PaymentMethodId property.</param>
-        public static factLineItems CreatefactLineItems(global::System.Guid uniqueKey, global::System.Int16 monthId, global::System.Int16 dayOfMonthId, global::System.Int16 dayOfWeekId, global::System.Int32 yearId, global::System.Guid categoryKey, global::System.String description, global::System.Decimal amount, global::System.Int32 typeId, global::System.Int16 quarterId, global::System.Int16 subTypeId, global::System.Guid paymentMethodId)
+        /// <param name="statusId">Initial value of the StatusId property.</param>
+        public static factLineItems CreatefactLineItems(global::System.Guid uniqueKey, global::System.Int16 monthId, global::System.Int16 dayOfMonthId, global::System.Int16 dayOfWeekId, global::System.Int32 yearId, global::System.Guid categoryKey, global::System.String description, global::System.Decimal amount, global::System.Int32 typeId, global::System.Int16 quarterId, global::System.Int16 subTypeId, global::System.Guid paymentMethodId, global::System.Int16 statusId)
         {
             factLineItems factLineItems = new factLineItems();
             factLineItems.UniqueKey = uniqueKey;
@@ -1203,6 +1335,7 @@ namespace HouseholdBudget.DataModel
             factLineItems.QuarterId = quarterId;
             factLineItems.SubTypeId = subTypeId;
             factLineItems.PaymentMethodId = paymentMethodId;
+            factLineItems.StatusId = statusId;
             return factLineItems;
         }
 
@@ -1499,6 +1632,30 @@ namespace HouseholdBudget.DataModel
         private global::System.Guid _PaymentMethodId;
         partial void OnPaymentMethodIdChanging(global::System.Guid value);
         partial void OnPaymentMethodIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int16 StatusId
+        {
+            get
+            {
+                return _StatusId;
+            }
+            set
+            {
+                OnStatusIdChanging(value);
+                ReportPropertyChanging("StatusId");
+                _StatusId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StatusId");
+                OnStatusIdChanged();
+            }
+        }
+        private global::System.Int16 _StatusId;
+        partial void OnStatusIdChanging(global::System.Int16 value);
+        partial void OnStatusIdChanged();
 
         #endregion
     
@@ -1728,6 +1885,44 @@ namespace HouseholdBudget.DataModel
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimPaymentMethods>("BudgetModel.FK_factLineItems_dimPaymentMethods", "dimPaymentMethods", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("BudgetModel", "FK_factLineItems_dimStatus", "dimStatus")]
+        public dimStatus Status
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimStatus>("BudgetModel.FK_factLineItems_dimStatus", "dimStatus").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimStatus>("BudgetModel.FK_factLineItems_dimStatus", "dimStatus").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<dimStatus> StatusReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<dimStatus>("BudgetModel.FK_factLineItems_dimStatus", "dimStatus");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<dimStatus>("BudgetModel.FK_factLineItems_dimStatus", "dimStatus", value);
                 }
             }
         }

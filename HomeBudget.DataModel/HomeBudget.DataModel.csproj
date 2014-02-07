@@ -81,10 +81,10 @@
     <None Include="BudgetModel.edmx.sqlce" />
     <None Include="MigrateDimCategoriesToDimSubCategories.sqlce" />
     <None Include="Properties\DataSources\BudgetEntities.datasource" />
+    <None Include="Status_InitialData.sqlce" />
     <None Include="SubTypes_InitialData.sqlce" />
     <None Include="DaysOfWeek_InitialData.sqlce" />
     <None Include="Months_InitialData.sqlce" />
-    <None Include="Types_InitialData.sqlce" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

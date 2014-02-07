@@ -84,7 +84,8 @@ namespace HouseholdBudget.Data.Implementation
                             Type = (LineItemType)fli.TypeId,
                             SubType = (LineItemSubType)fli.SubTypeId,
                             Quarter = (Quarters)fli.QuarterId,
-                            PaymentMethod = fli.PaymentMethod.PaymentMethodName
+                            PaymentMethod = fli.PaymentMethod.PaymentMethodName,
+                            Status = fli.Status.StatusName
                         };
 
                         // save to the final list
@@ -136,12 +137,15 @@ namespace HouseholdBudget.Data.Implementation
                         {
                             type = (int)LineItemType.ALLOCATION;
                         }
+                        // compute the quarter
                         short quarterId = (short)GetQuarterForMonth(monthId);
                         // get the payment method key from the Line Item
                         Guid paymentMethodKey = Guid.Parse("b1c6ae6a-e56b-4c75-8948-255099ec78fe");
+                        // get the line item status
+                        short statusId = (short)LineItemStatus2.Reconciled;
 
                         factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
-                            lineItem.Description, lineItem.Amount, type, quarterId, subType, paymentMethodKey);
+                            lineItem.Description, lineItem.Amount, type, quarterId, subType, paymentMethodKey, statusId);
 
                         // save to DB
                         cxt.factLineItems.AddObject(fact);

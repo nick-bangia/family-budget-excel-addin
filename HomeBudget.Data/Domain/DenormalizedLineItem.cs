@@ -16,5 +16,6 @@ namespace HouseholdBudget.Data.Domain
         public LineItemSubType SubType { get; set; }
         public Quarters Quarter { get; set; }
         public string PaymentMethod { get; set; }
+        public string Status { get; set; }
     }
 }
