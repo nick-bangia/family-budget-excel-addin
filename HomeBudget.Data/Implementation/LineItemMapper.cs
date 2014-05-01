@@ -73,8 +73,10 @@ namespace HouseholdBudget.Data.Implementation
                         // convert the factLineitem to a LineItem
                         DenormalizedLineItem lineItem = new DenormalizedLineItem()
                         {
+                            UniqueKey = fli.UniqueKey,
                             Year = fli.YearId,
                             Month = fli.Month.MonthName,
+                            MonthInt = fli.Month.MonthId,
                             Day = fli.DayOfMonthId,
                             DayOfWeek = fli.DayOfWeek.DayName,
                             Amount = fli.Amount,
@@ -85,7 +87,7 @@ namespace HouseholdBudget.Data.Implementation
                             SubType = (LineItemSubType)fli.SubTypeId,
                             Quarter = (Quarters)fli.QuarterId,
                             PaymentMethod = fli.PaymentMethod.PaymentMethodName,
-                            Status = fli.Status.StatusName
+                            Status = (LineItemStatus2)fli.Status.StatusId
                         };
 
                         // save to the final list
@@ -101,6 +103,11 @@ namespace HouseholdBudget.Data.Implementation
             
             logger.Info("Completed retrieval of all line items from DB.");
             return allLineItems;
+        }
+
+        public List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria)
+        {
+            throw new NotImplementedException();
         }
 
         private LineItemStatus SaveLineItemToDB(LineItem lineItem)

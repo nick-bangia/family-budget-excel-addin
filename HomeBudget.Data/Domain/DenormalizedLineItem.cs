@@ -1,10 +1,13 @@
 ﻿using HouseholdBudget.Data.Enums;
+using System;
 
 namespace HouseholdBudget.Data.Domain
 {
     public class DenormalizedLineItem
     {
+        public Guid UniqueKey { get; set; }
         public int Year { get; set; }
+        public short MonthInt { get; set; }
         public string Month { get; set; }
         public short Day { get; set; }
         public string DayOfWeek { get; set; }
@@ -16,6 +19,6 @@ namespace HouseholdBudget.Data.Domain
         public LineItemSubType SubType { get; set; }
         public Quarters Quarter { get; set; }
         public string PaymentMethod { get; set; }
-        public string Status { get; set; }
+        public LineItemStatus2 Status { get; set; }
     }
 }

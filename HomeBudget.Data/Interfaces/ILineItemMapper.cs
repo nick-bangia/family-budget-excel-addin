@@ -12,5 +12,6 @@ namespace HouseholdBudget.Data.Interfaces
         LineItem AddNewLineItem(LineItem lineItem);
         LineItem GetLineItem(LineItem lineItem);
         List<DenormalizedLineItem> GetAllLineItems();
+        List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria);
     }
 }
