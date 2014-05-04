@@ -310,7 +310,8 @@ namespace HouseholdBudget
                                     "Check that:" + Environment.NewLine +
                                     "\t1) The new SubCategory is not already in the DB." + Environment.NewLine +
                                     "\t2) The DB exists." + Environment.NewLine +
-                                    "\t3) The required system files for this workbook are present.";
+                                    "\t3) The required system files for this workbook are present." + Environment.NewLine +
+                                    "\t4) The subcategory's code is fits within the constraint of the system.";
                 logger.Error(errorText);
                 MessageBox.Show(errorText);
             }

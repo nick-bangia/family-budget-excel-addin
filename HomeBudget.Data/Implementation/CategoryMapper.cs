@@ -88,30 +88,40 @@ namespace HouseholdBudget.Data.Implementation
 
         private OperationStatus SaveSubCategoryToDB(dimSubCategories newSubCategory)
         {
-            using (BudgetEntities ctx = new BudgetEntities())
+            try
             {
-                var subCategories = from subCat in ctx.dimSubCategories
-                                 where subCat.SubCategoryName == newSubCategory.SubCategoryName &&
-                                       subCat.SubCategoryPrefix == newSubCategory.SubCategoryPrefix
-                                 select subCat;
-
-                // if a category already exists, return failure
-                if (subCategories.Count() > 0)
+                using (BudgetEntities ctx = new BudgetEntities())
                 {
-                    logger.Info("Attempted to add a new subcategory that already exists!");
-                    return OperationStatus.FAILURE;
+                    var subCategories = from subCat in ctx.dimSubCategories
+                                        where subCat.SubCategoryName == newSubCategory.SubCategoryName &&
+                                              subCat.SubCategoryPrefix == newSubCategory.SubCategoryPrefix
+                                        select subCat;
+
+                    // if a category already exists, return failure
+                    if (subCategories.Count() > 0)
+                    {
+                        logger.Info("Attempted to add a new subcategory that already exists!");
+                        return OperationStatus.FAILURE;
+                    }
+
+                    // otherwise, add to the DB
+                    // add object to context
+                    logger.Info(String.Format("Adding a new SubCategory: {0}/{1}.", newSubCategory.CategoryKey, newSubCategory.SubCategoryName));
+                    ctx.dimSubCategories.AddObject(newSubCategory);
+
+                    // save changes to DB
+                    ctx.SaveChanges();
+
+                    // return success operation
+                    return OperationStatus.SUCCESS;
                 }
+            }
+            catch (Exception ex)
+            {
+                string exceptionMsg = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : String.Empty);
+                logger.Error(String.Format("An error occurred while attempting to add a new subcategory. Error Text: {0}", exceptionMsg));
 
-                // otherwise, add to the DB
-                // add object to context
-                logger.Info(String.Format("Adding a new SubCategory: {0}/{1}.", newSubCategory.CategoryKey, newSubCategory.SubCategoryName));
-                ctx.dimSubCategories.AddObject(newSubCategory);
-
-                // save changes to DB
-                ctx.SaveChanges();
-
-                // return success operation
-                return OperationStatus.SUCCESS;
+                return OperationStatus.FAILURE;
             }
         }
 
