@@ -65,6 +65,7 @@ namespace HouseholdBudget.Data.Implementation
                     logger.Info("Getting all items from DB.");
                     var lineItems = from fli in ctx.factLineItems
                                     where fli.Category.IsActive
+                                    orderby fli.YearId descending, fli.MonthId descending, fli.DayOfMonthId descending
                                     select fli;
 
                     logger.Info("Denormalizing line items.");
@@ -105,10 +106,10 @@ namespace HouseholdBudget.Data.Implementation
             return allLineItems;
         }
 
-        public List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria)
+        /*public List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria)
         {
             throw new NotImplementedException();
-        }
+        }*/
 
         private LineItemStatus SaveLineItemToDB(LineItem lineItem)
         {
@@ -139,10 +140,14 @@ namespace HouseholdBudget.Data.Implementation
                         // default to EXPENSE
                         int type = (int)LineItemType.EXPENSE;
                         short subType = (short)(lineItem.Amount < 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT);
-                        // if the description suggests an allocation, change its type
+                        // if the description suggests an allocation or an adjustment, change its type
                         if (lineItem.Description.ToLower().Contains("alloc"))
                         {
                             type = (int)LineItemType.ALLOCATION;
+                        }
+                        else if (lineItem.Description.ToLower().Contains("adj"))
+                        {
+                            type = (int)LineItemType.ADJUSTMENT;
                         }
                         // compute the quarter
                         short quarterId = (short)GetQuarterForMonth(monthId);

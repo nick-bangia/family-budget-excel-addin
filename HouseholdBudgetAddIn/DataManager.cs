@@ -148,7 +148,7 @@ namespace HouseholdBudget
                     value = lineItems[index].PaymentMethod;
                     break;
                 case (int)DataColumns.STATUS:
-                    value = lineItems[index].Status;
+                    value = EnumUtil.GetFriendlyName(lineItems[index].Status);
                     break;
                 default:
                     value = "N/A";
