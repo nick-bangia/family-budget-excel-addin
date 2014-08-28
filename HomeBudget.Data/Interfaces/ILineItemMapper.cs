@@ -10,8 +10,11 @@ namespace HouseholdBudget.Data.Interfaces
     public interface ILineItemMapper
     {
         LineItem AddNewLineItem(LineItem lineItem);
+        OperationStatus UpdateLineItem(DenormalizedLineItem lineItem);
         LineItem GetLineItem(LineItem lineItem);
         List<DenormalizedLineItem> GetAllLineItems();
-        //List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria);
+        List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria);
+        DenormalizedLineItem GetFirstLineItemByCriteria(SearchCriteria searchCriteria);
+        OperationStatus DeleteLineItem(Guid itemKey);
     }
 }

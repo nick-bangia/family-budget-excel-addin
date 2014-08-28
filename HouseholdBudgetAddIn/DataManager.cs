@@ -17,7 +17,7 @@ namespace HouseholdBudget
         private static readonly ILog logger = LogManager.GetLogger("HouseholdBudgetAddIn_DataManager");
         #endregion
 
-        public static void PopulateDataSheet(List<DenormalizedLineItem> lineItems)
+        public static void PopulateMasterDataTable(List<DenormalizedLineItem> lineItems)
         {
             // log the status
             logger.Info("Beginning population of data sheet...");
@@ -168,7 +168,7 @@ namespace HouseholdBudget
                 NativeExcel.Sheets worksheets = Globals.ThisAddIn.Application.Worksheets;
                 foreach (NativeExcel.Worksheet wrksheet in worksheets)
                 {
-                    if (wrksheet.Name == Properties.Resources.DataWorksheetName)
+                    if (wrksheet.Name == Properties.Resources.MasterDataWorksheetName)
                     {
                         // if found, assign it to the dataSheet
                         dataSheet = wrksheet;
@@ -181,7 +181,7 @@ namespace HouseholdBudget
                 {
                     NativeExcel.Worksheet lastWorksheet = worksheets[worksheets.Count];
                     dataSheet = (NativeExcel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(After: lastWorksheet);
-                    dataSheet.Name = Properties.Resources.DataWorksheetName;
+                    dataSheet.Name = Properties.Resources.MasterDataWorksheetName;
                 }
 
                 // assign the VSTO object for it to the vstoDataSheet property

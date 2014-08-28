@@ -16,6 +16,8 @@ using HouseholdBudget.Tools;
 using HouseholdBudget.UI;
 using Microsoft.Office.Tools.Ribbon;
 using NativeExcel = Microsoft.Office.Interop.Excel;
+using VstoExcel = Microsoft.Office.Tools.Excel;
+using HouseholdBudget.Utilities;
 
 namespace HouseholdBudget
 {
@@ -28,6 +30,7 @@ namespace HouseholdBudget
         private static frmNewSubCategory newSubCategoryForm;
         private static frmUpdateCategories updateCategoriesForm;
         private static frmPaymentMethods paymentMethodsForm;
+        private static frmSearchItems searchItemsForm;
 
         // importing items
         private static LineItemCSVImporter importer;
@@ -228,7 +231,7 @@ namespace HouseholdBudget
                     logger.Info("Generating import summary.");
                     importReport = e.Result as List<LineItem>;
                     ImportResultsManager.DisplayImportResults(importReport);
-                    DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                    DataManager.PopulateMasterDataTable(lineItemMapper.GetAllLineItems());
                     RefreshPivotTables();
                     ShowWorksheetByName(Properties.Resources.ImportResultsListObjectName);
                 }
@@ -277,10 +280,58 @@ namespace HouseholdBudget
             ShowFirstWorksheet();
         }
 
+        internal static void btnGetPendingItems_Click(object sender, RibbonControlEventArgs e)
+        {
+            SearchCriteria sc = new SearchCriteria()
+            {
+                Status = (short)LineItemStatus2.PENDING
+            };
+            
+            List<DenormalizedLineItem> items = lineItemMapper.GetLineItemsByCriteria(sc);
+                        
+            if (items.Count == 0)
+            {
+                // if no line items are returned, then notify user
+                MessageBox.Show("No pending items were found.");
+            }
+            else
+            {
+                // otherwise, populate the worksheet
+                DataWorksheetManager.PopulateNewWorksheet(DataWorksheetType.PENDING, items);
+            }
+        }
+
+        internal static void btnGetFutureItems_Click(object sender, RibbonControlEventArgs e)
+        {
+            SearchCriteria sc = new SearchCriteria()
+            {
+                Status = (short)LineItemStatus2.FUTURE
+            };
+            
+            List<DenormalizedLineItem> items = lineItemMapper.GetLineItemsByCriteria(sc);
+
+            if (items.Count == 0)
+            {
+                // if no line items are returned, then notify user
+                MessageBox.Show("No future items were found.");
+            }
+            else
+            {
+                // otherwise, populate the worksheet
+                DataWorksheetManager.PopulateNewWorksheet(DataWorksheetType.FUTURE, items);
+            }
+        }
+
         internal static void btnManagePaymentMethods_Click(object sender, RibbonControlEventArgs e)
         {
             paymentMethodsForm = new frmPaymentMethods();
             paymentMethodsForm.Show();
+        }
+
+        internal static void btnSearch_Click(object sender, RibbonControlEventArgs e)
+        {
+            searchItemsForm = new frmSearchItems();
+            searchItemsForm.Show();
         }
 
         private static void categoryForm_UserCancelled(object sender, CategoryControlEventArgs e)
@@ -350,23 +401,23 @@ namespace HouseholdBudget
             }
         }
 
-        internal static void importReport_ActionRequested(object sender, ImportActionEventArgs e)
+        internal static void importReport_ActionRequested(object sender, ActionEventArgs e)
         {
             try
             {
                 // if IMPORT, then attempt to re-import the (hopefully) modified line item
-                logger.Info("Attempting to import a single line item...");
-                if (e.ImportAction == ImportResultActions.IMPORT)
+                if (e.Action == LineItemActions.IMPORT)
                 {
-                    LineItem item = ImportResultsManager.ConvertImportResultToLineItem(e.ImportListIndex, e.ImportResultsIndex);
+                    logger.Info("Attempting to import a single line item...");
+                    LineItem item = ImportResultsManager.ConvertImportResultToLineItem(e.ListIndex, e.Index);
                     item = lineItemMapper.AddNewLineItem(item);
-                    ImportResultsManager.ProcessImportResult(item, e.ImportListIndex, e.ImportResultsIndex);
+                    ImportResultsManager.ProcessImportResult(item, e.ListIndex, e.Index);
                     
                     // if the item was successfully saved, update the data sheet
                     logger.Info("The line item's status is: " + item.Status.ToString());
                     if (item.Status == LineItemStatus.SAVED)
                     {
-                        DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+                        DataManager.PopulateMasterDataTable(lineItemMapper.GetAllLineItems());
                     }                    
                 }
             }
@@ -381,6 +432,77 @@ namespace HouseholdBudget
             }
         }
 
+        internal static void dataWorksheet_ActionRequested(object sender, ActionEventArgs e)
+        {
+            try
+            {
+                // if EDIT, then bring up a dialog to edit or delete the line item
+                if (e.Action == LineItemActions.EDIT)
+                {
+                    logger.Info("Attempting to edit a single line item...");
+                    Guid itemKey = DataWorksheetManager.GetItemKey(e.ListIndex, e.Index);
+                    SearchCriteria sc = new SearchCriteria() { UniqueId = itemKey };
+
+                    // bring up dialog to edit or delete the line item
+                    DenormalizedLineItem item = lineItemMapper.GetFirstLineItemByCriteria(sc);
+                    if (item != null)
+                    {
+                        frmItem itemForm = new frmItem(e.ListIndex, e.Index, e.worksheetType);
+                        itemForm.Show();
+                        itemForm.HydrateForm(item);
+                        itemForm.Focus();
+                    }
+                    else
+                    {
+                        string error = "Unable to access item with unique ID: " + item.UniqueKey.ToString() + Environment.NewLine +
+                            Environment.NewLine + "Check that this item actually exists!";
+                        logger.Error(error);
+
+                        MessageBox.Show(error);
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {
+                // log the exception
+                logger.Error("An error occurred while attempting to edit a line item.", ex);
+
+                MessageBox.Show("An error occurred while attempting to edit a line item." + Environment.NewLine + Environment.NewLine +
+                                "Error Details:" + Environment.NewLine +
+                                ex.Message);
+            }
+        }
+
+        internal static ActionButton AddButtonToListObject(VstoExcel.Worksheet worksheet, 
+                                                          VstoExcel.ListObject listObject, 
+                                                          LineItemActions action,
+                                                          DataWorksheetType worksheetType,
+                                                          int resultIndex, 
+                                                          int listObjectIndex, 
+                                                          int column,
+                                                          int NUM_HEADER_ROWS,
+                                                          EventHandler<ActionEventArgs> handler)
+        {
+            // create the button & set its properties
+            ActionButton actionButton = new ActionButton();
+            actionButton.index = resultIndex;
+            actionButton.action = action;
+            actionButton.listObjectIndex = listObjectIndex;
+            actionButton.worksheetType = worksheetType;
+            actionButton.Text = EnumUtil.GetFriendlyName(action);
+            string buttonName = "btn" + action.ToString() + (resultIndex).ToString();
+            actionButton.Name = buttonName;
+                        
+            // add it to the list
+            int rowIndex = listObjectIndex + NUM_HEADER_ROWS;
+            worksheet.Controls.AddControl(actionButton, worksheet.Cells[rowIndex, column], buttonName);
+            
+            // tie it to the handler
+            actionButton.OnActionRequested += handler;
+
+            return actionButton;
+        }
+
         internal static void RebuildDataSheet()
         {
             Globals.ThisAddIn.Application.DisplayAlerts = false;
@@ -392,7 +514,7 @@ namespace HouseholdBudget
         internal static void PopulateDataSheet()
         {
             logger.Info("Populating the data sheet.");
-            DataManager.PopulateDataSheet(lineItemMapper.GetAllLineItems());
+            DataManager.PopulateMasterDataTable(lineItemMapper.GetAllLineItems());
         }
 
         internal static void RefreshPivotTables()
@@ -524,9 +646,24 @@ namespace HouseholdBudget
             return categoryMapper.GetCategories();
         }
 
+        internal static Guid? GetCategoryID(string categoryName)
+        {
+            return categoryMapper.GetCategoryKeyByName(categoryName);
+        }
+
+        internal static String GetCategoryValidationList()
+        {
+            return categoryMapper.GetCategoryList(',');
+        }
+
         internal static LiveDataObject GetSubCategories()
         {
             return categoryMapper.GetSubCategories();
+        }
+
+        internal static String GetSubCategoryValidationList()
+        {
+            return categoryMapper.GetSubCategoryList(',');
         }
 
         internal static LiveDataObject GetFilteredSubCategories(Guid categoryKey)
@@ -534,14 +671,81 @@ namespace HouseholdBudget
             return categoryMapper.GetFilteredSubCategories(categoryKey);
         }
 
+        internal static Guid? GetSubCategoryID(string subCategoryName)
+        {
+            return categoryMapper.GetSubCategoryKeyByName(subCategoryName);
+        }
+
         internal static LiveDataObject GetPaymentMethods()
         {
             return paymentMethodMapper.GetPaymentMethods();
         }
 
+        internal static String GetPaymentMethodValidationList()
+        {
+            return paymentMethodMapper.GetPaymentMethodList(',');
+        }
+
         internal static OperationStatus AddNewPaymentMethod(string methodName, bool isActive)
         {
             return paymentMethodMapper.AddNewPaymentMethod(methodName, isActive);
+        }
+
+        internal static Guid? GetPaymentMethodKeyByName(string paymentMethodName)
+        {
+            return paymentMethodMapper.GetPaymentMethodKeyByName(paymentMethodName);
+        }
+
+        internal static void DeleteLineItem(Guid itemKey)
+        {
+            OperationStatus status = lineItemMapper.DeleteLineItem(itemKey);
+
+            if (status == OperationStatus.FAILURE)
+            {
+                MessageBox.Show("Unable to delete item with key: " + itemKey.ToString() + Environment.NewLine +
+                    "Check that the item exists, or check the log for more details.");
+            }
+        }
+
+        internal static void UpdateLineItem(DenormalizedLineItem lineItem)
+        {
+            OperationStatus status = lineItemMapper.UpdateLineItem(lineItem);
+
+            if (status == OperationStatus.FAILURE)
+            {
+                MessageBox.Show("Unable to update item with key: " + lineItem.UniqueKey.ToString() + Environment.NewLine +
+                    "Check that the item exists, or check the log for more details.");
+            }
+        }
+
+        internal static void SearchSubmitted(SearchCriteria sc)
+        {
+            List<DenormalizedLineItem> items = lineItemMapper.GetLineItemsByCriteria(sc);
+            bool displayResults = true;
+
+            if (items.Count == 0)
+            {
+                // if no line items are returned, then notify user
+                searchItemsForm.NotifyUser("No items found! Please change your search criteria.");
+                displayResults = false;
+            }
+            else if (items.Count > Convert.ToInt32(Properties.Resources.MaxSearchResults))
+            {
+                // number of items exceeds the max search results, so truncate the results and notify user
+                int startIndex = Convert.ToInt32(Properties.Resources.MaxSearchResults);
+                items.RemoveRange(startIndex, items.Count - startIndex);
+                searchItemsForm.NotifyUser(
+                    "Search results exceeded max results size of " +
+                    startIndex.ToString() + " items. Results have been truncated." + Environment.NewLine +
+                    Environment.NewLine + "Update your search criteria to limit number of results.");
+            }
+            
+            if (displayResults)
+            {
+                // otherwise, populate the worksheet
+                DataWorksheetManager.PopulateNewWorksheet(DataWorksheetType.SEARCH_RESULTS, items);
+                searchItemsForm.Close();
+            }
         }
     }
 }

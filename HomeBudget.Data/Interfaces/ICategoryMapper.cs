@@ -13,8 +13,11 @@ namespace HouseholdBudget.Data.Interfaces
         LiveDataObject GetCategories();
         LiveDataObject GetSubCategories();
         LiveDataObject GetFilteredSubCategories(Guid categoryKey);
+        Guid? GetCategoryKeyByName(string categoryName);
+        Guid? GetSubCategoryKeyByName(string subCategoryName);
         OperationStatus AddNewCategory(string categoryName);
         OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, bool isActive);
-        //OperationStatus SetCategoryActiveState(Guid categoryId, bool activeState);        
+        String GetCategoryList(char delimiter);
+        String GetSubCategoryList(char delimiter);
     }
 }

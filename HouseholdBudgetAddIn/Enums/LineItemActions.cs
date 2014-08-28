@@ -2,10 +2,13 @@
 
 namespace HouseholdBudget.Enums
 {
-    internal enum ImportResultActions
+    internal enum LineItemActions
     {
         [FriendlyName("Import")]
         IMPORT,
+
+        [FriendlyName("Edit")]
+        EDIT,
 
         [FriendlyName("Delete")]
         DELETE,

@@ -9,6 +9,7 @@ using HouseholdBudget.Tools;
 using System.Configuration;
 using HouseholdBudget.Data;
 using HouseholdBudget.Data.Interfaces;
+using HouseholdBudget.Data.Enums;
 
 namespace HouseholdBudget.UI
 {
@@ -22,6 +23,9 @@ namespace HouseholdBudget.UI
             this.btnRefresh.Click += new RibbonControlEventHandler(Controller.btnRefresh_Click);
             this.btnUpdateCategories.Click += new RibbonControlEventHandler(Controller.btnUpdateCategories_Click);
             this.btnManagePaymentMethods.Click += new RibbonControlEventHandler(Controller.btnManagePaymentMethods_Click);
+            this.btnGetPendingItems.Click += new RibbonControlEventHandler(Controller.btnGetPendingItems_Click);
+            this.btnGetFutureItems.Click += new RibbonControlEventHandler(Controller.btnGetFutureItems_Click);
+            this.btnSearch.Click += new RibbonControlEventHandler(Controller.btnSearch_Click);
         }
     }
 }
