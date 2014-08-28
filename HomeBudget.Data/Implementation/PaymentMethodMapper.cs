@@ -7,6 +7,7 @@ using HouseholdBudget.Data.Interfaces;
 using HouseholdBudget.Data.Protocol;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Data.Utilities;
 using HouseholdBudget.DataModel;
 using System.Data.Objects;
 
@@ -39,7 +40,16 @@ namespace HouseholdBudget.Data.Implementation
         {
             return SavePaymentMethodToDB(dimPaymentMethods.CreatedimPaymentMethods(Guid.NewGuid(), methodName, isActive));
         }
-        
+
+        public string GetPaymentMethodList(char delimiter)
+        {
+            return GetPaymentMethodEnumerable().ToDelimitedString(delimiter);
+        }
+
+        public Guid? GetPaymentMethodKeyByName(string paymentMethodName)
+        {
+            return GetPaymentMethodKeyByNameFromDB(paymentMethodName);
+        }       
         #endregion
 
         #region Private Methods
@@ -84,9 +94,50 @@ namespace HouseholdBudget.Data.Implementation
             }
         }
 
+        private IEnumerable<string> GetPaymentMethodEnumerable()
+        {
+            using (BudgetEntities ctx = new BudgetEntities())
+            {
+                List<string> paymentMethods = (from pm in ctx.dimPaymentMethods
+                                               orderby pm.PaymentMethodName
+                                               select pm.PaymentMethodName).ToList<string>();
+
+                return paymentMethods;
+            }
+        }
+
+        private Guid? GetPaymentMethodKeyByNameFromDB(string paymentMethodName)
+        {
+            Guid paymentMethodKey = Guid.Empty;
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    // get a list of Guids that match the category name
+                    // there should realistically only ever be one match
+                    List<Guid> matches = (from pm in ctx.dimPaymentMethods
+                                          where pm.PaymentMethodName == paymentMethodName
+                                          select pm.PaymentMethodKey).ToList();
+
+                    if (matches.Count > 0)
+                    {
+                        // if a match exists, take the first one (there should only by one)
+                        paymentMethodKey = matches[0];
+                    }
+
+                    return paymentMethodKey;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while attempting to get the key for the payment method " + paymentMethodName + "."
+                    + Environment.NewLine + Environment.NewLine +
+                    "Error details: " + Environment.NewLine +
+                    ex.Message);
+
+                return (Guid?)null;
+            }
+        }
         #endregion
-
-
-        
     }
 }

@@ -8,6 +8,7 @@ using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.DataModel;
 using System.ComponentModel;
+using HouseholdBudget.Data.Utilities;
 
 namespace HouseholdBudget.Data.Implementation
 {
@@ -36,10 +37,37 @@ namespace HouseholdBudget.Data.Implementation
 
             return lineItem;
         }
+
+        public OperationStatus UpdateLineItem(DenormalizedLineItem lineItem)
+        {
+            return UpdateLineItemInDB(lineItem);
+        }
                 
         public List<DenormalizedLineItem> GetAllLineItems()
         {
             return GetAllItemsFromDB();
+        }
+
+        public List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria)
+        {
+            return GetLineItemsFromDB(searchCriteria);
+        }
+
+        public DenormalizedLineItem GetFirstLineItemByCriteria(SearchCriteria searchCriteria)
+        {
+            List<DenormalizedLineItem> list = GetLineItemsByCriteria(searchCriteria);
+            
+            // process list result
+            if (list.Count == 0)
+            {
+                // if the list has zero items, then return null
+                return null;
+            }
+            else
+            {
+                // otherwise, return the first item in the list
+                return list[0];
+            }
         }
 
         public LineItem GetLineItem(LineItem lineItem)
@@ -47,69 +75,14 @@ namespace HouseholdBudget.Data.Implementation
             return CheckForDuplicate(lineItem);
         }
 
+        public OperationStatus DeleteLineItem(Guid itemKey)
+        {
+            return DeleteLineItemFromDB(itemKey);
+        }
+
         #endregion
 
         #region Private Methods
-
-        private List<DenormalizedLineItem> GetAllItemsFromDB()
-        {
-            // log start of method
-            logger.Info("Beginning retrieval of all items for active categories from DB...");
-
-            List<DenormalizedLineItem> allLineItems = new List<DenormalizedLineItem>();
-
-            try
-            {
-                using (BudgetEntities ctx = new BudgetEntities())
-                {
-                    logger.Info("Getting all items from DB.");
-                    var lineItems = from fli in ctx.factLineItems
-                                    where fli.Category.IsActive
-                                    orderby fli.YearId descending, fli.MonthId descending, fli.DayOfMonthId descending
-                                    select fli;
-
-                    logger.Info("Denormalizing line items.");
-                    foreach (factLineItems fli in lineItems)
-                    {
-                        // convert the factLineitem to a LineItem
-                        DenormalizedLineItem lineItem = new DenormalizedLineItem()
-                        {
-                            UniqueKey = fli.UniqueKey,
-                            Year = fli.YearId,
-                            Month = fli.Month.MonthName,
-                            MonthInt = fli.Month.MonthId,
-                            Day = fli.DayOfMonthId,
-                            DayOfWeek = fli.DayOfWeek.DayName,
-                            Amount = fli.Amount,
-                            Description = fli.Description,
-                            Category = fli.Category.ParentCategory.CategoryName,
-                            SubCategory = fli.Category.SubCategoryName,
-                            Type = (LineItemType)fli.TypeId,
-                            SubType = (LineItemSubType)fli.SubTypeId,
-                            Quarter = (Quarters)fli.QuarterId,
-                            PaymentMethod = fli.PaymentMethod.PaymentMethodName,
-                            Status = (LineItemStatus2)fli.Status.StatusId
-                        };
-
-                        // save to the final list
-                        allLineItems.Add(lineItem);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Error("An error occurred while retreiving denormalized line items.", ex);
-                throw ex;
-            }
-            
-            logger.Info("Completed retrieval of all line items from DB.");
-            return allLineItems;
-        }
-
-        /*public List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria)
-        {
-            throw new NotImplementedException();
-        }*/
 
         private LineItemStatus SaveLineItemToDB(LineItem lineItem)
         {
@@ -150,11 +123,11 @@ namespace HouseholdBudget.Data.Implementation
                             type = (int)LineItemType.ADJUSTMENT;
                         }
                         // compute the quarter
-                        short quarterId = (short)GetQuarterForMonth(monthId);
+                        short quarterId = (short)DateUtil.GetQuarterForMonth(monthId);
                         // get the payment method key from the Line Item
                         Guid paymentMethodKey = Guid.Parse("b1c6ae6a-e56b-4c75-8948-255099ec78fe");
                         // get the line item status
-                        short statusId = (short)LineItemStatus2.Reconciled;
+                        short statusId = (short)LineItemStatus2.RECONCILED;
 
                         factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
                             lineItem.Description, lineItem.Amount, type, quarterId, subType, paymentMethodKey, statusId);
@@ -181,42 +154,152 @@ namespace HouseholdBudget.Data.Implementation
             }
         }
 
-        private Quarters GetQuarterForMonth(short monthId)
+        private OperationStatus UpdateLineItemInDB(DenormalizedLineItem lineItem)
         {
-            Quarters quarter;
-
-            switch (monthId)
+            try
             {
-                case 1:
-                case 2:
-                case 3:
-                    quarter = Quarters.Q1;
-                    break;
-                case 4:
-                case 5:
-                case 6:
-                    quarter = Quarters.Q2;
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                    quarter = Quarters.Q3;
-                    break;
-                case 10:
-                case 11:
-                case 12:
-                    quarter = Quarters.Q4;
-                    break;
-                default:
-                    // default to Q1 - this shouldn't ever happen
-                    quarter = Quarters.Q1;
-                    break;
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    factLineItems currentLineItem = (from fli in ctx.factLineItems
+                                                     where fli.UniqueKey == lineItem.UniqueKey
+                                                     select fli).ToList()[0];
+
+                    currentLineItem.YearId = lineItem.Year;
+                    currentLineItem.MonthId = lineItem.MonthInt;
+                    currentLineItem.DayOfMonthId = lineItem.Day;
+                    currentLineItem.DayOfWeekId = lineItem.DayOfWeekId;
+                    currentLineItem.QuarterId = (short)lineItem.Quarter;
+                    currentLineItem.CategoryKey = lineItem.SubCategoryKey;
+                    currentLineItem.Category.CategoryKey = lineItem.CategoryKey;
+                    currentLineItem.Description = lineItem.Description;
+                    currentLineItem.Amount = lineItem.Amount;
+                    currentLineItem.TypeId = (int)lineItem.Type;
+                    currentLineItem.PaymentMethodId = lineItem.PaymentMethodKey;
+                    currentLineItem.StatusId = (short)lineItem.Status;
+
+                    // save changes
+                    ctx.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                // if an error occurs, log it, and return failure
+                logger.Error("An error occurred while attempting to update a line item." + Environment.NewLine +
+                    "Error Details:" + Environment.NewLine +
+                    ex.Message);
+
+                return OperationStatus.FAILURE;
             }
 
-
-            return quarter;
+            // if code gets here, return success
+            return OperationStatus.SUCCESS;
         }
 
+        private List<DenormalizedLineItem> GetAllItemsFromDB()
+        {
+            // log start of method
+            logger.Info("Beginning retrieval of all items for active categories from DB...");
+            List<DenormalizedLineItem> allLineItems;
+
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    logger.Info("Getting all items from DB.");
+                    var lineItems = from fli in ctx.factLineItems
+                                    where fli.Category.IsActive
+                                    orderby fli.YearId descending, fli.MonthId descending, fli.DayOfMonthId descending
+                                    select fli;
+
+                    logger.Info("Denormalizing line items.");
+                    allLineItems = DenormalizeLineItems(lineItems);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while retreiving denormalized line items.", ex);
+                throw ex;
+            }
+            
+            logger.Info("Completed retrieval of all line items from DB.");
+            return allLineItems;
+        }
+
+        private List<DenormalizedLineItem> GetLineItemsFromDB(SearchCriteria searchCriteria)
+        {
+            // log start of method
+            logger.Info("Beginning retrieval of all items matching search criteria");
+            List<DenormalizedLineItem> matchingLineItems;
+
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    logger.Info("Getting items from DB that match search criteria.");
+                        
+                    // set up the initial base query
+                    IQueryable<factLineItems> lineItemQuery = ctx.factLineItems.Where(fli => fli.Category.IsActive);
+
+                    // build the query up based on the search criteria
+                    lineItemQuery = searchCriteria.BuildQueryFromCriteria(lineItemQuery);
+
+                    // add ordering to the query
+                    lineItemQuery = lineItemQuery.OrderByDescending(fli => fli.YearId)
+                                                 .ThenByDescending(fli => fli.MonthId)
+                                                 .ThenByDescending(fli => fli.DayOfMonthId);
+                    
+                    logger.Info("Denormalizing line items.");
+                    matchingLineItems = DenormalizeLineItems(lineItemQuery);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while retreiving denormalized line items.", ex);
+                throw ex;
+            }
+
+            logger.Info("Completed retrieval of all line items from DB.");
+            return matchingLineItems;
+        }
+
+        private List<DenormalizedLineItem> DenormalizeLineItems(IQueryable<factLineItems> lineItems)
+        {
+            List<DenormalizedLineItem> lineItemList = new List<DenormalizedLineItem>();
+
+            foreach (factLineItems fli in lineItems)
+            {
+                // convert the factLineitem to a LineItem
+                DenormalizedLineItem lineItem = new DenormalizedLineItem()
+                {
+                    UniqueKey = fli.UniqueKey,
+                    Year = fli.YearId,
+                    Month = fli.Month.MonthName,
+                    MonthInt = fli.Month.MonthId,
+                    Day = fli.DayOfMonthId,
+                    DayOfWeek = fli.DayOfWeek.DayName,
+                    DayOfWeekId = fli.DayOfWeekId,
+                    Amount = fli.Amount,
+                    Description = fli.Description,
+                    Category = fli.Category.ParentCategory.CategoryName,
+                    CategoryKey = fli.Category.ParentCategory.CategoryKey,
+                    SubCategory = fli.Category.SubCategoryName,
+                    SubCategoryKey = fli.CategoryKey,
+                    Type = (LineItemType)fli.TypeId,
+                    SubType = (LineItemSubType)fli.SubTypeId,
+                    Quarter = (Quarters)fli.QuarterId,
+                    PaymentMethod = fli.PaymentMethod.PaymentMethodName,
+                    PaymentMethodKey = fli.PaymentMethodId,
+                    Status = (LineItemStatus2)fli.Status.StatusId
+                };
+
+                // save to the final list
+                lineItemList.Add(lineItem);
+            }
+
+            // return the populated list
+            return lineItemList;
+        }
+        
         private Guid GetCategoryKeyFor(string itemDescription)
         {
             using (BudgetEntities ctx = new BudgetEntities())
@@ -282,6 +365,36 @@ namespace HouseholdBudget.Data.Implementation
                 // if code reaches here, there is no sign of a duplicate item
                 return null;
             }
+        }
+        
+        private OperationStatus DeleteLineItemFromDB(Guid itemKey)
+        {
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    factLineItems lineItem = (from fli in ctx.factLineItems
+                                              where fli.UniqueKey == itemKey
+                                              select fli).ToList()[0];
+
+                    ctx.factLineItems.DeleteObject(lineItem);
+                    ctx.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while attempting to delete the line item with key: " +
+                    itemKey.ToString() + ". Please make sure this item exists in the DB before deleting it." +
+                    Environment.NewLine + Environment.NewLine +
+                    "Error Details: " + Environment.NewLine +
+                    ex.Message);
+
+                // return failed operation if an error occurs
+                return OperationStatus.FAILURE;
+            }
+
+            // if we get here, return a successful operation
+            return OperationStatus.SUCCESS;
         }
 
         #endregion

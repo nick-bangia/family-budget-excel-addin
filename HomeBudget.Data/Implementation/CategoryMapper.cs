@@ -8,6 +8,7 @@ using HouseholdBudget.DataModel;
 using log4net;
 using System.Data.Objects;
 using HouseholdBudget.Data.Protocol;
+using HouseholdBudget.Data.Utilities;
 
 namespace HouseholdBudget.Data.Implementation
 {
@@ -44,6 +45,16 @@ namespace HouseholdBudget.Data.Implementation
             return GetSubCategoryDataSource(categoryKey);
         }
 
+        public Guid? GetCategoryKeyByName(string categoryName)
+        {
+            return GetCategoryKeyByNameFromDB(categoryName);
+        }
+
+        public Guid? GetSubCategoryKeyByName(string subCategoryName)
+        {
+            return GetSubCategoryKeyByNameFromDB(subCategoryName);
+        }
+
         public OperationStatus AddNewCategory(string categoryName)
         {
             return SaveCategoryToDB(dimCategories.CreatedimCategories(Guid.NewGuid(), categoryName));
@@ -52,6 +63,18 @@ namespace HouseholdBudget.Data.Implementation
         public OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, bool isActive)
         {
             return SaveSubCategoryToDB(dimSubCategories.CreatedimSubCategories(Guid.NewGuid(), categoryKey, subCategoryName, subCategoryPrefix, isActive));
+        }
+
+        public string GetCategoryList(char delimiter)
+        {
+            // get the enumerable to build list from, and convert it to a delimited string
+            return GetCategoryEnumerable().ToDelimitedString(delimiter);
+        }
+
+        public string GetSubCategoryList(char delimiter)
+        {
+            // get the enumerable to build list from, and convert it to a delimited string
+            return GetSubCategoryEnumerable().ToDelimitedString(delimiter);
         }
 
         #endregion
@@ -157,6 +180,95 @@ namespace HouseholdBudget.Data.Implementation
             };
         }
 
+        private Guid? GetCategoryKeyByNameFromDB(string categoryName)
+        {
+            Guid categoryKey = Guid.Empty;
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    // get a list of Guids that match the category name
+                    // there should realistically only ever be one match
+                    List<Guid> matches = (from c in ctx.dimCategories
+                                          where c.CategoryName == categoryName
+                                          select c.CategoryKey).ToList();
+
+                    if (matches.Count > 0)
+                    {
+                        // if a match exists, take the first one (there should only by one)
+                        categoryKey = matches[0];
+                    }
+
+                    return categoryKey;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while attempting to get the category key for the category " + categoryName + "."
+                    + Environment.NewLine + Environment.NewLine +
+                    "Error details: " + Environment.NewLine +
+                    ex.Message);
+
+                return (Guid?)null;
+            }
+        }
+
+        private Guid? GetSubCategoryKeyByNameFromDB(string subCategoryName)
+        {
+            Guid subCategoryKey = Guid.Empty;
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    // get a list of Guids that match the category name
+                    // there should realistically only ever be one match
+                    List<Guid> matches = (from sc in ctx.dimSubCategories
+                                          where sc.SubCategoryName == subCategoryName
+                                          select sc.SubCategoryKey).ToList();
+
+                    if (matches.Count > 0)
+                    {
+                        // if a match exists, take the first one (there should only by one)
+                        subCategoryKey = matches[0];
+                    }
+
+                    return subCategoryKey;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while attempting to get the SubCategory key for the subcategory " + subCategoryName + "."
+                    + Environment.NewLine + Environment.NewLine +
+                    "Error details: " + Environment.NewLine +
+                    ex.Message);
+
+                return (Guid?)null;
+            }
+        }
+
+        private IEnumerable<string> GetCategoryEnumerable()
+        {
+            using (BudgetEntities ctx = new BudgetEntities())
+            {
+                List<string> categories = (from cat in ctx.dimCategories
+                                           orderby cat.CategoryName
+                                           select cat.CategoryName).ToList<string>();
+
+                return categories;
+            }
+        }
+
+        private IEnumerable<string> GetSubCategoryEnumerable()
+        {
+            using (BudgetEntities ctx = new BudgetEntities())
+            {
+                List<string> subcategories = (from subcat in ctx.dimSubCategories
+                                              orderby subcat.SubCategoryName
+                                              select subcat.SubCategoryName).ToList<string>();
+
+                return subcategories;
+            }
+        }
         #endregion
     }
 }

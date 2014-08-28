@@ -208,9 +208,12 @@
       <Link>Properties\SharedVersioning.cs</Link>
     </Compile>
     <Compile Include="DataManager.cs" />
+    <Compile Include="DataWorksheetManager.cs" />
     <Compile Include="Enums\CategoryFormType.cs" />
     <Compile Include="Enums\DataColumns.cs" />
-    <Compile Include="Enums\ImportActions.cs" />
+    <Compile Include="Enums\DataWorksheetColumns.cs" />
+    <Compile Include="Enums\DataWorksheetType.cs" />
+    <Compile Include="Enums\LineItemActions.cs" />
     <Compile Include="Enums\ImportResultsColumns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -227,12 +230,24 @@
       <DependentUpon>LineItemCSVImporter.cs</DependentUpon>
     </Compile>
     <Compile Include="EventArgs\CategoryEventArgs.cs" />
-    <Compile Include="EventArgs\ImportActionEventArgs.cs" />
+    <Compile Include="EventArgs\ActionEventArgs.cs" />
     <Compile Include="UI\Categories\NewCategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Categories\NewCategoryModal.Designer.cs">
       <DependentUpon>NewCategoryModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LineItems\EditItemModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LineItems\EditItemModal.Designer.cs">
+      <DependentUpon>EditItemModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LineItems\SearchItemsModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LineItems\SearchItemsModal.Designer.cs">
+      <DependentUpon>SearchItemsModal.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\PaymentMethods\PaymentMethodModal.cs">
       <SubType>Form</SubType>
@@ -246,7 +261,7 @@
     <Compile Include="UI\Ribbon\HouseholdBudgetRibbon.Designer.cs">
       <DependentUpon>HouseholdBudgetRibbon.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Import\ImportActionButton.cs">
+    <Compile Include="UI\Buttons\ActionButton.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\Categories\NewSubCategoryModal.cs">
@@ -278,6 +293,12 @@
       <DependentUpon>NewCategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\LineItems\EditItemModal.resx">
+      <DependentUpon>EditItemModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LineItems\SearchItemsModal.resx">
+      <DependentUpon>SearchItemsModal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\PaymentMethods\PaymentMethodModal.resx">
       <DependentUpon>PaymentMethodModal.cs</DependentUpon>
     </EmbeddedResource>
@@ -302,6 +323,7 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.Category.datasource" />
+    <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.EnumListMember.datasource" />
     <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.PaymentMethod.datasource" />
     <None Include="Properties\DataSources\HouseholdBudget.Data.Domain.SubCategory.datasource" />
     <None Include="ThisAddIn.Designer.xml">

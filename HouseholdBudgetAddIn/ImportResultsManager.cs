@@ -90,8 +90,8 @@ namespace HouseholdBudget
             logger.Info("Creating import buttons for all line items.");
             for (int i = 0; i < importReport.Count; i++)
             {
-                ActionButton importActionButton = AddButtonToListObject(vstoImportResults, importResultsList, ImportResultActions.IMPORT, 
-                    i, i + 1, IMPORT_ACTION_COLUMN, Controller.importReport_ActionRequested);
+                ActionButton importActionButton = Controller.AddButtonToListObject(vstoImportResults, importResultsList, LineItemActions.IMPORT, 
+                    DataWorksheetType.IMPORT_RESULTS, i, i + 1, IMPORT_ACTION_COLUMN, NUM_HEADER_ROWS, Controller.importReport_ActionRequested);
 
                 // add buttons to the button dictionary
                 buttons.Add(i + 1, importActionButton);
@@ -160,7 +160,7 @@ namespace HouseholdBudget
             importResults[resultsIndex].Status = item.Status;
 
             // update the button's enabled status based on the new status
-            string buttonName = "btn" + ImportResultActions.IMPORT.ToString() + resultsIndex.ToString();
+            string buttonName = "btn" + LineItemActions.IMPORT.ToString() + resultsIndex.ToString();
             ((ActionButton)vstoImportResults.Controls[buttonName]).Enabled = item.Status != LineItemStatus.SAVED;
         }
 
@@ -174,34 +174,6 @@ namespace HouseholdBudget
                 importResults = null;
                 buttons.Clear();
             }
-        }
-
-        private static ActionButton AddButtonToListObject(VstoExcel.Worksheet worksheet, 
-                                                          VstoExcel.ListObject listObject, 
-                                                          ImportResultActions action, 
-                                                          int resultIndex, 
-                                                          int listObjectIndex, 
-                                                          int column, 
-                                                          EventHandler<ImportActionEventArgs> handler)
-        {
-            // create the button & set its properties
-            ActionButton actionButton = new ActionButton();
-            actionButton.ImportResultIndex = resultIndex;
-            actionButton.ImportResultAction = action;
-            actionButton.ImportResultListObjectIndex = listObjectIndex;
-            //actionButton.column = column;
-            actionButton.Text = EnumUtil.GetFriendlyName(action);
-            string buttonName = "btn" + action.ToString() + (resultIndex).ToString();
-            actionButton.Name = buttonName;
-                        
-            // add it to the list
-            int rowIndex = listObjectIndex + NUM_HEADER_ROWS;
-            worksheet.Controls.AddControl(actionButton, worksheet.Cells[rowIndex, column], buttonName);
-            
-            // tie it to the handler
-            actionButton.OnActionRequested += handler;
-
-            return actionButton;
         }
 
         private static void GetImportResultsSheet()

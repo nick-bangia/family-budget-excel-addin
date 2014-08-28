@@ -69,7 +69,7 @@ namespace HouseholdBudget.UI
             NativeExcel.Worksheet dataSheet = null;
             foreach (NativeExcel.Worksheet worksheet in Wb.Application.Worksheets)
             {
-                if (worksheet.Name == Properties.Resources.DataWorksheetName)
+                if (worksheet.Name == Properties.Resources.MasterDataWorksheetName)
                 {
                     dataSheet = worksheet;
                     break;
@@ -81,6 +81,7 @@ namespace HouseholdBudget.UI
                 // if the sheet exists, delete it w/out any notification
                 Globals.ThisAddIn.Application.DisplayAlerts = false;
                 DataManager.RemoveSheet();
+                DataWorksheetManager.RemoveAllSheets();
                 Wb.Save();
                 Globals.ThisAddIn.Application.DisplayAlerts = true;
             }

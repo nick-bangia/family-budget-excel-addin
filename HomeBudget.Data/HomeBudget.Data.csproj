@@ -60,25 +60,31 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\FriendlyNameAttribute.cs" />
+    <Compile Include="Attributes\ComparableAttribute.cs" />
     <Compile Include="Domain\Category.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\DenormalizedLineItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Domain\EnumListMember.cs" />
     <Compile Include="Domain\LineItem.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\PaymentMethod.cs" />
+    <Compile Include="Domain\SearchCriteria.cs" />
     <Compile Include="Domain\SubCategory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Enums\Comparators.cs" />
     <Compile Include="Enums\LineItemStatus2.cs" />
     <Compile Include="Enums\LineItemSubType.cs" />
+    <Compile Include="Enums\Months.cs" />
     <Compile Include="Enums\OperationStatus.cs" />
     <Compile Include="Enums\LineItemStatus.cs" />
     <Compile Include="Enums\LineItemType.cs" />
     <Compile Include="Enums\Quarters.cs" />
+    <Compile Include="Enums\SearchFields.cs" />
     <Compile Include="Implementation\CategoryMapper.cs" />
     <Compile Include="Implementation\PaymentMethodMapper.cs" />
     <Compile Include="Interfaces\ICategoryMapper.cs" />
@@ -91,6 +97,8 @@
       <Link>Properties\AssemblyVersioning.cs</Link>
     </Compile>
     <Compile Include="Protocol\LiveDataObject.cs" />
+    <Compile Include="Utilities\DateUtil.cs" />
+    <Compile Include="Utilities\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">

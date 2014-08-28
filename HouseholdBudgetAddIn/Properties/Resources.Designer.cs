@@ -95,7 +95,7 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DATA.
+        ///   Looks up a localized string similar to PIVOT_DATA.
         /// </summary>
         internal static string DataListObjectName {
             get {
@@ -131,11 +131,47 @@ namespace HouseholdBudget.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to DATA.
+        ///   Looks up a localized string similar to $J$2.
+        /// </summary>
+        internal static string DataWorksheetBottomRightRange {
+            get {
+                return ResourceManager.GetString("DataWorksheetBottomRightRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to WORKSHEET_.
         /// </summary>
         internal static string DataWorksheetName {
             get {
                 return ResourceManager.GetString("DataWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $B$1:$J$1.
+        /// </summary>
+        internal static string DataWorksheetObjectRange {
+            get {
+                return ResourceManager.GetString("DataWorksheetObjectRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $J.
+        /// </summary>
+        internal static string DataWorksheetRightMostColumn {
+            get {
+                return ResourceManager.GetString("DataWorksheetRightMostColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $B$1.
+        /// </summary>
+        internal static string DataWorksheetTopLeftRange {
+            get {
+                return ResourceManager.GetString("DataWorksheetTopLeftRange", resourceCulture);
             }
         }
         
@@ -190,6 +226,24 @@ namespace HouseholdBudget.Properties {
         internal static string ImportResultsWorksheetName {
             get {
                 return ResourceManager.GetString("ImportResultsWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DATA.
+        /// </summary>
+        internal static string MasterDataWorksheetName {
+            get {
+                return ResourceManager.GetString("MasterDataWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 100.
+        /// </summary>
+        internal static string MaxSearchResults {
+            get {
+                return ResourceManager.GetString("MaxSearchResults", resourceCulture);
             }
         }
         

@@ -40,11 +40,14 @@ namespace HouseholdBudget.UI
             this.grpData = this.Factory.CreateRibbonGroup();
             this.btnImport = this.Factory.CreateRibbonButton();
             this.btnRefresh = this.Factory.CreateRibbonButton();
+            this.btnGetPendingItems = this.Factory.CreateRibbonButton();
+            this.btnGetFutureItems = this.Factory.CreateRibbonButton();
             this.grpManage = this.Factory.CreateRibbonGroup();
             this.btnAddCategory = this.Factory.CreateRibbonButton();
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
             this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
+            this.btnSearch = this.Factory.CreateRibbonButton();
             this.tabHouseholdBudget.SuspendLayout();
             this.grpData.SuspendLayout();
             this.grpManage.SuspendLayout();
@@ -61,6 +64,9 @@ namespace HouseholdBudget.UI
             // 
             this.grpData.Items.Add(this.btnImport);
             this.grpData.Items.Add(this.btnRefresh);
+            this.grpData.Items.Add(this.btnGetPendingItems);
+            this.grpData.Items.Add(this.btnGetFutureItems);
+            this.grpData.Items.Add(this.btnSearch);
             this.grpData.Label = "Data";
             this.grpData.Name = "grpData";
             // 
@@ -79,6 +85,16 @@ namespace HouseholdBudget.UI
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.OfficeImageId = "Refresh";
             this.btnRefresh.ShowImage = true;
+            // 
+            // btnGetPendingItems
+            // 
+            this.btnGetPendingItems.Label = "Pending Items";
+            this.btnGetPendingItems.Name = "btnGetPendingItems";
+            // 
+            // btnGetFutureItems
+            // 
+            this.btnGetFutureItems.Label = "Future Items";
+            this.btnGetFutureItems.Name = "btnGetFutureItems";
             // 
             // grpManage
             // 
@@ -121,6 +137,14 @@ namespace HouseholdBudget.UI
             this.btnManagePaymentMethods.OfficeImageId = "AccountingFormat";
             this.btnManagePaymentMethods.ShowImage = true;
             // 
+            // btnSearch
+            // 
+            this.btnSearch.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnSearch.Label = "Search";
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.OfficeImageId = "InstantSearch";
+            this.btnSearch.ShowImage = true;
+            // 
             // HouseholdBudgetRibbon
             // 
             this.Name = "HouseholdBudgetRibbon";
@@ -147,6 +171,9 @@ namespace HouseholdBudget.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpManage;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddSubCategory;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnManagePaymentMethods;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetPendingItems;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetFutureItems;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSearch;
     }
 
     partial class ThisRibbonCollection

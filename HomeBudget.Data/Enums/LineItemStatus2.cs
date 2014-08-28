@@ -9,12 +9,12 @@ namespace HouseholdBudget.Data.Enums
     public enum LineItemStatus2
     {
         [FriendlyName("Reconciled")]
-        Reconciled = 0,
+        RECONCILED = 0,
 
         [FriendlyName("Pending")]
-        Pending = 1,
+        PENDING = 1,
 
         [FriendlyName("Future")]
-        Future = 2
+        FUTURE = 2
     }
 }
