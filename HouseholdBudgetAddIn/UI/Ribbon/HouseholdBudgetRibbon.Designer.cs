@@ -37,46 +37,76 @@ namespace HouseholdBudget.UI
         private void InitializeComponent()
         {
             this.tabHouseholdBudget = this.Factory.CreateRibbonTab();
+            this.NewItemsGroup = this.Factory.CreateRibbonGroup();
+            this.btnAddNewItems = this.Factory.CreateRibbonButton();
+            this.btnPreProcessItems = this.Factory.CreateRibbonButton();
+            this.btnSave = this.Factory.CreateRibbonButton();
             this.grpData = this.Factory.CreateRibbonGroup();
-            this.btnImport = this.Factory.CreateRibbonButton();
             this.btnRefresh = this.Factory.CreateRibbonButton();
             this.btnGetPendingItems = this.Factory.CreateRibbonButton();
             this.btnGetFutureItems = this.Factory.CreateRibbonButton();
+            this.btnSearch = this.Factory.CreateRibbonButton();
             this.grpManage = this.Factory.CreateRibbonGroup();
             this.btnAddCategory = this.Factory.CreateRibbonButton();
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
             this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
-            this.btnSearch = this.Factory.CreateRibbonButton();
             this.tabHouseholdBudget.SuspendLayout();
+            this.NewItemsGroup.SuspendLayout();
             this.grpData.SuspendLayout();
             this.grpManage.SuspendLayout();
             // 
             // tabHouseholdBudget
             // 
+            this.tabHouseholdBudget.Groups.Add(this.NewItemsGroup);
             this.tabHouseholdBudget.Groups.Add(this.grpData);
             this.tabHouseholdBudget.Groups.Add(this.grpManage);
             this.tabHouseholdBudget.Label = "Household Budget";
             this.tabHouseholdBudget.Name = "tabHouseholdBudget";
             this.tabHouseholdBudget.Visible = false;
             // 
+            // NewItemsGroup
+            // 
+            this.NewItemsGroup.Items.Add(this.btnAddNewItems);
+            this.NewItemsGroup.Items.Add(this.btnPreProcessItems);
+            this.NewItemsGroup.Items.Add(this.btnSave);
+            this.NewItemsGroup.Label = "New Items";
+            this.NewItemsGroup.Name = "NewItemsGroup";
+            // 
+            // btnAddNewItems
+            // 
+            this.btnAddNewItems.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnAddNewItems.Label = "Add New Items";
+            this.btnAddNewItems.Name = "btnAddNewItems";
+            this.btnAddNewItems.OfficeImageId = "AddAccount";
+            this.btnAddNewItems.ShowImage = true;
+            // 
+            // btnPreProcessItems
+            // 
+            this.btnPreProcessItems.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnPreProcessItems.Enabled = false;
+            this.btnPreProcessItems.Label = "Pre-Process";
+            this.btnPreProcessItems.Name = "btnPreProcessItems";
+            this.btnPreProcessItems.OfficeImageId = "QueryRunQuery";
+            this.btnPreProcessItems.ShowImage = true;
+            // 
+            // btnSave
+            // 
+            this.btnSave.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnSave.Enabled = false;
+            this.btnSave.Label = "Save";
+            this.btnSave.Name = "btnSave";
+            this.btnSave.OfficeImageId = "SaveItem";
+            this.btnSave.ShowImage = true;
+            // 
             // grpData
             // 
-            this.grpData.Items.Add(this.btnImport);
             this.grpData.Items.Add(this.btnRefresh);
             this.grpData.Items.Add(this.btnGetPendingItems);
             this.grpData.Items.Add(this.btnGetFutureItems);
             this.grpData.Items.Add(this.btnSearch);
             this.grpData.Label = "Data";
             this.grpData.Name = "grpData";
-            // 
-            // btnImport
-            // 
-            this.btnImport.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnImport.Label = "Import ";
-            this.btnImport.Name = "btnImport";
-            this.btnImport.OfficeImageId = "ImportTextFile";
-            this.btnImport.ShowImage = true;
             // 
             // btnRefresh
             // 
@@ -95,6 +125,14 @@ namespace HouseholdBudget.UI
             // 
             this.btnGetFutureItems.Label = "Future Items";
             this.btnGetFutureItems.Name = "btnGetFutureItems";
+            // 
+            // btnSearch
+            // 
+            this.btnSearch.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnSearch.Label = "Search";
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.OfficeImageId = "PrintPreviewZoomMenu";
+            this.btnSearch.ShowImage = true;
             // 
             // grpManage
             // 
@@ -137,14 +175,6 @@ namespace HouseholdBudget.UI
             this.btnManagePaymentMethods.OfficeImageId = "AccountingFormat";
             this.btnManagePaymentMethods.ShowImage = true;
             // 
-            // btnSearch
-            // 
-            this.btnSearch.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnSearch.Label = "Search";
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.OfficeImageId = "InstantSearch";
-            this.btnSearch.ShowImage = true;
-            // 
             // HouseholdBudgetRibbon
             // 
             this.Name = "HouseholdBudgetRibbon";
@@ -153,6 +183,8 @@ namespace HouseholdBudget.UI
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.HouseholdBudgetRibbon_Load);
             this.tabHouseholdBudget.ResumeLayout(false);
             this.tabHouseholdBudget.PerformLayout();
+            this.NewItemsGroup.ResumeLayout(false);
+            this.NewItemsGroup.PerformLayout();
             this.grpData.ResumeLayout(false);
             this.grpData.PerformLayout();
             this.grpManage.ResumeLayout(false);
@@ -164,7 +196,7 @@ namespace HouseholdBudget.UI
 
         internal Microsoft.Office.Tools.Ribbon.RibbonTab tabHouseholdBudget;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpData;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnImport;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddNewItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddCategory;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRefresh;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdateCategories;
@@ -174,6 +206,9 @@ namespace HouseholdBudget.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetPendingItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetFutureItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSearch;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup NewItemsGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnPreProcessItems;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;
     }
 
     partial class ThisRibbonCollection

@@ -223,14 +223,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tools\LineItemCSVImporter.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Tools\LineItemCSVImporter.Designer.cs">
-      <DependentUpon>LineItemCSVImporter.cs</DependentUpon>
-    </Compile>
     <Compile Include="EventArgs\CategoryEventArgs.cs" />
     <Compile Include="EventArgs\ActionEventArgs.cs" />
+    <Compile Include="Tools\LineItemPreProcessor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Tools\LineItemPreProcessor.Designer.cs">
+      <DependentUpon>LineItemPreProcessor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\LineItemImporter.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Tools\LineItemImporter.Designer.cs">
+      <DependentUpon>LineItemImporter.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Categories\NewCategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -283,7 +289,6 @@
       <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\EnumUtil.cs" />
-    <Compile Include="ImportResultsManager.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

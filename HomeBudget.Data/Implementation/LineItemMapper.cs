@@ -30,12 +30,10 @@ namespace HouseholdBudget.Data.Implementation
 
         #region  ILineItemMapper
 
-        public LineItem AddNewLineItem(LineItem lineItem)
+        public DenormalizedLineItem AddNewLineItem(DenormalizedLineItem lineItem)
         {
             // attempt to insert into the database, and get the status back
-            lineItem.Status = SaveLineItemToDB(lineItem);
-
-            return lineItem;
+            return SaveLineItemToDB(lineItem);
         }
 
         public OperationStatus UpdateLineItem(DenormalizedLineItem lineItem)
@@ -70,7 +68,7 @@ namespace HouseholdBudget.Data.Implementation
             }
         }
 
-        public LineItem GetLineItem(LineItem lineItem)
+        public DenormalizedLineItem GetLineItem(DenormalizedLineItem lineItem)
         {
             return CheckForDuplicate(lineItem);
         }
@@ -84,50 +82,37 @@ namespace HouseholdBudget.Data.Implementation
 
         #region Private Methods
 
-        private LineItemStatus SaveLineItemToDB(LineItem lineItem)
+        private DenormalizedLineItem SaveLineItemToDB(DenormalizedLineItem lineItem)
         {
             try
             {
-                if (CheckForDuplicate(lineItem) == null)
+                DenormalizedLineItem duplicate = CheckForDuplicate(lineItem);
+                if (duplicate == null)
                 {
                     using (BudgetEntities cxt = new BudgetEntities())
                     {
                         /* extract the IDs of the fields that need to be mapped */
 
                         // if category key is not found, return UNMAPPABLE line item status
-                        Guid categoryKey = GetCategoryKeyFor(lineItem.Description);
-                        if (categoryKey == Guid.Empty)
-                        {
-                            return LineItemStatus.UNMAPPABLE;
-                        }
-
+                        Guid categoryKey = lineItem.SubCategoryKey;
                         // month
-                        short monthId = (short)lineItem.Date.Month;
+                        short monthId = (short)lineItem.MonthInt;
                         //day of month
-                        short dayOfMonthId = (short)lineItem.Date.Day;
+                        short dayOfMonthId = (short)lineItem.Day;
                         // day of week
-                        short dayOfWeekId = (short)lineItem.Date.DayOfWeek;
+                        short dayOfWeekId = (short)lineItem.DayOfWeekId;
                         // year
-                        int yearId = lineItem.Date.Year;
+                        int yearId = lineItem.Year;
                         // type of transaction
-                        // default to EXPENSE
-                        int type = (int)LineItemType.EXPENSE;
-                        short subType = (short)(lineItem.Amount < 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT);
-                        // if the description suggests an allocation or an adjustment, change its type
-                        if (lineItem.Description.ToLower().Contains("alloc"))
-                        {
-                            type = (int)LineItemType.ALLOCATION;
-                        }
-                        else if (lineItem.Description.ToLower().Contains("adj"))
-                        {
-                            type = (int)LineItemType.ADJUSTMENT;
-                        }
+                        int type = (int)lineItem.Type;
+                        // subtype of transaction
+                        short subType = (short)(lineItem.Amount <= 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT);
                         // compute the quarter
                         short quarterId = (short)DateUtil.GetQuarterForMonth(monthId);
                         // get the payment method key from the Line Item
-                        Guid paymentMethodKey = Guid.Parse("b1c6ae6a-e56b-4c75-8948-255099ec78fe");
+                        Guid paymentMethodKey = lineItem.PaymentMethodKey;
                         // get the line item status
-                        short statusId = (short)LineItemStatus2.RECONCILED;
+                        short statusId = (short)lineItem.Status;
 
                         factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
                             lineItem.Description, lineItem.Amount, type, quarterId, subType, paymentMethodKey, statusId);
@@ -137,20 +122,21 @@ namespace HouseholdBudget.Data.Implementation
                         cxt.SaveChanges();
 
                         // return SAVED
-                        return LineItemStatus.SAVED;
+                        lineItem.UniqueKey = fact.UniqueKey;
+                        return lineItem;
                     }
                 }
                 else
                 {
                     // if duplicate, return a status of duplicate
-                    return LineItemStatus.DUPLICATE;
+                    return duplicate;
                 }
             }
             catch (Exception ex)
             {
                 // if an exception is caught when attempting to save the item, return the SAVE_ERROR enum
                 logger.Error("An exception was caught while saving a line item!", ex);
-                return LineItemStatus.SAVE_ERROR;
+                return null;
             }
         }
 
@@ -269,29 +255,8 @@ namespace HouseholdBudget.Data.Implementation
             foreach (factLineItems fli in lineItems)
             {
                 // convert the factLineitem to a LineItem
-                DenormalizedLineItem lineItem = new DenormalizedLineItem()
-                {
-                    UniqueKey = fli.UniqueKey,
-                    Year = fli.YearId,
-                    Month = fli.Month.MonthName,
-                    MonthInt = fli.Month.MonthId,
-                    Day = fli.DayOfMonthId,
-                    DayOfWeek = fli.DayOfWeek.DayName,
-                    DayOfWeekId = fli.DayOfWeekId,
-                    Amount = fli.Amount,
-                    Description = fli.Description,
-                    Category = fli.Category.ParentCategory.CategoryName,
-                    CategoryKey = fli.Category.ParentCategory.CategoryKey,
-                    SubCategory = fli.Category.SubCategoryName,
-                    SubCategoryKey = fli.CategoryKey,
-                    Type = (LineItemType)fli.TypeId,
-                    SubType = (LineItemSubType)fli.SubTypeId,
-                    Quarter = (Quarters)fli.QuarterId,
-                    PaymentMethod = fli.PaymentMethod.PaymentMethodName,
-                    PaymentMethodKey = fli.PaymentMethodId,
-                    Status = (LineItemStatus2)fli.Status.StatusId
-                };
-
+                DenormalizedLineItem lineItem = GetDenormalizedItemFromFact(fli);
+                
                 // save to the final list
                 lineItemList.Add(lineItem);
             }
@@ -300,28 +265,35 @@ namespace HouseholdBudget.Data.Implementation
             return lineItemList;
         }
         
-        private Guid GetCategoryKeyFor(string itemDescription)
+        private SubCategory GetSubCategoryFor(string itemDescription)
         {
             using (BudgetEntities ctx = new BudgetEntities())
             {
                 // find the category key for a given description by matching the prefix with
                 // the beginning of the description. First match wins.
                 var subCategories = from subCat in ctx.dimSubCategories
-                                 select subCat;
+                                    select subCat;
 
                 dimSubCategories match = subCategories.FirstOrDefault(f => itemDescription.StartsWith(f.SubCategoryPrefix));
                 if (match != null)
                 {
-                    return match.SubCategoryKey;
+                    return new SubCategory()
+                    {
+                        SubCategoryKey = match.SubCategoryKey,
+                        SubCategoryName = match.SubCategoryName,
+                        SubCategoryPrefix = match.SubCategoryPrefix,
+                        CategoryKey = match.CategoryKey,
+                        CategoryName = match.ParentCategory.CategoryName
+                    }; 
                 }
                 else
                 {
-                    return Guid.Empty;
+                    return null;
                 }
             }
         }
 
-        private LineItem CheckForDuplicate(LineItem lineItem)
+        private DenormalizedLineItem CheckForDuplicate(DenormalizedLineItem lineItem)
         {
             List<factLineItems> shortList = new List<factLineItems>();
             
@@ -335,8 +307,7 @@ namespace HouseholdBudget.Data.Implementation
                 // loop through the short list of same amounts, and check the date. Pull out any matches.
                 foreach (factLineItems item in factLineItems)
                 {
-                    DateTime dateOfTransaction = new DateTime(item.YearId, item.MonthId, item.DayOfMonthId);
-                    if (lineItem.Date == dateOfTransaction)
+                    if (lineItem.Year == item.YearId && lineItem.MonthInt == item.MonthId && lineItem.Day == item.DayOfMonthId)
                     {
                         // if the date matches, add to the short list
                         shortList.Add(item);
@@ -347,17 +318,12 @@ namespace HouseholdBudget.Data.Implementation
                 // convert to a LineItem, and check the unique key against each other
                 foreach (factLineItems item in shortList)
                 {
-                    LineItem actualLineItem = new LineItem()
-                    {
-                        Amount = item.Amount,
-                        Description = item.Description,
-                        Status = Enums.LineItemStatus.EMPTY
-                    };
-                    actualLineItem.setDate(item.YearId, item.MonthId, item.DayOfMonthId);
-
+                    DenormalizedLineItem actualLineItem = GetDenormalizedItemFromFact(item);
+                    
                     // if the checksum for the DB item and the to-be-inserted line item match, return true for duplicate
                     if (actualLineItem.CheckSum == lineItem.CheckSum)
                     {
+                        actualLineItem.IsDuplicate = true;
                         return actualLineItem;
                     }
                 }
@@ -365,6 +331,36 @@ namespace HouseholdBudget.Data.Implementation
                 // if code reaches here, there is no sign of a duplicate item
                 return null;
             }
+        }
+
+        private DenormalizedLineItem GetDenormalizedItemFromFact(factLineItems fli)
+        {
+            DenormalizedLineItem lineItem = new DenormalizedLineItem()
+            {
+                UniqueKey = fli.UniqueKey,
+                Year = fli.YearId,
+                Month = fli.Month.MonthName,
+                MonthInt = fli.Month.MonthId,
+                Day = fli.DayOfMonthId,
+                DayOfWeek = fli.DayOfWeek.DayName,
+                DayOfWeekId = fli.DayOfWeekId,
+                Amount = fli.Amount,
+                Description = fli.Description,
+                Category = fli.Category.ParentCategory.CategoryName,
+                CategoryKey = fli.Category.ParentCategory.CategoryKey,
+                SubCategory = fli.Category.SubCategoryName,
+                SubCategoryKey = fli.CategoryKey,
+                Type = (LineItemType)fli.TypeId,
+                SubType = (LineItemSubType)fli.SubTypeId,
+                Quarter = (Quarters)fli.QuarterId,
+                PaymentMethod = fli.PaymentMethod.PaymentMethodName,
+                PaymentMethodKey = fli.PaymentMethodId,
+                Status = (LineItemStatus)fli.Status.StatusId,
+                IsDeleted = false,
+                IsDuplicate = false
+            };
+
+            return lineItem;
         }
         
         private OperationStatus DeleteLineItemFromDB(Guid itemKey)

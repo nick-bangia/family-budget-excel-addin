@@ -9,6 +9,7 @@ using log4net;
 using System.Data.Objects;
 using HouseholdBudget.Data.Protocol;
 using HouseholdBudget.Data.Utilities;
+using HouseholdBudget.Data.Domain;
 
 namespace HouseholdBudget.Data.Implementation
 {
@@ -53,6 +54,34 @@ namespace HouseholdBudget.Data.Implementation
         public Guid? GetSubCategoryKeyByName(string subCategoryName)
         {
             return GetSubCategoryKeyByNameFromDB(subCategoryName);
+        }
+
+        public SubCategory GetSubCategoryFor(string itemDescription)
+        {
+            using (BudgetEntities ctx = new BudgetEntities())
+            {
+                // find the category key for a given description by matching the prefix with
+                // the beginning of the description. First match wins.
+                var subCategories = from subCat in ctx.dimSubCategories
+                                    select subCat;
+
+                dimSubCategories match = subCategories.FirstOrDefault(f => itemDescription.StartsWith(f.SubCategoryPrefix));
+                if (match != null)
+                {
+                    return new SubCategory()
+                    {
+                        SubCategoryKey = match.SubCategoryKey,
+                        SubCategoryName = match.SubCategoryName,
+                        SubCategoryPrefix = match.SubCategoryPrefix,
+                        CategoryKey = match.CategoryKey,
+                        CategoryName = match.ParentCategory.CategoryName
+                    };
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public OperationStatus AddNewCategory(string categoryName)

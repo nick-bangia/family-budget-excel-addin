@@ -59,7 +59,7 @@ namespace HouseholdBudget.UI
             typeBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(LineItemType));
 
             // populate status combo box
-            statusBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(LineItemStatus2));
+            statusBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(LineItemStatus));
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -77,10 +77,19 @@ namespace HouseholdBudget.UI
 
             if (choice == DialogResult.Yes)
             {
-                // if delete is confirmed, do it, and refresh the data
-                Controller.DeleteLineItem(originalLineItem.UniqueKey);
-                Controller.RebuildDataSheet();
-                Controller.RefreshPivotTables();
+                if (originalLineItem.UniqueKey == Guid.Empty)
+                {
+                    DataWorksheetManager.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
+                }
+                else
+                {
+                    // if delete is confirmed, do it, and refresh the data
+                    Controller.DeleteLineItem(originalLineItem.UniqueKey);
+                    DataWorksheetManager.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
+                    Controller.RebuildDataSheet();
+                    Controller.RefreshPivotTables();
+                }
+                
                 // close the form
                 this.Close();
             }
@@ -103,11 +112,14 @@ namespace HouseholdBudget.UI
             originalLineItem.Type = (LineItemType)cbTxType.SelectedValue;
             originalLineItem.PaymentMethod = cbPaymentMethod.Text;
             originalLineItem.PaymentMethodKey = (Guid)cbPaymentMethod.SelectedValue;
-            originalLineItem.Status = (LineItemStatus2)cbStatus.SelectedValue;
+            originalLineItem.Status = (LineItemStatus)cbStatus.SelectedValue;
 
-            Controller.UpdateLineItem(originalLineItem);
-            Controller.RebuildDataSheet();
-            Controller.RefreshPivotTables();
+            if (originalLineItem.UniqueKey != Guid.Empty)
+            {
+                Controller.UpdateLineItem(originalLineItem);
+                Controller.RebuildDataSheet();
+                Controller.RefreshPivotTables();
+            }
 
             // update the line item in the data worksheet
             DataWorksheetManager.UpdateLineItem(this.listObjectIndex, this.lineItemIndex, this.worksheetType, originalLineItem);
@@ -136,52 +148,43 @@ namespace HouseholdBudget.UI
             // check the line item to check if this is a new item, or current item
             if (lineItem.UniqueKey == Guid.Empty)
             {
-                // new line item
-                btnDelete.Visible = false;
                 this.Text = "New Line Item";
             }
-            else if (lineItem.UniqueKey != Guid.Empty)
+            
+            // populate the form
+            // date
+            dtpTxDate.Value = new DateTime(lineItem.Year, lineItem.MonthInt, lineItem.Day);
+
+            // category
+            // Otherwise, show messagebox error.
+            cbCategory.SelectedValue = lineItem.CategoryKey;
+
+            // get filtered subcategories by currently chosen category
+            subCategoryDataObject = Controller.GetFilteredSubCategories(lineItem.CategoryKey);
+            subcategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
+            cbSubcategory.SelectedValue = lineItem.SubCategoryKey;
+
+            // description
+            txtDescription.Text = lineItem.Description;
+
+            // transaction amount
+            txtTxAmount.Text = Math.Round(lineItem.Amount, 2).ToString();
+
+            // transaction type
+            cbTxType.SelectedIndex = (int)lineItem.Type;
+
+            // payment method
+            if (lineItem.PaymentMethodKey != Guid.Empty)
             {
-                // current line item, populate the form
-
-                // date
-                dtpTxDate.Value = new DateTime(lineItem.Year, lineItem.MonthInt, lineItem.Day);
-
-                // category
-                // Otherwise, show messagebox error.
-                cbCategory.SelectedValue = lineItem.CategoryKey;
-
-                // get filtered subcategories by currently chosen category
-                subCategoryDataObject = Controller.GetFilteredSubCategories(lineItem.CategoryKey);
-                subcategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
-                cbSubcategory.SelectedValue = lineItem.SubCategoryKey;
-
-                // description
-                txtDescription.Text = lineItem.Description;
-
-                // transaction amount
-                txtTxAmount.Text = Math.Round(lineItem.Amount, 2).ToString();
-
-                // transaction type
-                cbTxType.SelectedIndex = (int)lineItem.Type;
-
-                // payment method
-                Guid? paymentMethodKey = Controller.GetPaymentMethodKeyByName(lineItem.PaymentMethod);
-                // if the payment method exists for the given name, set it
-                // Otherwise, show messagebox error
-                if (paymentMethodKey.HasValue)
-                {
-                    cbPaymentMethod.SelectedValue = paymentMethodKey.Value;
-                }
-                else
-                {
-                    MessageBox.Show("Unable to load the payment method for this line item." + Environment.NewLine +
-                        "Please manually update.");
-                }
-
-                // status
-                cbStatus.SelectedIndex = (int)lineItem.Status;
+                cbPaymentMethod.SelectedValue = lineItem.PaymentMethodKey;
             }
+            else
+            {
+                cbPaymentMethod.SelectedIndex = 0;
+            }                       
+
+            // status
+            cbStatus.SelectedIndex = (int)lineItem.Status;
         }
     }   
 }

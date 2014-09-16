@@ -13,6 +13,7 @@ namespace HouseholdBudget.Data.Interfaces
         LiveDataObject GetPaymentMethods();
         OperationStatus AddNewPaymentMethod(string methodName, bool isActive);
         string GetPaymentMethodList(char delimiter);
-        Guid? GetPaymentMethodKeyByName(string paymentMethodName);
+        PaymentMethod GetPaymentMethodByName(string paymentMethodName);
+        PaymentMethod GetDefaultPaymentMethod();
     }
 }

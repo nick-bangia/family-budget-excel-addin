@@ -1,6 +1,6 @@
 ﻿namespace HouseholdBudget.Tools
 {
-    partial class LineItemCSVImporter
+    partial class LineItemImporter
     {
         /// <summary>
         /// Required designer variable.

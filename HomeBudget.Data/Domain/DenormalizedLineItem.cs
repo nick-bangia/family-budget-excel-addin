@@ -1,4 +1,5 @@
 ﻿using HouseholdBudget.Data.Enums;
+using HouseholdBudget.Data.Utilities;
 using System;
 
 namespace HouseholdBudget.Data.Domain
@@ -23,7 +24,11 @@ namespace HouseholdBudget.Data.Domain
         public Quarters Quarter { get; set; }
         public Guid PaymentMethodKey { get; set; }
         public string PaymentMethod { get; set; }
-        public LineItemStatus2 Status { get; set; }
+        public LineItemStatus Status { get; set; }
+
+        public bool IsDeleted { get; set; }
+        public bool IsDuplicate { get; set; }
+        public int ItemSurrogateKey { get; set; }
 
         public object Clone()
         {
@@ -47,8 +52,26 @@ namespace HouseholdBudget.Data.Domain
                 Quarter = this.Quarter,
                 PaymentMethodKey = this.PaymentMethodKey,
                 PaymentMethod = this.PaymentMethod,
-                Status = this.Status
+                Status = this.Status,
+                IsDeleted = this.IsDeleted,
+                ItemSurrogateKey = this.ItemSurrogateKey
             };
+        }
+        public long CheckSum
+        {
+            get
+            {
+                // compute the checksum from the date, description & amount
+                DateTime date = new DateTime(this.Year, this.MonthInt, this.Day);
+                long checksum =
+                    date.Ticks +
+                    this.Description.GetStringChecksum() +
+                    this.CategoryKey.ToString().GetStringChecksum() +
+                    this.SubCategoryKey.ToString().GetStringChecksum() +
+                    (long)this.Amount;
+
+                return checksum;
+            }
         }
     }
 }

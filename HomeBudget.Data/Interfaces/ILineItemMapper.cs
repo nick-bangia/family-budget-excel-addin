@@ -9,9 +9,9 @@ namespace HouseholdBudget.Data.Interfaces
 {
     public interface ILineItemMapper
     {
-        LineItem AddNewLineItem(LineItem lineItem);
+        DenormalizedLineItem AddNewLineItem(DenormalizedLineItem lineItem);
         OperationStatus UpdateLineItem(DenormalizedLineItem lineItem);
-        LineItem GetLineItem(LineItem lineItem);
+        DenormalizedLineItem GetLineItem(DenormalizedLineItem lineItem);
         List<DenormalizedLineItem> GetAllLineItems();
         List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria);
         DenormalizedLineItem GetFirstLineItemByCriteria(SearchCriteria searchCriteria);

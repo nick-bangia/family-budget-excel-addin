@@ -10,7 +10,7 @@ namespace HouseholdBudget.Enums
         [FriendlyName("Edit")]
         EDIT,
 
-        [FriendlyName("Delete")]
+        [FriendlyName("Remove")]
         DELETE,
     }
 }

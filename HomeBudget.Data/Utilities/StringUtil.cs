@@ -32,5 +32,21 @@ namespace HouseholdBudget.Data.Utilities
 
             return sb.ToString();
         }
+
+        public static long GetStringChecksum(this string input)
+        {
+            // prepare to get the checksum
+            char[] charArray = input.ToCharArray();
+            long checksum = 0;
+
+            // loop through the character array, and sum up the
+            // character value of each character
+            foreach (char character in charArray)
+            {
+                checksum += (long)character;
+            }
+
+            return checksum;
+        }
     }
 }

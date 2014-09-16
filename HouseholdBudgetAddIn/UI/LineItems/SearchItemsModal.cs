@@ -198,7 +198,7 @@ namespace HouseholdBudget.UI
                 case SearchFields.STATUS:
                     PositionControl(cbStatus);
                     cbStatus.Visible = true;
-                    StatusBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(LineItemStatus2));
+                    StatusBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(LineItemStatus));
                     break;
                 case SearchFields.SUBCATEGORY:
                     PositionControl(cbSubCategory);
@@ -327,7 +327,7 @@ namespace HouseholdBudget.UI
                     break;
                 case SearchFields.STATUS:
                     searchCriteria.Status = Convert.ToInt16(cbStatus.SelectedValue);
-                    criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((LineItemStatus2)searchCriteria.Status.Value));
+                    criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((LineItemStatus)searchCriteria.Status.Value));
                     break;
                 case SearchFields.SUBCATEGORY:
                     searchCriteria.SubCategory = (Guid)cbSubCategory.SelectedValue;

@@ -46,10 +46,15 @@ namespace HouseholdBudget.Data.Implementation
             return GetPaymentMethodEnumerable().ToDelimitedString(delimiter);
         }
 
-        public Guid? GetPaymentMethodKeyByName(string paymentMethodName)
+        public PaymentMethod GetPaymentMethodByName(string paymentMethodName)
         {
-            return GetPaymentMethodKeyByNameFromDB(paymentMethodName);
-        }       
+            return GetPaymentMethodByNameFromDB(paymentMethodName);
+        }
+
+        public PaymentMethod GetDefaultPaymentMethod()
+        {
+            return GetDefaultPaymentMethodFromDB();
+        }
         #endregion
 
         #region Private Methods
@@ -106,26 +111,32 @@ namespace HouseholdBudget.Data.Implementation
             }
         }
 
-        private Guid? GetPaymentMethodKeyByNameFromDB(string paymentMethodName)
+        private PaymentMethod GetPaymentMethodByNameFromDB(string paymentMethodName)
         {
-            Guid paymentMethodKey = Guid.Empty;
+            PaymentMethod paymentMethodInfo = null;
+
             try
             {
                 using (BudgetEntities ctx = new BudgetEntities())
                 {
                     // get a list of Guids that match the category name
                     // there should realistically only ever be one match
-                    List<Guid> matches = (from pm in ctx.dimPaymentMethods
-                                          where pm.PaymentMethodName == paymentMethodName
-                                          select pm.PaymentMethodKey).ToList();
+                    List<dimPaymentMethods> matches = (from pm in ctx.dimPaymentMethods
+                                            where pm.PaymentMethodName == paymentMethodName
+                                            select pm).ToList();
 
                     if (matches.Count > 0)
                     {
                         // if a match exists, take the first one (there should only by one)
-                        paymentMethodKey = matches[0];
+                        paymentMethodInfo = new PaymentMethod()
+                        {
+                           PaymentMethodName = matches[0].PaymentMethodName,
+                           PaymentMethodKey = matches[0].PaymentMethodKey,
+                           IsActive = matches[0].IsActive
+                        };
                     }
 
-                    return paymentMethodKey;
+                    return paymentMethodInfo;
                 }
             }
             catch (Exception ex)
@@ -135,7 +146,44 @@ namespace HouseholdBudget.Data.Implementation
                     "Error details: " + Environment.NewLine +
                     ex.Message);
 
-                return (Guid?)null;
+                return paymentMethodInfo;
+            }
+        }
+
+        private PaymentMethod GetDefaultPaymentMethodFromDB()
+        {
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    List<dimPaymentMethods> paymentMethods = (from pm in ctx.dimPaymentMethods
+                                                              where pm.IsActive
+                                                              orderby pm.PaymentMethodKey
+                                                              select pm).ToList();
+
+                    if (paymentMethods.Count > 0)
+                    {
+                        return new PaymentMethod()
+                        {
+                            PaymentMethodKey = paymentMethods[0].PaymentMethodKey,
+                            PaymentMethodName = paymentMethods[0].PaymentMethodName,
+                            IsActive = paymentMethods[0].IsActive
+                        };
+                    }
+                    else
+                    {
+                        return null;
+                    }                    
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while attempting to get the default payment method."
+                    + Environment.NewLine + Environment.NewLine +
+                    "Error details: " + Environment.NewLine +
+                    ex.Message);
+
+                return null;
             }
         }
         #endregion
