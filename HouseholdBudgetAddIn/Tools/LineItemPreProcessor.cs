@@ -102,6 +102,7 @@ namespace HouseholdBudget.Tools
                             lineItem.Year = date.Year;
                             lineItem.MonthInt = (short)date.Month;
                             lineItem.Day = (short)date.Day;
+                            lineItem.DayOfWeekId = (short)date.DayOfWeek;
                             lineItem.Description = description;
                             lineItem.Category = categoryInfo != null ? categoryInfo.CategoryName : null;
                             lineItem.CategoryKey = categoryInfo != null ? categoryInfo.CategoryKey : Guid.Empty;
