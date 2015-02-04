@@ -41,6 +41,7 @@ namespace HouseholdBudget.UI
                         CategoryKey = (Guid)cbParentCategory.SelectedValue,
                         SubCategoryName = txtSubCategoryName.Text,
                         SubCategoryPrefix = txtSubCategoryPrefix.Text,
+                        AccountName = txtAccountName.Text,
                         IsActive = chkEnabled.Checked
                     }
                     

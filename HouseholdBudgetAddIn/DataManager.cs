@@ -38,7 +38,9 @@ namespace HouseholdBudget
 
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.YEAR].Value2 = EnumUtil.GetFriendlyName(DataColumns.YEAR);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.MONTH].Value2 = EnumUtil.GetFriendlyName(DataColumns.MONTH);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.MONTH_YEAR].Value2 = EnumUtil.GetFriendlyName(DataColumns.MONTH_YEAR);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.QUARTER].Value2 = EnumUtil.GetFriendlyName(DataColumns.QUARTER);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.QUARTER_YEAR].Value2 = EnumUtil.GetFriendlyName(DataColumns.QUARTER_YEAR);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DAY].Value2 = EnumUtil.GetFriendlyName(DataColumns.DAY);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DAY_OF_WEEK].Value2 = EnumUtil.GetFriendlyName(DataColumns.DAY_OF_WEEK);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.DESCRIPTION].Value2 = EnumUtil.GetFriendlyName(DataColumns.DESCRIPTION);
@@ -48,6 +50,7 @@ namespace HouseholdBudget
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.TYPE].Value2 = EnumUtil.GetFriendlyName(DataColumns.TYPE);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.SUBTYPE].Value2 = EnumUtil.GetFriendlyName(DataColumns.SUBTYPE);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.PAYMENT_METHOD].Value2 = EnumUtil.GetFriendlyName(DataColumns.PAYMENT_METHOD);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.ACCOUNT].Value2 = EnumUtil.GetFriendlyName(DataColumns.ACCOUNT);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.STATUS].Value2 = EnumUtil.GetFriendlyName(DataColumns.STATUS);
             }
             else
@@ -117,8 +120,14 @@ namespace HouseholdBudget
                 case (int)DataColumns.MONTH:
                     value = lineItems[index].Month;
                     break;
+                case (int)DataColumns.MONTH_YEAR:
+                    value = lineItems[index].Month + "-" + lineItems[index].Year.ToString();
+                    break;
                 case (int)DataColumns.QUARTER:
                     value = EnumUtil.GetFriendlyName(lineItems[index].Quarter);
+                    break;
+                case (int)DataColumns.QUARTER_YEAR:
+                    value = EnumUtil.GetFriendlyName(lineItems[index].Quarter) + "-" + lineItems[index].Year.ToString().Substring(2);
                     break;
                 case (int)DataColumns.DAY:
                     value = lineItems[index].Day;
@@ -146,6 +155,9 @@ namespace HouseholdBudget
                     break;
                 case (int)DataColumns.PAYMENT_METHOD:
                     value = lineItems[index].PaymentMethod;
+                    break;
+                case (int)DataColumns.ACCOUNT:
+                    value = lineItems[index].AccountName;
                     break;
                 case (int)DataColumns.STATUS:
                     value = EnumUtil.GetFriendlyName(lineItems[index].Status);

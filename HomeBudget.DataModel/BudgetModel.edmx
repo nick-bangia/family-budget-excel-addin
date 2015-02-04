@@ -64,6 +64,7 @@
 					<Property Name="SubCategoryName" Type="nvarchar" Nullable="false" MaxLength="100" />
 					<Property Name="SubCategoryPrefix" Type="nvarchar" Nullable="false" MaxLength="10" />
 					<Property Name="IsActive" Type="bit" Nullable="false" />
+					<Property Name="AccountName" Type="nvarchar" Nullable="false" MaxLength="100"  />
 				</EntityType>
 				<EntityType Name="dimCategories">
 					<Key>
@@ -287,6 +288,7 @@
 					<Property Type="String" Name="SubCategoryName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
 					<Property Type="String" Name="SubCategoryPrefix" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
 					<Property Type="Boolean" Name="IsActive" Nullable="false" />
+					<Property Type="String" Name="AccountName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
 					<NavigationProperty Name="ItemsInThisCategory" Relationship="BudgetModel.FK_factLineItems_dimSubCategories" FromRole="dimSubCategories" ToRole="factLineItems" />
 					<NavigationProperty Name="ParentCategory" Relationship="BudgetModel.FK_dimSubCategories_dimCategories" FromRole="dimSubCategories" ToRole="dimCategories" />
 				</EntityType>
@@ -482,6 +484,7 @@
 								<ScalarProperty Name="SubCategoryName" ColumnName="SubCategoryName" />
 								<ScalarProperty Name="SubCategoryPrefix" ColumnName="SubCategoryPrefix" />
 								<ScalarProperty Name="IsActive" ColumnName="IsActive" />
+								<ScalarProperty Name="AccountName" ColumnName="AccountName" />
 							</MappingFragment>
 						</EntityTypeMapping>
 					</EntitySetMapping>
@@ -575,15 +578,15 @@
 		<edmx:Diagrams>
 			<Diagram Name="Model1" ZoomLevel="74" >
 				<EntityTypeShape EntityType="BudgetModel.dimSubTypes" Width="1.75" PointX="4" PointY="5.5" Height="1.5956835937499996" />
-				<EntityTypeShape EntityType="BudgetModel.dimSubCategories" Width="1.5" PointX="10.5" PointY="3.125" Height="2.3648893229166661" />
+				<EntityTypeShape EntityType="BudgetModel.dimSubCategories" Width="1.5" PointX="10.5" PointY="3.125" Height="2.5571907552083326" />
 				<EntityTypeShape EntityType="BudgetModel.dimCategories" Width="1.5" PointX="12.75" PointY="3.625" Height="1.5956835937499996" />
 				<EntityTypeShape EntityType="BudgetModel.dimDaysOfWeeks" Width="1.5" PointX="4" PointY="2.75" Height="1.5956835937499996" />
 				<EntityTypeShape EntityType="BudgetModel.dimMonths" Width="1.5" PointX="10.5" PointY="6.5" Height="1.5956835937499996" />
 				<EntityTypeShape EntityType="BudgetModel.dimTypes" Width="1.5" PointX="7.875" PointY="8.375" Height="1.5956835937500014" />
 				<EntityTypeShape EntityType="BudgetModel.factLineItems" Width="2" PointX="7.5" PointY="3" Height="4.6725065104166656" />
 				<AssociationConnector Association="BudgetModel.FK_factLineItems_dimSubCategories" >
-					<ConnectorPoint PointX="10.5" PointY="4.3074446614583328" />
-					<ConnectorPoint PointX="9.5" PointY="4.3074446614583328" />
+					<ConnectorPoint PointX="10.5" PointY="4.4035953776041659" />
+					<ConnectorPoint PointX="9.5" PointY="4.4035953776041659" />
 				</AssociationConnector>
 				<AssociationConnector Association="BudgetModel.FK_factLineItems_dimDaysOfWeek" >
 					<ConnectorPoint PointX="5.5" PointY="3.672841796875" />

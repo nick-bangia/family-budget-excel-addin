@@ -355,6 +355,7 @@ namespace HouseholdBudget.Data.Implementation
                 Quarter = (Quarters)fli.QuarterId,
                 PaymentMethod = fli.PaymentMethod.PaymentMethodName,
                 PaymentMethodKey = fli.PaymentMethodId,
+                AccountName = fli.Category.AccountName,
                 Status = (LineItemStatus)fli.Status.StatusId,
                 IsDeleted = false,
                 IsDuplicate = false

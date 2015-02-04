@@ -878,7 +878,8 @@ namespace HouseholdBudget.DataModel
         /// <param name="subCategoryName">Initial value of the SubCategoryName property.</param>
         /// <param name="subCategoryPrefix">Initial value of the SubCategoryPrefix property.</param>
         /// <param name="isActive">Initial value of the IsActive property.</param>
-        public static dimSubCategories CreatedimSubCategories(global::System.Guid subCategoryKey, global::System.Guid categoryKey, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive)
+        /// <param name="accountName">Initial value of the AccountName property.</param>
+        public static dimSubCategories CreatedimSubCategories(global::System.Guid subCategoryKey, global::System.Guid categoryKey, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive, global::System.String accountName)
         {
             dimSubCategories dimSubCategories = new dimSubCategories();
             dimSubCategories.SubCategoryKey = subCategoryKey;
@@ -886,6 +887,7 @@ namespace HouseholdBudget.DataModel
             dimSubCategories.SubCategoryName = subCategoryName;
             dimSubCategories.SubCategoryPrefix = subCategoryPrefix;
             dimSubCategories.IsActive = isActive;
+            dimSubCategories.AccountName = accountName;
             return dimSubCategories;
         }
 
@@ -1014,6 +1016,30 @@ namespace HouseholdBudget.DataModel
         private global::System.Boolean _IsActive;
         partial void OnIsActiveChanging(global::System.Boolean value);
         partial void OnIsActiveChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AccountName
+        {
+            get
+            {
+                return _AccountName;
+            }
+            set
+            {
+                OnAccountNameChanging(value);
+                ReportPropertyChanging("AccountName");
+                _AccountName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("AccountName");
+                OnAccountNameChanged();
+            }
+        }
+        private global::System.String _AccountName;
+        partial void OnAccountNameChanging(global::System.String value);
+        partial void OnAccountNameChanged();
 
         #endregion
     

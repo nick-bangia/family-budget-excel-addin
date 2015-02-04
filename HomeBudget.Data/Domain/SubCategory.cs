@@ -9,6 +9,7 @@ namespace HouseholdBudget.Data.Domain
         public string CategoryName { get; set; }
         public string SubCategoryName { get; set; }
         public string SubCategoryPrefix { get; set; }
+        public string AccountName { get; set; }
         public bool IsActive { get; set; }
     }
 }

@@ -406,7 +406,7 @@ namespace HouseholdBudget
         {
             // attempt to add a new SubCategory to the DB
             logger.Info("Adding a new SubCategory to the DB.");
-            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.IsActive);
+            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive);
             if (addedNewSubCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new subcategory, show a message box to that effect.

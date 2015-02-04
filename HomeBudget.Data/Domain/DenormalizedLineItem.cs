@@ -24,6 +24,7 @@ namespace HouseholdBudget.Data.Domain
         public Quarters Quarter { get; set; }
         public Guid PaymentMethodKey { get; set; }
         public string PaymentMethod { get; set; }
+        public string AccountName { get; set; }
         public LineItemStatus Status { get; set; }
 
         public bool IsDeleted { get; set; }

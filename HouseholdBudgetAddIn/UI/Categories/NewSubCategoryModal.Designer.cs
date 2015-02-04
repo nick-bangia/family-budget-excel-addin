@@ -37,6 +37,8 @@
             this.lblCategoryName = new System.Windows.Forms.Label();
             this.cbParentCategory = new System.Windows.Forms.ComboBox();
             this.chkEnabled = new System.Windows.Forms.CheckBox();
+            this.txtAccountName = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblSubCategoryName
@@ -78,7 +80,7 @@
             // btnSave
             // 
             this.btnSave.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSave.Location = new System.Drawing.Point(71, 230);
+            this.btnSave.Location = new System.Drawing.Point(71, 283);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 34);
             this.btnSave.TabIndex = 4;
@@ -88,7 +90,7 @@
             // btnCancel
             // 
             this.btnCancel.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCancel.Location = new System.Drawing.Point(152, 230);
+            this.btnCancel.Location = new System.Drawing.Point(152, 283);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 35);
             this.btnCancel.TabIndex = 5;
@@ -120,18 +122,38 @@
             this.chkEnabled.Checked = true;
             this.chkEnabled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkEnabled.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkEnabled.Location = new System.Drawing.Point(16, 186);
+            this.chkEnabled.Location = new System.Drawing.Point(16, 239);
             this.chkEnabled.Name = "chkEnabled";
             this.chkEnabled.Size = new System.Drawing.Size(84, 22);
             this.chkEnabled.TabIndex = 8;
             this.chkEnabled.Text = "Enabled?";
             this.chkEnabled.UseVisualStyleBackColor = true;
             // 
-            // frmNewCategory
+            // txtAccountName
+            // 
+            this.txtAccountName.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtAccountName.Location = new System.Drawing.Point(18, 194);
+            this.txtAccountName.Name = "txtAccountName";
+            this.txtAccountName.Size = new System.Drawing.Size(211, 26);
+            this.txtAccountName.TabIndex = 10;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(14, 172);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(107, 19);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Account Name:";
+            // 
+            // frmNewSubCategory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(242, 276);
+            this.ClientSize = new System.Drawing.Size(242, 337);
+            this.Controls.Add(this.txtAccountName);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.chkEnabled);
             this.Controls.Add(this.cbParentCategory);
             this.Controls.Add(this.lblCategoryName);
@@ -142,7 +164,7 @@
             this.Controls.Add(this.lblSubCategoryPrefix);
             this.Controls.Add(this.lblSubCategoryName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "frmNewCategory";
+            this.Name = "frmNewSubCategory";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add a New Budget SubCategory";
             this.Load += new System.EventHandler(this.frmNewCategory_Load);
@@ -162,5 +184,7 @@
         private System.Windows.Forms.Label lblCategoryName;
         private System.Windows.Forms.ComboBox cbParentCategory;
         private System.Windows.Forms.CheckBox chkEnabled;
+        private System.Windows.Forms.TextBox txtAccountName;
+        private System.Windows.Forms.Label label1;
     }
 }
