@@ -5,3 +5,5 @@ INSERT INTO dimStatus (StatusId, StatusName)
 VALUES (1, 'Pending');
 INSERT INTO dimStatus (StatusId, StatusName)
 VALUES (2, 'Future');
+INSERT INTO dimStatus (StatusId, StatusName)
+VALUES (3, 'Goal');

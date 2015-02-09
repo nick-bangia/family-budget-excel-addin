@@ -17,6 +17,12 @@ namespace HouseholdBudget.Events
         public SubCategory subCategory { get; set; }
     }
 
+    internal class GoalEventArgs : EventArgs
+    {
+        public SubCategory subCategory { get; set; }
+        public decimal GoalAmount { get; set; }
+    }
+
     internal class CategoryControlEventArgs : EventArgs
     {
         public CategoryFormType formType { get; set; }

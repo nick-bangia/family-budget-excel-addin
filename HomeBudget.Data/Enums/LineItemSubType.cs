@@ -8,6 +8,9 @@ namespace HouseholdBudget.Data.Enums
         DEBIT = 0,
 
         [FriendlyName("Credit")]
-        CREDIT = 1
+        CREDIT = 1,
+
+        [FriendlyName("Goal")]
+        GOAL = 2
     }
 }

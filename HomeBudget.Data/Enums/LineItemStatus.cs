@@ -15,6 +15,9 @@ namespace HouseholdBudget.Data.Enums
         PENDING = 1,
 
         [FriendlyName("Future")]
-        FUTURE = 2
+        FUTURE = 2,
+
+        [FriendlyName("Goal")]
+        GOAL = 3
     }
 }

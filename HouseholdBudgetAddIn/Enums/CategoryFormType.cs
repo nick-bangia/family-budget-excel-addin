@@ -8,6 +8,7 @@ namespace HouseholdBudget.Enums
     public enum CategoryFormType
     {
         ParentCategory,
-        SubCategory
+        SubCategory,
+        Goal
     }
 }

@@ -51,6 +51,7 @@ namespace HouseholdBudget.UI
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
             this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
+            this.btnNewGoal = this.Factory.CreateRibbonButton();
             this.tabHouseholdBudget.SuspendLayout();
             this.NewItemsGroup.SuspendLayout();
             this.grpData.SuspendLayout();
@@ -138,6 +139,7 @@ namespace HouseholdBudget.UI
             // 
             this.grpManage.Items.Add(this.btnAddCategory);
             this.grpManage.Items.Add(this.btnAddSubCategory);
+            this.grpManage.Items.Add(this.btnNewGoal);
             this.grpManage.Items.Add(this.btnUpdateCategories);
             this.grpManage.Items.Add(this.btnManagePaymentMethods);
             this.grpManage.Label = "Manage";
@@ -175,6 +177,14 @@ namespace HouseholdBudget.UI
             this.btnManagePaymentMethods.OfficeImageId = "AccountingFormat";
             this.btnManagePaymentMethods.ShowImage = true;
             // 
+            // btnNewGoal
+            // 
+            this.btnNewGoal.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnNewGoal.Label = "New Goal";
+            this.btnNewGoal.Name = "btnNewGoal";
+            this.btnNewGoal.OfficeImageId = "FlagCustom";
+            this.btnNewGoal.ShowImage = true;
+            // 
             // HouseholdBudgetRibbon
             // 
             this.Name = "HouseholdBudgetRibbon";
@@ -209,6 +219,7 @@ namespace HouseholdBudget.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup NewItemsGroup;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnPreProcessItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnNewGoal;
     }
 
     partial class ThisRibbonCollection

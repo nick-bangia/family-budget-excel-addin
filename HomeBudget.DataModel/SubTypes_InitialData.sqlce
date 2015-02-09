@@ -3,3 +3,5 @@ INSERT INTO dimSubTypes (SubTypeId, SubTypeName)
 VALUES (0, 'Debit');
 INSERT INTO dimSubTypes (SubTypeId, SubTypeName)
 VALUES (1, 'Credit');
+INSERT INTO dimSubTypes (SubTypeId, SubTypeName)
+VALUES (2, 'Goal');

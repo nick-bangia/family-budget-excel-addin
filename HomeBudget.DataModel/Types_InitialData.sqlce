@@ -5,3 +5,5 @@ INSERT INTO dimTypes (TypeId, TypeName)
 VALUES (1, 'ALLOCATION');
 INSERT INTO dimTypes (TypeId, TypeName)
 VALUES (2, 'ADJUSTMENT');
+INSERT INTO dimTypes (TypeId, TypeName)
+VALUES (3, 'GOAL');

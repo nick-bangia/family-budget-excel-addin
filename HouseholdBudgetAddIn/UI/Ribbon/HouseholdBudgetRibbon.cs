@@ -28,6 +28,7 @@ namespace HouseholdBudget.UI
             this.btnSearch.Click += new RibbonControlEventHandler(Controller.btnSearch_Click);
             this.btnPreProcessItems.Click += new RibbonControlEventHandler(Controller.btnPreProcessItems_Click);
             this.btnSave.Click += new RibbonControlEventHandler(Controller.btnSave_Click);
+            this.btnNewGoal.Click += new RibbonControlEventHandler(Controller.btnNewGoal_Click);
         }
     }
 }

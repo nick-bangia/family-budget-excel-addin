@@ -29,6 +29,7 @@ namespace HouseholdBudget
         private static frmUpdateCategories updateCategoriesForm;
         private static frmPaymentMethods paymentMethodsForm;
         private static frmSearchItems searchItemsForm;
+        private static frmNewGoal newGoalForm;
 
         // importing items
         private static LineItemImporter importer;
@@ -326,6 +327,14 @@ namespace HouseholdBudget
             updateCategoriesForm.Show();
         }
 
+        internal static void btnNewGoal_Click(object sender, RibbonControlEventArgs e)
+        {
+            newGoalForm = new frmNewGoal();
+            newGoalForm.GoalSaved += new EventHandler<GoalEventArgs>(newGoalForm_GoalSaved);
+            newGoalForm.UserCancelled += new EventHandler<CategoryControlEventArgs>(categoryForm_UserCancelled);
+            newGoalForm.Show();
+        }
+
         internal static void btnRefresh_Click(object sender, RibbonControlEventArgs e)
         {
             RebuildDataSheet();
@@ -399,6 +408,10 @@ namespace HouseholdBudget
                 // on user request to cancel the New SubCategory form, close the form
                 CloseNewSubCategoryForm();
             }
+            else if (e.formType == CategoryFormType.Goal)
+            {
+                CloseNewGoalForm();
+            }
             
         }
 
@@ -422,6 +435,79 @@ namespace HouseholdBudget
 
             // close the form, regardless.
             CloseNewSubCategoryForm();
+        }
+
+        internal static void newGoalForm_GoalSaved(object sender, GoalEventArgs e)
+        {
+            // attempt to add a new goal to the DB. A goal is just a subcategory, but with an added fact of the negation of the goal amount
+            logger.Info("Adding a new goal to the DB.");
+            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive);
+            if (addedNewSubCategory == OperationStatus.FAILURE)
+            {
+                // if an error occurred while attempting to write the new subcategory, show a message box to that effect.
+                string errorText = "An error occurred while attempting to add a new goal to the DB:" + Environment.NewLine +
+                                    "Check that:" + Environment.NewLine +
+                                    "\t1) The new goal (subcategory) is not already in the DB." + Environment.NewLine +
+                                    "\t2) The DB exists." + Environment.NewLine +
+                                    "\t3) The required system files for this workbook are present." + Environment.NewLine +
+                                    "\t4) The goal's (subcategory's) code fits within the constraint of the system.";
+                logger.Error(errorText);
+                MessageBox.Show(errorText);
+            }
+            else
+            {
+                // Add the negation of the goal amount as a line item for the new subcategory
+                decimal negatedGoalAmount = -1 * e.GoalAmount;
+
+                // get the current date to use
+                DateTime currentDate = DateTime.Now;
+
+                // get the Payment method to use
+                PaymentMethod paymentMethod = Controller.GetPaymentMethodByName("Logical");
+                if (paymentMethod == null) 
+                {
+                    paymentMethod = Controller.GetDefaultPaymentMethod();
+                }
+
+                // get the new subcategory key
+                Guid? goalKey = Controller.GetSubCategoryID(e.subCategory.SubCategoryName);
+
+                if (goalKey.HasValue)
+                {
+                    // build out the line item that represents the new goal
+                    DenormalizedLineItem goalLineItem = new DenormalizedLineItem()
+                    {
+                        Year = currentDate.Year,
+                        MonthInt = (short)currentDate.Month,
+                        Day = (short)currentDate.Day,
+                        DayOfWeekId = (short)currentDate.DayOfWeek,
+                        Description = "New Goal Set",
+                        CategoryKey = e.subCategory.CategoryKey,
+                        SubCategoryKey = goalKey.Value,
+                        Amount = negatedGoalAmount,
+                        Type = LineItemType.GOAL,
+                        SubType = LineItemSubType.GOAL,
+                        PaymentMethodKey = paymentMethod.PaymentMethodKey,
+                        Status = LineItemStatus.GOAL
+                    };
+
+                    // save the line item
+                    lineItemMapper.AddNewLineItem(goalLineItem);
+
+                    // refresh data & pivot tables
+                    DataManager.PopulateMasterDataTable(lineItemMapper.GetAllLineItems());
+                    RefreshPivotTables();
+                }
+                else
+                {
+                    string noSubCategoryError = String.Format("Unable to save this goal ({0}), as it was not found in the DB.", e.subCategory.SubCategoryName);
+                    logger.Error(noSubCategoryError);
+                    MessageBox.Show(noSubCategoryError);
+                }
+            }
+            
+            // close the form, regardless.
+            CloseNewGoalForm();
         }
 
         internal static void newCategoryForm_CategorySaved(object sender, CategoryEventArgs e)
@@ -685,6 +771,19 @@ namespace HouseholdBudget
                 }
 
                 newSubCategoryForm = null;
+            }
+        }
+
+        private static void CloseNewGoalForm()
+        {
+            if (newGoalForm != null)
+            {
+                if (!newGoalForm.IsDisposed)
+                {
+                    newGoalForm.Close();
+                }
+
+                newGoalForm = null;
             }
         }
 

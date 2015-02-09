@@ -106,7 +106,8 @@ namespace HouseholdBudget.Data.Implementation
                         // type of transaction
                         int type = (int)lineItem.Type;
                         // subtype of transaction
-                        short subType = (short)(lineItem.Amount <= 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT);
+                        short subType = (short)(lineItem.SubType != LineItemSubType.GOAL ?
+                            (lineItem.Amount <= 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT) : lineItem.SubType);
                         // compute the quarter
                         short quarterId = (short)DateUtil.GetQuarterForMonth(monthId);
                         // get the payment method key from the Line Item
