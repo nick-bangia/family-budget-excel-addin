@@ -47,7 +47,8 @@ namespace HouseholdBudget.UI
                             SubCategoryName = txtGoalName.Text,
                             SubCategoryPrefix = txtGoalPrefix.Text,
                             AccountName = txtAccountName.Text,
-                            IsActive = chkEnabled.Checked
+                            IsActive = chkEnabled.Checked,
+                            IsGoal = true
                         },
                         GoalAmount = goalAmount
                     

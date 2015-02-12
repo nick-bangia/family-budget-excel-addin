@@ -89,9 +89,9 @@ namespace HouseholdBudget.Data.Implementation
             return SaveCategoryToDB(dimCategories.CreatedimCategories(Guid.NewGuid(), categoryName));
         }
 
-        public OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, string accountName, bool isActive)
+        public OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, string accountName, bool isActive, bool isGoal)
         {
-            return SaveSubCategoryToDB(dimSubCategories.CreatedimSubCategories(Guid.NewGuid(), categoryKey, subCategoryName, subCategoryPrefix, isActive, accountName));
+            return SaveSubCategoryToDB(dimSubCategories.CreatedimSubCategories(Guid.NewGuid(), categoryKey, subCategoryName, subCategoryPrefix, isActive, accountName, isGoal));
         }
 
         public string GetCategoryList(char delimiter)

@@ -419,7 +419,7 @@ namespace HouseholdBudget
         {
             // attempt to add a new SubCategory to the DB
             logger.Info("Adding a new SubCategory to the DB.");
-            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive);
+            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive, e.subCategory.IsGoal);
             if (addedNewSubCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new subcategory, show a message box to that effect.
@@ -441,7 +441,7 @@ namespace HouseholdBudget
         {
             // attempt to add a new goal to the DB. A goal is just a subcategory, but with an added fact of the negation of the goal amount
             logger.Info("Adding a new goal to the DB.");
-            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive);
+            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive, e.subCategory.IsGoal);
             if (addedNewSubCategory == OperationStatus.FAILURE)
             {
                 // if an error occurred while attempting to write the new subcategory, show a message box to that effect.

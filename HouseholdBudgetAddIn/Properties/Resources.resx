@@ -128,16 +128,16 @@
     <value>Configuration</value>
   </data>
   <data name="DataListBottomRightRange" xml:space="preserve">
-    <value>$P$2</value>
+    <value>$Q$2</value>
   </data>
   <data name="DataListObjectName" xml:space="preserve">
     <value>PIVOT_DATA</value>
   </data>
   <data name="DataListObjectRange" xml:space="preserve">
-    <value>$A$1:$P$1</value>
+    <value>$A$1:$Q$1</value>
   </data>
   <data name="DataListRightMostColumn" xml:space="preserve">
-    <value>$P</value>
+    <value>$Q</value>
   </data>
   <data name="DataListTopLeftRange" xml:space="preserve">
     <value>$A$1</value>

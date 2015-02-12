@@ -42,7 +42,8 @@ namespace HouseholdBudget.UI
                         SubCategoryName = txtSubCategoryName.Text,
                         SubCategoryPrefix = txtSubCategoryPrefix.Text,
                         AccountName = txtAccountName.Text,
-                        IsActive = chkEnabled.Checked
+                        IsActive = chkEnabled.Checked,
+                        IsGoal = false
                     }
                     
                 };

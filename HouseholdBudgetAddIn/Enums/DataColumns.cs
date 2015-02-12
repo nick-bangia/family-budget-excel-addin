@@ -50,6 +50,9 @@ namespace HouseholdBudget.Enums
         ACCOUNT = 15,
 
         [FriendlyName("Status")]
-        STATUS = 16
+        STATUS = 16,
+
+        [FriendlyName("Is Goal?")]
+        IS_GOAL = 17
     }
 }

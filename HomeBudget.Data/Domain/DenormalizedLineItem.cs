@@ -26,6 +26,7 @@ namespace HouseholdBudget.Data.Domain
         public string PaymentMethod { get; set; }
         public string AccountName { get; set; }
         public LineItemStatus Status { get; set; }
+        public string IsGoal { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsDuplicate { get; set; }

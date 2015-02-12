@@ -357,6 +357,7 @@ namespace HouseholdBudget.Data.Implementation
                 PaymentMethod = fli.PaymentMethod.PaymentMethodName,
                 PaymentMethodKey = fli.PaymentMethodId,
                 AccountName = fli.Category.AccountName,
+                IsGoal = fli.Category.IsGoal ? "Yes" : "No",
                 Status = (LineItemStatus)fli.Status.StatusId,
                 IsDeleted = false,
                 IsDuplicate = false

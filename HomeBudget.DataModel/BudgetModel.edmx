@@ -65,6 +65,7 @@
 					<Property Name="SubCategoryPrefix" Type="nvarchar" Nullable="false" MaxLength="10" />
 					<Property Name="IsActive" Type="bit" Nullable="false" />
 					<Property Name="AccountName" Type="nvarchar" Nullable="false" MaxLength="100"  />
+					<Property Name="IsGoal" Type="bit" Nullable="false" />
 				</EntityType>
 				<EntityType Name="dimCategories">
 					<Key>
@@ -289,6 +290,7 @@
 					<Property Type="String" Name="SubCategoryPrefix" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
 					<Property Type="Boolean" Name="IsActive" Nullable="false" />
 					<Property Type="String" Name="AccountName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+					<Property Type="Boolean" Name="IsGoal" Nullable="false" />
 					<NavigationProperty Name="ItemsInThisCategory" Relationship="BudgetModel.FK_factLineItems_dimSubCategories" FromRole="dimSubCategories" ToRole="factLineItems" />
 					<NavigationProperty Name="ParentCategory" Relationship="BudgetModel.FK_dimSubCategories_dimCategories" FromRole="dimSubCategories" ToRole="dimCategories" />
 				</EntityType>
@@ -485,6 +487,7 @@
 								<ScalarProperty Name="SubCategoryPrefix" ColumnName="SubCategoryPrefix" />
 								<ScalarProperty Name="IsActive" ColumnName="IsActive" />
 								<ScalarProperty Name="AccountName" ColumnName="AccountName" />
+								<ScalarProperty Name="IsGoal" ColumnName="IsGoal" />
 							</MappingFragment>
 						</EntityTypeMapping>
 					</EntitySetMapping>

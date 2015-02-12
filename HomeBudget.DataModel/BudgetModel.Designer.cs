@@ -879,7 +879,8 @@ namespace HouseholdBudget.DataModel
         /// <param name="subCategoryPrefix">Initial value of the SubCategoryPrefix property.</param>
         /// <param name="isActive">Initial value of the IsActive property.</param>
         /// <param name="accountName">Initial value of the AccountName property.</param>
-        public static dimSubCategories CreatedimSubCategories(global::System.Guid subCategoryKey, global::System.Guid categoryKey, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive, global::System.String accountName)
+        /// <param name="isGoal">Initial value of the IsGoal property.</param>
+        public static dimSubCategories CreatedimSubCategories(global::System.Guid subCategoryKey, global::System.Guid categoryKey, global::System.String subCategoryName, global::System.String subCategoryPrefix, global::System.Boolean isActive, global::System.String accountName, global::System.Boolean isGoal)
         {
             dimSubCategories dimSubCategories = new dimSubCategories();
             dimSubCategories.SubCategoryKey = subCategoryKey;
@@ -888,6 +889,7 @@ namespace HouseholdBudget.DataModel
             dimSubCategories.SubCategoryPrefix = subCategoryPrefix;
             dimSubCategories.IsActive = isActive;
             dimSubCategories.AccountName = accountName;
+            dimSubCategories.IsGoal = isGoal;
             return dimSubCategories;
         }
 
@@ -1040,6 +1042,30 @@ namespace HouseholdBudget.DataModel
         private global::System.String _AccountName;
         partial void OnAccountNameChanging(global::System.String value);
         partial void OnAccountNameChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsGoal
+        {
+            get
+            {
+                return _IsGoal;
+            }
+            set
+            {
+                OnIsGoalChanging(value);
+                ReportPropertyChanging("IsGoal");
+                _IsGoal = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsGoal");
+                OnIsGoalChanged();
+            }
+        }
+        private global::System.Boolean _IsGoal;
+        partial void OnIsGoalChanging(global::System.Boolean value);
+        partial void OnIsGoalChanged();
 
         #endregion
     

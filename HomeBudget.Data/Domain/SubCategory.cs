@@ -11,5 +11,6 @@ namespace HouseholdBudget.Data.Domain
         public string SubCategoryPrefix { get; set; }
         public string AccountName { get; set; }
         public bool IsActive { get; set; }
+        public bool IsGoal { get; set; }
     }
 }

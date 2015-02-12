@@ -18,7 +18,7 @@ namespace HouseholdBudget.Data.Interfaces
         Guid? GetSubCategoryKeyByName(string subCategoryName);
         SubCategory GetSubCategoryFor(string itemDescription);
         OperationStatus AddNewCategory(string categoryName);
-        OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, string accountName, bool isActive);
+        OperationStatus AddNewSubCategory(Guid categoryKey, string subCategoryName, string subCategoryPrefix, string accountName, bool isActive, bool isGoal);
         String GetCategoryList(char delimiter);
         String GetSubCategoryList(char delimiter);
     }

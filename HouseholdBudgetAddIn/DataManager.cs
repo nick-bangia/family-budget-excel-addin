@@ -52,6 +52,7 @@ namespace HouseholdBudget
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.PAYMENT_METHOD].Value2 = EnumUtil.GetFriendlyName(DataColumns.PAYMENT_METHOD);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.ACCOUNT].Value2 = EnumUtil.GetFriendlyName(DataColumns.ACCOUNT);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.STATUS].Value2 = EnumUtil.GetFriendlyName(DataColumns.STATUS);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.IS_GOAL].Value2 = EnumUtil.GetFriendlyName(DataColumns.IS_GOAL);
             }
             else
             {
@@ -161,6 +162,9 @@ namespace HouseholdBudget
                     break;
                 case (int)DataColumns.STATUS:
                     value = EnumUtil.GetFriendlyName(lineItems[index].Status);
+                    break;
+                case (int)DataColumns.IS_GOAL:
+                    value = lineItems[index].IsGoal;
                     break;
                 default:
                     value = "N/A";

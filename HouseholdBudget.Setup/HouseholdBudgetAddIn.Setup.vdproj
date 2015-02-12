@@ -325,7 +325,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HouseholdBudget.DataModel, Version=1.2.14034.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HouseholdBudget.DataModel, Version=1.2.15042.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_3BD253F370BD5D65F90E0E85326181D7"
@@ -356,7 +356,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:HomeBudget.Data, Version=1.2.14034.1, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:HomeBudget.Data, Version=1.2.15042.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_41FBF73237D5AF89F26D03ACB6534660"
@@ -808,7 +808,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:HouseholdBudgetAddIn"
         "ProductCode" = "8:{CAECC284-7DA9-41F0-9D44-5FBC5E4701DA}"
-        "PackageCode" = "8:{43D1D846-10D6-4EC1-8F40-DAEFC02C1990}"
+        "PackageCode" = "8:{45D08F7D-1079-4D27-A125-E65EF3670760}"
         "UpgradeCode" = "8:{D5FD4735-95E2-480C-BAAF-01ADB87FEFEE}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
