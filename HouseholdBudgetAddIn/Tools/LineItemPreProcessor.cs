@@ -128,7 +128,7 @@ namespace HouseholdBudget.Tools
                             // advance the iterator and report progress
                             lineItemIterator += 1;
                             ReportProgress(Convert.ToInt32(Math.Floor((((double)lineItemIterator) / ((double)totalRows)) * 100)),
-                                String.Format("Processed {0} out of {1} line item(s)...", lineItemIterator, totalRows));
+                                String.Format("Processed {0} out of {1} line item(s)...", lineItemIterator - 1, totalRows));
                         }
                         catch (Exception ex)
                         {
