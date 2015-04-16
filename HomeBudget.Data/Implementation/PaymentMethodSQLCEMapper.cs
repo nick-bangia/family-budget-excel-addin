@@ -13,7 +13,7 @@ using System.Data.Objects;
 
 namespace HouseholdBudget.Data.Implementation
 {
-    public class PaymentMethodMapper : IPaymentMethodMapper
+    public class PaymentMethodSqlCEMapper : IPaymentMethodMapper
     {
         #region Properties
 
@@ -23,7 +23,7 @@ namespace HouseholdBudget.Data.Implementation
 
         #region Constructor
 
-        public PaymentMethodMapper()
+        public PaymentMethodSqlCEMapper()
         {
         }
 

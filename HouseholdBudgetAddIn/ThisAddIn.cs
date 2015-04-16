@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml.Linq;
+using System.Threading;
+using HouseholdBudget.Async;
+using HouseholdBudget.Controllers;
+using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Data.Enums;
+using HouseholdBudget.Data.Utilities;
+using HouseholdBudget.DataControllers;
+using HouseholdBudget.Utilities;
+using log4net;
 using log4net.Config;
 using NativeExcel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
-using VstoExcel = Microsoft.Office.Tools.Excel;
 using System.Windows.Forms;
-using log4net.Repository.Hierarchy;
-using log4net;
-using log4net.Appender;
-using System.IO;
 
 namespace HouseholdBudget.UI
 {
@@ -37,11 +37,33 @@ namespace HouseholdBudget.UI
 
             if (validWorkbook)
             {
-                // only update the data sheet is the workbook is configured properly
-                Controller.PopulateDataSheet();
-                Controller.RefreshPivotTables();
-                Controller.ShowFirstWorksheet();
-            }            
+                // check the API health before continuing
+                ApiHealth apiHealth = APIUtil.CheckAPIHealth();
+                if (apiHealth.healthState == ApiHealthState.OK)
+                {
+                    // only update the data sheet is the workbook is configured properly
+                    LineItemsController.PopulateDataSheet();
+                    CategoriesController.PopulateSubCategoriesSheet();
+                    WorkbookUtil.RefreshPivotTables();
+
+                    // pre-populate any data service lists
+                    PaymentMethodsController.GetPaymentMethods();
+
+                    // Switch to the first worksheet
+                    WorkbookUtil.ShowFirstWorksheet();
+                }
+                else
+                {
+                    logger.ErrorFormat("The API is not in a healthy state. STATE = {0}, REASON = {1}", apiHealth.healthState.ToString(), apiHealth.healthReason);
+                    string message =
+                        "The API is not in a healthy state." + Environment.NewLine +
+                        "Status: " + apiHealth.healthState.ToString() + Environment.NewLine +
+                        "Reason: " + apiHealth.healthReason + Environment.NewLine + Environment.NewLine +
+                        "This will prevent you from interacting with this tool properly. Please resolve the issue and click Refresh to check the state";
+
+                    MessageBox.Show(message);
+                }
+            }
         }
 
         private void Application_WorkbookBeforeClose(NativeExcel.Workbook Wb, ref bool Cancel)
@@ -52,76 +74,24 @@ namespace HouseholdBudget.UI
             {
                 logger.Info("Saving state and shutting down the workbook.");
                 
-                // attempt to remove the ImportResults sheet, allowing the user to cancel if they want
-                Cancel = RemoveImportResults(Wb, Cancel);
-
-                // if everything is ok to close, delete the data sheet too (will be regenerated on open again)
-                if (!Cancel)
-                {
-                    RemoveData(Wb);
-                }
+                // remove any data based worksheets
+                RemoveData(Wb);
             }            
         }
 
         private void RemoveData(NativeExcel.Workbook Wb)
         {
-            // find the data sheet (if it exists)
-            NativeExcel.Worksheet dataSheet = null;
-            foreach (NativeExcel.Worksheet worksheet in Wb.Application.Worksheets)
-            {
-                if (worksheet.Name == Properties.Resources.MasterDataWorksheetName)
-                {
-                    dataSheet = worksheet;
-                    break;
-                }
-            }
+            // remove any data sheets without notification
+            Globals.ThisAddIn.Application.DisplayAlerts = false;
 
-            if (dataSheet != null)
-            {
-                // if the sheet exists, delete it w/out any notification
-                Globals.ThisAddIn.Application.DisplayAlerts = false;
-                DataManager.RemoveSheet();
-                DataWorksheetManager.RemoveAllSheets();
-                Wb.Save();
-                Globals.ThisAddIn.Application.DisplayAlerts = true;
-            }
-        }
+            // remove the sheets
+            MasterDataController.RemoveSheet();
+            SubCategoriesDataManager.RemoveSheet();
+            WorksheetDataController.RemoveAllSheets();
 
-        private static bool RemoveImportResults(NativeExcel.Workbook Wb, bool Cancel)
-        {
-            // determine if the import results worksheet is still in the workbook
-            NativeExcel.Worksheet importResultSheet = null;
-            foreach (NativeExcel.Worksheet worksheet in Wb.Application.Worksheets)
-            {
-                if (worksheet.Name == Properties.Resources.ImportResultsWorksheetName)
-                {
-                    importResultSheet = worksheet;
-                    break;
-                }
-            }
-
-            if (importResultSheet != null)
-            {
-                // show a dialog prompting the user as to whether they really want to close the workbook
-                DialogResult result = MessageBox.Show("Closing this workbook will result in losing your current import results." + Environment.NewLine +
-                                                  "If you are not finished reconciling your statement, do not close this workbook," + Environment.NewLine +
-                                                  "or you may lose your work." + Environment.NewLine + Environment.NewLine +
-                                                  "Are you sure you want to close the workbook?", "Confirm Close?", MessageBoxButtons.YesNo);
-
-                if (result == DialogResult.No)
-                {
-                    // cancel closing the workbook
-                    Cancel = true;
-                }
-                else
-                {
-                    // if user chose Yes, then delete the sheet
-                    Globals.ThisAddIn.Application.DisplayAlerts = false;
-                    importResultSheet.Delete();
-                    Globals.ThisAddIn.Application.DisplayAlerts = true;
-                }
-            }
-            return Cancel;
+            // save the workbook, and renable alerts
+            Wb.Save();
+            Globals.ThisAddIn.Application.DisplayAlerts = true;
         }
 
         private static void SetRibbonState(NativeExcel.Workbook Wb, bool ribbonState)
@@ -148,7 +118,7 @@ namespace HouseholdBudget.UI
                             ConfigureLogging();
 
                             // configure the workbook if the workbook is valid
-                            Controller.ConfigureWorkbook(worksheet, Wb.Path);
+                            WorkbookUtil.ConfigureWorkbook(worksheet, Wb.Path);
                         }
                         
                         // break from the foreach loop since the workbook is valid

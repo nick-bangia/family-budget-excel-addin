@@ -18,6 +18,7 @@ namespace HouseholdBudget.Data.Domain
         public string Category { get; set; }
         public Guid SubCategoryKey { get; set; }
         public string SubCategory { get; set; }
+        public string SubCategoryPrefix { get; set; }
         public decimal Amount { get; set; }
         public LineItemType Type { get; set; }
         public LineItemSubType SubType { get; set; }
@@ -48,13 +49,16 @@ namespace HouseholdBudget.Data.Domain
                 Category = this.Category,
                 SubCategoryKey = this.SubCategoryKey,
                 SubCategory = this.SubCategory,
+                SubCategoryPrefix = this.SubCategoryPrefix,
                 Amount = this.Amount,
                 Type = this.Type,
                 SubType = this.SubType,
                 Quarter = this.Quarter,
                 PaymentMethodKey = this.PaymentMethodKey,
                 PaymentMethod = this.PaymentMethod,
+                AccountName = this.AccountName,
                 Status = this.Status,
+                IsGoal = this.IsGoal,
                 IsDeleted = this.IsDeleted,
                 ItemSurrogateKey = this.ItemSurrogateKey
             };

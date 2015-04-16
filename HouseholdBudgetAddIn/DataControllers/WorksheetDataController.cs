@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using VstoExcel = Microsoft.Office.Tools.Excel;
-using NativeExcel = Microsoft.Office.Interop.Excel;
-using HouseholdBudget.Data.Enums;
-using log4net;
-using HouseholdBudget.Data.Domain;
-using HouseholdBudget.Utilities;
-using HouseholdBudget.Enums;
 using System.Windows.Forms;
+using HouseholdBudget.Controllers;
+using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Enums;
+using HouseholdBudget.Events;
 using HouseholdBudget.UI;
+using HouseholdBudget.Utilities;
+using log4net;
+using NativeExcel = Microsoft.Office.Interop.Excel;
+using VstoExcel = Microsoft.Office.Tools.Excel;
 
-namespace HouseholdBudget
+namespace HouseholdBudget.DataControllers
 {
-    internal static class DataWorksheetManager
+    internal static class WorksheetDataController
     {
         #region Composite Datasheet Object
         private class CompositeDataSheetObject
@@ -30,18 +29,19 @@ namespace HouseholdBudget
         #region Properties
         private static List<CompositeDataSheetObject> dataWorksheets = new List<CompositeDataSheetObject>();
         private static readonly ILog logger = LogManager.GetLogger("HouseholdBudgetAddIn_DataWorksheetManager");
-        internal static VstoExcel.ListObject lineItemsListObject;
-        internal static VstoExcel.Worksheet dataSheet;
-        internal static List<DenormalizedLineItem> lineItems;
-        internal static Dictionary<DataWorksheetType, Dictionary<int, List<ActionButton>>> buttons = 
+        private static VstoExcel.ListObject lineItemsListObject;
+        private static VstoExcel.Worksheet dataSheet;
+        private static List<DenormalizedLineItem> lineItems;
+        private static Dictionary<DataWorksheetType, Dictionary<int, List<ActionButton>>> buttons = 
             new Dictionary<DataWorksheetType, Dictionary<int, List<ActionButton>>>();
-        internal const int NUM_HEADER_ROWS = 1;
-        internal const int EDIT_ACTION_COLUMN = 1;
-        internal const string amountFormat = "$#,##0.00";
-        internal const string dateFormat = "MM/DD/YYYY";
+        private const int NUM_HEADER_ROWS = 1;
+        private const int EDIT_ACTION_COLUMN = 1;
+        private const string amountFormat = "$#,##0.00";
+        private const string dateFormat = "MM/DD/YYYY";
         #endregion
-        
-        public static void PopulateNewWorksheet(DataWorksheetType worksheetType, List<DenormalizedLineItem> lineItemsFromDB = null)
+
+        #region Internal Methods
+        internal static void PopulateNewWorksheet(DataWorksheetType worksheetType, List<DenormalizedLineItem> lineItemsFromDB = null)
         {
             // log status
             logger.Info(String.Format("Beginning population of {0} data sheet...", EnumUtil.GetFriendlyName(worksheetType)));
@@ -74,7 +74,7 @@ namespace HouseholdBudget
                 GetNewDataSheet(worksheetType);
                                
                 // disable screen updating, event, and alerts
-                Controller.ToggleUpdatingAndAlerts(false);
+                WorkbookUtil.ToggleUpdatingAndAlerts(false);
 
                 lineItemsListObject = dataSheet.Controls.AddListObject(dataSheet.get_Range(Properties.Resources.DataWorksheetObjectRange),
                     Properties.Resources.DataWorksheetName + EnumUtil.GetFriendlyName(worksheetType));
@@ -159,88 +159,14 @@ namespace HouseholdBudget
                 lineItemsListObject.Range.Columns.AutoFit();
                 
                 // enable screen updating, events, & alerts
-                Controller.ToggleUpdatingAndAlerts(true);
+                WorkbookUtil.ToggleUpdatingAndAlerts(true);
 
                 // log completion
                 logger.Info("Completed population of data worksheet.");
             }            
         }
-
-        private static bool DataWorksheetExists(DataWorksheetType worksheetType, bool notifyUser, out DialogResult result, out string worksheetName)
-        {
-            bool worksheetExists = false;
-            result = DialogResult.None;
-            worksheetName = null;
-            foreach (CompositeDataSheetObject obj in dataWorksheets)
-            {
-                // if the worksheet type desired is already in existence and has not been deleted, ask user if they want to remove it
-                if (obj.worksheetType == worksheetType)
-                {
-                    if (WorksheetPhysicallyExists(obj.worksheetName, out worksheetName))
-                    {
-                        result = notifyUser ?
-                            MessageBox.Show("A data sheet of this type already exists. Remove it?", "Worksheet Exists!", MessageBoxButtons.YesNo) :
-                            DialogResult.No;
-                        worksheetExists = true;
-                        break;
-                    }
-                }
-            }
-
-            return worksheetExists;
-        }
-        
-        private static void AddEditButtons(DataWorksheetType worksheetType, CompositeDataSheetObject dso)
-        {
-            // fill in edit buttons
-            logger.Info("Creating edit buttons for all line items.");
-                
-            // get the appropriate dictionary for the worksheet type
-            if (buttons.ContainsKey(worksheetType))
-            {
-                // if the dictionary contains an entry for this worksheet type
-                // delete it, as you can only one open at a time - which means
-                // the worksheet has already been deleted manually.
-                buttons.Remove(worksheetType);
-            }
-
-            // create the new button dictionary for this worksheet type
-            Dictionary<int, List<ActionButton>> thisWorksheetButtons;
-            thisWorksheetButtons = new Dictionary<int, List<ActionButton>>();
-            buttons.Add(worksheetType, thisWorksheetButtons);
-                
-            // based on the type of worksheet that buttons are being added to, we need to get the total count from different sources
-            int totalRows = 0;
-            if (dso.listObject != null)
-            {
-                totalRows = dso.listObject.ListRows.Count;
-            }
-            else if (dso.lineItems != null)
-            {
-                totalRows = dso.lineItems.Count;
-            }
-
-            // loop through each line item, and apply the button, and save it in the dictionary
-            for (int i = 1; i <= totalRows; i++)
-            {
-                ActionButton editActionButton = Controller.AddButtonToListObject(dataSheet, dso.listObject, LineItemActions.EDIT, 
-                    dso.worksheetType, i-1, i, EDIT_ACTION_COLUMN, NUM_HEADER_ROWS, Controller.dataWorksheet_ActionRequested);
-
-                List<ActionButton> actionButtonList;
-                if (!thisWorksheetButtons.TryGetValue(i, out actionButtonList))
-                {
-                    actionButtonList = new List<ActionButton>();
-                }
-
-                // add the edit button to the list
-                actionButtonList.Add(editActionButton);
-
-                // add buttons to the button dictionary
-                thisWorksheetButtons.Add(i, actionButtonList);
-            }
-        }
-        
-        public static void RemoveAllSheets()
+                        
+        internal static void RemoveAllSheets()
         {
             // loop through and delete all the data sheets
             foreach (CompositeDataSheetObject obj in dataWorksheets)
@@ -255,7 +181,7 @@ namespace HouseholdBudget
             dataWorksheets.Clear();
         }
 
-        public static Guid GetItemKey(int listObjectIndex, DataWorksheetType worksheetType)
+        internal static Guid GetItemKey(int listObjectIndex, DataWorksheetType worksheetType)
         {
             // get the unique key from the list object, so that it can be retreived
             // from the DB
@@ -277,7 +203,7 @@ namespace HouseholdBudget
             return itemKey;
         }
 
-        public static DenormalizedLineItem GetItem(int itemIndex, DataWorksheetType worksheetType)
+        internal static DenormalizedLineItem GetItem(int itemIndex, DataWorksheetType worksheetType)
         {
             // check if the worksheet type exists
             CompositeDataSheetObject dataSheetObject = dataWorksheets.Find(dso => dso.worksheetType == worksheetType);
@@ -293,7 +219,7 @@ namespace HouseholdBudget
             }
         }
 
-        public static void RemoveLineItem(int listObjectIndex, int lineItemIndex, DataWorksheetType worksheetType)
+        internal static void RemoveLineItem(int listObjectIndex, int lineItemIndex, DataWorksheetType worksheetType)
         {
             CompositeDataSheetObject dso = dataWorksheets.Find(cdso => cdso.worksheetType == worksheetType);
 
@@ -323,12 +249,204 @@ namespace HouseholdBudget
             }
         }
 
+        internal static void UpdateLineItem(int listObjectIndex, int lineItemIndex, DataWorksheetType worksheetType, DenormalizedLineItem updatedLineItem)
+        {
+            CompositeDataSheetObject dataSheetObject = dataWorksheets.Find(dso => dso.worksheetType == worksheetType);
+
+            if (dataSheetObject != null)
+            {
+                if (updatedLineItem != null)
+                {
+                    // update the list object and the lineItems list
+                    DateTime date = new DateTime(updatedLineItem.Year, updatedLineItem.MonthInt, updatedLineItem.Day);
+                    string type = EnumUtil.GetFriendlyName(updatedLineItem.Type);
+                    string status = EnumUtil.GetFriendlyName(updatedLineItem.Status);
+                    string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : (updatedLineItem.UniqueKey != Guid.Empty ? updatedLineItem.UniqueKey.ToString() : String.Empty));
+
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = uniqueKey;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DATE].Value2 = date;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DESCRIPTION].Value2 = updatedLineItem.Description;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.AMOUNT].Value2 = updatedLineItem.Amount;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.CATEGORY].Value2 = updatedLineItem.Category;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.SUBCATEGORY].Value2 = updatedLineItem.SubCategory;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.TYPE].Value2 = type;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.PAYMENT_METHOD].Value2 = updatedLineItem.PaymentMethod;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.STATUS].Value2 = status;
+
+                    // update the line item in the list
+                    if (dataSheetObject.lineItems != null)
+                    {
+                        dataSheetObject.lineItems[lineItemIndex] = updatedLineItem;
+                    }                    
+                }
+                else
+                {
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = "ERROR";
+                }
+            }
+
+            // select the sheet for editing
+            dataSheetObject.vstoWorksheet.Select();
+        }
+
+        internal static void PreProcessNewItems()
+        {
+            // check if there is a new worksheet that exists
+            DialogResult userNotifyResult = DialogResult.None;
+            string worksheetName = null;
+            bool worksheetExists = DataWorksheetExists(DataWorksheetType.NEW_ENTRIES, false, out userNotifyResult, out worksheetName);
+
+            if (worksheetExists)
+            {
+                // new worksheet exists, so pre-process the items
+                CompositeDataSheetObject cdo = dataWorksheets.Find(ds => ds.worksheetType == DataWorksheetType.NEW_ENTRIES);
+                VstoExcel.ListObject listObject = cdo.listObject;
+
+                // spin off the background worker to do the preprocessing
+                LineItemsController.PreprocessLineItems(listObject, cdo.lineItems);
+
+                // add edit buttons to the sheet
+                AddEditButtons(DataWorksheetType.NEW_ENTRIES, cdo);
+            }
+        }
+
+        internal static List<DenormalizedLineItem> GetLineItemsToSave(DataWorksheetType worksheetType)
+        {
+            CompositeDataSheetObject dso = dataWorksheets.Find(ds => ds.worksheetType == worksheetType);
+
+            if (dso != null && dso.lineItems != null)
+            {
+                return dso.lineItems;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        internal static ActionButton AddButtonToListObject(VstoExcel.Worksheet worksheet,
+                                                          VstoExcel.ListObject listObject,
+                                                          LineItemActions action,
+                                                          DataWorksheetType worksheetType,
+                                                          int resultIndex,
+                                                          int listObjectIndex,
+                                                          int column,
+                                                          int NUM_HEADER_ROWS,
+                                                          EventHandler<ActionEventArgs> handler)
+        {
+            // create the button & set its properties
+            ActionButton actionButton = new ActionButton();
+            actionButton.index = resultIndex;
+            actionButton.action = action;
+            actionButton.listObjectIndex = listObjectIndex;
+            actionButton.worksheetType = worksheetType;
+            actionButton.Text = EnumUtil.GetFriendlyName(action);
+            string buttonName = "btn" + action.ToString() + (resultIndex).ToString();
+            actionButton.Name = buttonName;
+
+            // add it to the list
+            int rowIndex = listObjectIndex + NUM_HEADER_ROWS;
+            worksheet.Controls.AddControl(actionButton, worksheet.Cells[rowIndex, column], buttonName);
+
+            // tie it to the handler
+            actionButton.OnActionRequested += handler;
+
+            return actionButton;
+        }
+
+        internal static void BackgroundWorkCompleted(DataWorksheetType dataWorksheetType, List<DenormalizedLineItem> lineItems)
+        {
+            CompositeDataSheetObject dso = dataWorksheets.Find(ds => ds.worksheetType == dataWorksheetType);
+
+            // set the updated line items on the data sheet object
+            if (dso != null)
+            {
+                dso.lineItems = lineItems;
+            }
+        }
+        #endregion
+
+        #region Private Methods
+        private static bool DataWorksheetExists(DataWorksheetType worksheetType, bool notifyUser, out DialogResult result, out string worksheetName)
+        {
+            bool worksheetExists = false;
+            result = DialogResult.None;
+            worksheetName = null;
+            foreach (CompositeDataSheetObject obj in dataWorksheets)
+            {
+                // if the worksheet type desired is already in existence and has not been deleted, ask user if they want to remove it
+                if (obj.worksheetType == worksheetType)
+                {
+                    if (WorksheetPhysicallyExists(obj.worksheetName, out worksheetName))
+                    {
+                        result = notifyUser ?
+                            MessageBox.Show("A data sheet of this type already exists. Remove it?", "Worksheet Exists!", MessageBoxButtons.YesNo) :
+                            DialogResult.No;
+                        worksheetExists = true;
+                        break;
+                    }
+                }
+            }
+
+            return worksheetExists;
+        }
+
+        private static void AddEditButtons(DataWorksheetType worksheetType, CompositeDataSheetObject dso)
+        {
+            // fill in edit buttons
+            logger.Info("Creating edit buttons for all line items.");
+
+            // get the appropriate dictionary for the worksheet type
+            if (buttons.ContainsKey(worksheetType))
+            {
+                // if the dictionary contains an entry for this worksheet type
+                // delete it, as you can only one open at a time - which means
+                // the worksheet has already been deleted manually.
+                buttons.Remove(worksheetType);
+            }
+
+            // create the new button dictionary for this worksheet type
+            Dictionary<int, List<ActionButton>> thisWorksheetButtons;
+            thisWorksheetButtons = new Dictionary<int, List<ActionButton>>();
+            buttons.Add(worksheetType, thisWorksheetButtons);
+
+            // based on the type of worksheet that buttons are being added to, we need to get the total count from different sources
+            int totalRows = 0;
+            if (dso.listObject != null)
+            {
+                totalRows = dso.listObject.ListRows.Count;
+            }
+            else if (dso.lineItems != null)
+            {
+                totalRows = dso.lineItems.Count;
+            }
+
+            // loop through each line item, and apply the button, and save it in the dictionary
+            for (int i = 1; i <= totalRows; i++)
+            {
+                ActionButton editActionButton = AddButtonToListObject(dataSheet, dso.listObject, LineItemActions.EDIT,
+                    dso.worksheetType, i - 1, i, EDIT_ACTION_COLUMN, NUM_HEADER_ROWS, LineItemsController.dataWorksheet_ActionRequested);
+
+                List<ActionButton> actionButtonList;
+                if (!thisWorksheetButtons.TryGetValue(i, out actionButtonList))
+                {
+                    actionButtonList = new List<ActionButton>();
+                }
+
+                // add the edit button to the list
+                actionButtonList.Add(editActionButton);
+
+                // add buttons to the button dictionary
+                thisWorksheetButtons.Add(i, actionButtonList);
+            }
+        }
+
         private static bool WorksheetPhysicallyExists(string dataWorksheetName)
         {
             string dummyOutString = null;
             return WorksheetPhysicallyExists(dataWorksheetName, out dummyOutString);
         }
-        
+
         private static bool WorksheetPhysicallyExists(string dataWorksheetName, out string worksheetNameToRemove)
         {
             bool worksheetExists = false;
@@ -395,7 +513,7 @@ namespace HouseholdBudget
             {
                 if (obj.worksheetType == worksheetType && obj.vstoWorksheet != null)
                 {
-                    obj.vstoWorksheet.Delete(); 
+                    obj.vstoWorksheet.Delete();
                     dataWorksheets.Remove(obj);
                     buttons.Remove(worksheetType);
                     break;
@@ -415,91 +533,6 @@ namespace HouseholdBudget
             // return the VSTO object to the caller
             dataSheet = Globals.Factory.GetVstoObject(dataWorksheet);
         }
-
-        public static void UpdateLineItem(int listObjectIndex, int lineItemIndex, DataWorksheetType worksheetType, DenormalizedLineItem updatedLineItem)
-        {
-            CompositeDataSheetObject dataSheetObject = dataWorksheets.Find(dso => dso.worksheetType == worksheetType);
-
-            if (dataSheetObject != null)
-            {
-                if (updatedLineItem != null)
-                {
-                    // update the list object and the lineItems list
-                    DateTime date = new DateTime(updatedLineItem.Year, updatedLineItem.MonthInt, updatedLineItem.Day);
-                    string type = EnumUtil.GetFriendlyName(updatedLineItem.Type);
-                    string status = EnumUtil.GetFriendlyName(updatedLineItem.Status);
-                    string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : (updatedLineItem.UniqueKey != Guid.Empty ? updatedLineItem.UniqueKey.ToString() : String.Empty));
-
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = uniqueKey;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DATE].Value2 = date;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DESCRIPTION].Value2 = updatedLineItem.Description;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.AMOUNT].Value2 = updatedLineItem.Amount;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.CATEGORY].Value2 = updatedLineItem.Category;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.SUBCATEGORY].Value2 = updatedLineItem.SubCategory;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.TYPE].Value2 = type;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.PAYMENT_METHOD].Value2 = updatedLineItem.PaymentMethod;
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.STATUS].Value2 = status;
-
-                    // update the line item in the list
-                    if (dataSheetObject.lineItems != null)
-                    {
-                        dataSheetObject.lineItems[lineItemIndex] = updatedLineItem;
-                    }                    
-                }
-                else
-                {
-                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = "ERROR";
-                }
-            }
-
-            // select the sheet for editing
-            dataSheetObject.vstoWorksheet.Select();
-        }
-
-        public static void PreProcessNewItems()
-        {
-            // check if there is a new worksheet that exists
-            DialogResult userNotifyResult = DialogResult.None;
-            string worksheetName = null;
-            bool worksheetExists = DataWorksheetExists(DataWorksheetType.NEW_ENTRIES, false, out userNotifyResult, out worksheetName);
-
-            if (worksheetExists)
-            {
-                // new worksheet exists, so pre-process the items
-                CompositeDataSheetObject cdo = dataWorksheets.Find(ds => ds.worksheetType == DataWorksheetType.NEW_ENTRIES);
-                VstoExcel.ListObject listObject = cdo.listObject;
-
-                // spin off the background worker to do the preprocessing
-                Controller.PreprocessLineItems(listObject, cdo.lineItems);
-
-                // add edit buttons to the sheet
-                AddEditButtons(DataWorksheetType.NEW_ENTRIES, cdo);
-            }
-        }
-
-        public static List<DenormalizedLineItem> GetLineItemsToSave(DataWorksheetType worksheetType)
-        {
-            CompositeDataSheetObject dso = dataWorksheets.Find(ds => ds.worksheetType == worksheetType);
-
-            if (dso != null && dso.lineItems != null)
-            {
-                return dso.lineItems;
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public static void BackgroundWorkCompleted(DataWorksheetType dataWorksheetType, List<DenormalizedLineItem> lineItems)
-        {
-            CompositeDataSheetObject dso = dataWorksheets.Find(ds => ds.worksheetType == dataWorksheetType);
-
-            // set the updated line items on the data sheet object
-            if (dso != null)
-            {
-                dso.lineItems = lineItems;
-            }
-        }
+        #endregion
     }
 }

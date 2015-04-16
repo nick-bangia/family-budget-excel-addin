@@ -3,6 +3,7 @@
     public enum OperationStatus
     {
         SUCCESS,
+        PARTIAL_SUCCESS,
         FAILURE
     }
 }

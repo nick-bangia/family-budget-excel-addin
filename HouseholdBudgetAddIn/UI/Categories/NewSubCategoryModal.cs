@@ -4,6 +4,7 @@ using HouseholdBudget.Events;
 using HouseholdBudget.Data.Protocol;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Enums;
+using HouseholdBudget.Controllers;
 
 namespace HouseholdBudget.UI
 {
@@ -22,7 +23,7 @@ namespace HouseholdBudget.UI
 
         private void frmNewCategory_Load(object sender, EventArgs e)
         {
-            categoryDataObject = Controller.GetCategories();
+            categoryDataObject = CategoriesController.GetCategories();
             cbParentCategory.DataSource = categoryDataObject.dataSource;
             cbParentCategory.DisplayMember = "CategoryName";
             cbParentCategory.ValueMember = "CategoryKey";

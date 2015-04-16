@@ -60,15 +60,6 @@ namespace HouseholdBudget.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to $B$2.
-        /// </summary>
-        internal static string ArchiveDirectoryRange {
-            get {
-                return ResourceManager.GetString("ArchiveDirectoryRange", resourceCulture);
-            }
-        }
-        
         internal static System.Drawing.Bitmap arrow_refresh {
             get {
                 object obj = ResourceManager.GetObject("arrow_refresh", resourceCulture);
@@ -175,57 +166,10 @@ namespace HouseholdBudget.Properties {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to archive.
-        /// </summary>
-        internal static string DefaultArchiveDirectory {
+        internal static System.Drawing.Bitmap loading {
             get {
-                return ResourceManager.GetString("DefaultArchiveDirectory", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IMPORT_RESULTS.
-        /// </summary>
-        internal static string ImportResultsListObjectName {
-            get {
-                return ResourceManager.GetString("ImportResultsListObjectName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to $B$1:$E$1.
-        /// </summary>
-        internal static string ImportResultsListObjectRange {
-            get {
-                return ResourceManager.GetString("ImportResultsListObjectRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to $E.
-        /// </summary>
-        internal static string ImportResultsRightMostColumn {
-            get {
-                return ResourceManager.GetString("ImportResultsRightMostColumn", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to $B$1.
-        /// </summary>
-        internal static string ImportResultsTopLeftRange {
-            get {
-                return ResourceManager.GetString("ImportResultsTopLeftRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to IMPORT RESULTS.
-        /// </summary>
-        internal static string ImportResultsWorksheetName {
-            get {
-                return ResourceManager.GetString("ImportResultsWorksheetName", resourceCulture);
+                object obj = ResourceManager.GetObject("loading", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -244,6 +188,60 @@ namespace HouseholdBudget.Properties {
         internal static string MaxSearchResults {
             get {
                 return ResourceManager.GetString("MaxSearchResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SUBCATEGORIES.
+        /// </summary>
+        internal static string SubCategoriesDataWorksheetName {
+            get {
+                return ResourceManager.GetString("SubCategoriesDataWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $D$2.
+        /// </summary>
+        internal static string SubCategoriesListBottomRightRange {
+            get {
+                return ResourceManager.GetString("SubCategoriesListBottomRightRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIVOT_SUBCATEGORIES.
+        /// </summary>
+        internal static string SubCategoriesListObjectName {
+            get {
+                return ResourceManager.GetString("SubCategoriesListObjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $A$1:$D$1.
+        /// </summary>
+        internal static string SubCategoriesListObjectRange {
+            get {
+                return ResourceManager.GetString("SubCategoriesListObjectRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $D.
+        /// </summary>
+        internal static string SubCategoriesListRightMostColumn {
+            get {
+                return ResourceManager.GetString("SubCategoriesListRightMostColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $A$1.
+        /// </summary>
+        internal static string SubCategoriesListTopLeftRange {
+            get {
+                return ResourceManager.GetString("SubCategoriesListTopLeftRange", resourceCulture);
             }
         }
         

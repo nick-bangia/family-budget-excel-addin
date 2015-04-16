@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using log4net;
 using HouseholdBudget.Data.Domain;
 using HouseholdBudget.Data.Interfaces;
-using LumenWorks.Framework.IO.Csv;
-using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Enums;
+using HouseholdBudget.DataControllers;
 
-namespace HouseholdBudget.Tools
+namespace HouseholdBudget.Async
 {
-    partial class LineItemImporter : BackgroundWorker
+    public partial class LineItemImporter : BackgroundWorker
     {
         // the interface to help with mapping each line item to the persistence source
-        private ILineItemMapper dataMap;
+        private ILineItemAPI dataMap;
 
         // properties
         private List<DenormalizedLineItem> lineItems;
@@ -23,7 +21,7 @@ namespace HouseholdBudget.Tools
         private static readonly ILog logger = LogManager.GetLogger("LineItemImporter");
 
         // constructor
-        public LineItemImporter(ILineItemMapper lineItemMapper, List<DenormalizedLineItem> itemsToImport)
+        public LineItemImporter(ILineItemAPI lineItemMapper, List<DenormalizedLineItem> itemsToImport)
         {
             // set up background worker properties
             WorkerReportsProgress = true;
@@ -73,7 +71,7 @@ namespace HouseholdBudget.Tools
                                 if (!lineItem.IsDeleted)
                                 {
                                     this.lineItems[lineItemIterator] = this.dataMap.AddNewLineItem(this.lineItems[lineItemIterator]);
-                                    DataWorksheetManager.UpdateLineItem(lineItem.ItemSurrogateKey, lineItemIterator, DataWorksheetType.NEW_ENTRIES, this.lineItems[lineItemIterator]);
+                                    WorksheetDataController.UpdateLineItem(lineItem.ItemSurrogateKey, lineItemIterator, DataWorksheetType.NEW_ENTRIES, this.lineItems[lineItemIterator]);
                                 }                               
                             }
 

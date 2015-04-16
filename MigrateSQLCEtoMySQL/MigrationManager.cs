@@ -55,13 +55,13 @@ namespace MigrateSQLCEtoMySQL
                 int numSubCategories = subCategoryList.Count();
 
                 // create sql statement
-                string sql = @"INSERT INTO dimsubcategory (SubCategoryKey, CategoryKey, SubCategoryName, SubCategoryPrefix, IsActive, LastUpdatedDate) VALUES ('{0}','{1}',@param_name,'{2}',{3},'{4}');";
+                string sql = @"INSERT INTO dimsubcategory (SubCategoryKey, CategoryKey, SubCategoryName, SubCategoryPrefix, IsActive, IsGoal, LastUpdatedDate) VALUES ('{0}','{1}',@param_name,'{2}',{3},'{4}','{5}');";
 
                 // loop through and add each category to the MySQL db
                 for (int i = 0; i < numSubCategories; i++)
                 {
                     string commandText = String.Format(sql, 
-                        subCategoryList[i].SubCategoryKey.ToString(), subCategoryList[i].CategoryKey.ToString(), subCategoryList[i].SubCategoryPrefix, subCategoryList[i].IsActive ? 1 : 0,  DateTime.Now.ToString("u"));
+                        subCategoryList[i].SubCategoryKey.ToString(), subCategoryList[i].CategoryKey.ToString(), subCategoryList[i].SubCategoryPrefix, subCategoryList[i].IsActive ? 1 : 0, subCategoryList[i].IsGoal ? 1 : 0, DateTime.Now.ToString("u"));
                     
                     List<KeyValuePair<string, object>> parameters = new List<KeyValuePair<string, object>>();
                     parameters.Add(new KeyValuePair<string, object>("@param_name", subCategoryList[i].SubCategoryName));

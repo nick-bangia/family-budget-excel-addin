@@ -5,14 +5,15 @@ using System.Text;
 using HouseholdBudget.Data.Protocol;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Data.Domain;
+using System.ComponentModel;
 
 namespace HouseholdBudget.Data.Interfaces
 {
-    public interface IPaymentMethodMapper
+    public interface IPaymentMethodAPI
     {
-        LiveDataObject GetPaymentMethods();
-        OperationStatus AddNewPaymentMethod(string methodName, bool isActive);
-        string GetPaymentMethodList(char delimiter);
+        BindingList<PaymentMethod> GetPaymentMethods(bool forceGet = false);
+        OperationStatus AddNewPaymentMethods(List<PaymentMethod> paymentMethods);
+        OperationStatus UpdatePaymentMethods(List<PaymentMethod> paymentMethods);
         PaymentMethod GetPaymentMethodByName(string paymentMethodName);
         PaymentMethod GetDefaultPaymentMethod();
     }

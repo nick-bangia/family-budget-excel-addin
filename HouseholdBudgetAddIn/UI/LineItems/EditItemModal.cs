@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using HouseholdBudget.Data.Protocol;
 using HouseholdBudget.Data.Domain;
@@ -12,6 +7,8 @@ using HouseholdBudget.Utilities;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Data.Utilities;
 using HouseholdBudget.Enums;
+using HouseholdBudget.DataControllers;
+using HouseholdBudget.Controllers;
 
 namespace HouseholdBudget.UI
 {
@@ -21,7 +18,7 @@ namespace HouseholdBudget.UI
         #region Properties
         private LiveDataObject categoryDataObject;
         private LiveDataObject subCategoryDataObject;
-        private LiveDataObject paymentMethodDataObject;
+        private BindingList<PaymentMethod> paymentMethodDataObject;
         private DenormalizedLineItem originalLineItem;
         private int listObjectIndex;
         private int lineItemIndex;
@@ -48,12 +45,12 @@ namespace HouseholdBudget.UI
         private void frmItem_Load(object sender, EventArgs e)
         {
             // populate category combo box
-            categoryDataObject = Controller.GetCategories();
+            categoryDataObject = CategoriesController.GetCategories();
             categoryBindingSource.DataSource = categoryDataObject.dataSource;
 
             // populate payment method combo box
-            paymentMethodDataObject = Controller.GetPaymentMethods();
-            paymentMethodBindingSource.DataSource = paymentMethodDataObject.dataSource;
+            paymentMethodDataObject = PaymentMethodsController.GetPaymentMethods();
+            paymentMethodBindingSource.DataSource = paymentMethodDataObject;
 
             // populate transaction type combo box
             typeBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(LineItemType));
@@ -79,15 +76,15 @@ namespace HouseholdBudget.UI
             {
                 if (originalLineItem.UniqueKey == Guid.Empty)
                 {
-                    DataWorksheetManager.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
+                    WorksheetDataController.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
                 }
                 else
                 {
                     // if delete is confirmed, do it, and refresh the data
-                    Controller.DeleteLineItem(originalLineItem.UniqueKey);
-                    DataWorksheetManager.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
-                    Controller.RebuildDataSheet();
-                    Controller.RefreshPivotTables();
+                    LineItemsController.DeleteLineItem(originalLineItem.UniqueKey);
+                    WorksheetDataController.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
+                    LineItemsController.RebuildDataSheet();
+                    WorkbookUtil.RefreshPivotTables();
                 }
                 
                 // close the form
@@ -116,13 +113,13 @@ namespace HouseholdBudget.UI
 
             if (originalLineItem.UniqueKey != Guid.Empty)
             {
-                Controller.UpdateLineItem(originalLineItem);
-                Controller.RebuildDataSheet();
-                Controller.RefreshPivotTables();
+                LineItemsController.UpdateLineItem(originalLineItem);
+                LineItemsController.RebuildDataSheet();
+                WorkbookUtil.RefreshPivotTables();
             }
 
             // update the line item in the data worksheet
-            DataWorksheetManager.UpdateLineItem(this.listObjectIndex, this.lineItemIndex, this.worksheetType, originalLineItem);
+            WorksheetDataController.UpdateLineItem(this.listObjectIndex, this.lineItemIndex, this.worksheetType, originalLineItem);
 
             // close the form
             this.Close();
@@ -133,7 +130,7 @@ namespace HouseholdBudget.UI
             // rehydrate the subcategories list with new subcategories
             if (cbCategory.SelectedValue != null)
             {
-                subCategoryDataObject = Controller.GetFilteredSubCategories((Guid)cbCategory.SelectedValue);
+                subCategoryDataObject = CategoriesController.GetFilteredSubCategories((Guid)cbCategory.SelectedValue);
                 subcategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
                 cbSubcategory.SelectedIndex = 0;
             }
@@ -160,7 +157,7 @@ namespace HouseholdBudget.UI
             cbCategory.SelectedValue = lineItem.CategoryKey;
 
             // get filtered subcategories by currently chosen category
-            subCategoryDataObject = Controller.GetFilteredSubCategories(lineItem.CategoryKey);
+            subCategoryDataObject = CategoriesController.GetFilteredSubCategories(lineItem.CategoryKey);
             subcategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
             cbSubcategory.SelectedValue = lineItem.SubCategoryKey;
 

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -9,6 +7,7 @@ using System.Windows.Forms;
 using HouseholdBudget.Utilities;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Controllers;
 
 namespace HouseholdBudget.UI
 {
@@ -155,7 +154,7 @@ namespace HouseholdBudget.UI
                 case SearchFields.CATEGORY:
                     PositionControl(cbCategory);
                     cbCategory.Visible = true;
-                    CategoryBindingSource.DataSource = Controller.GetCategories().dataSource;
+                    CategoryBindingSource.DataSource = CategoriesController.GetCategories().dataSource;
                     break;
                 case SearchFields.DATE:
                     PositionControl(panelDates);
@@ -188,7 +187,7 @@ namespace HouseholdBudget.UI
                 case SearchFields.PAYMENT_METHOD:
                     PositionControl(cbPaymentMethod);
                     cbPaymentMethod.Visible = true;
-                    PaymentMethodBindingSource.DataSource = Controller.GetPaymentMethods().dataSource;
+                    PaymentMethodBindingSource.DataSource = PaymentMethodsController.GetPaymentMethods();
                     break;
                 case SearchFields.QUARTER:
                     PositionControl(cbQuarter);
@@ -203,7 +202,7 @@ namespace HouseholdBudget.UI
                 case SearchFields.SUBCATEGORY:
                     PositionControl(cbSubCategory);
                     cbSubCategory.Visible = true;
-                    SubCategoryBindingSource.DataSource = Controller.GetSubCategories().dataSource;
+                    SubCategoryBindingSource.DataSource = CategoriesController.GetSubCategories().dataSource;
                     break;
                 case SearchFields.SUBTYPE:
                     PositionControl(cbSubType);
@@ -363,7 +362,7 @@ namespace HouseholdBudget.UI
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            Controller.SearchSubmitted(searchCriteria);
+            LineItemsController.SearchSubmitted(searchCriteria);
         }        
     }
 }

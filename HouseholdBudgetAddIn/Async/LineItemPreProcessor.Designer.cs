@@ -1,4 +1,4 @@
-﻿namespace HouseholdBudget.Tools
+﻿namespace HouseholdBudget.Async
 {
     partial class LineItemPreprocessor
     {

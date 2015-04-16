@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using HouseholdBudget.Data.Protocol;
-using System.Data.Objects;
-using HouseholdBudget.Data.Domain;
+using HouseholdBudget.Controllers;
 
 namespace HouseholdBudget.UI
 {
@@ -28,11 +21,11 @@ namespace HouseholdBudget.UI
         private void frmUpdateCategories_Load(object sender, EventArgs e)
         {
             // get the categories for cboCategories
-            categoryDataObject = Controller.GetCategories();
+            categoryDataObject = CategoriesController.GetCategories();
             categoryBindingSource.DataSource = categoryDataObject.dataSource;
             
             // get the categories for the data grid's category combo box
-            dataGridCategoryDataObject = Controller.GetCategories();
+            dataGridCategoryDataObject = CategoriesController.GetCategories();
             dataGridCategoryBindingSource.DataSource = dataGridCategoryDataObject.dataSource;
             
             // set the selected index, and load the grid's data source
@@ -74,7 +67,7 @@ namespace HouseholdBudget.UI
         {
             if (cboCategories.SelectedValue != null)
             {
-                subCategoryDataObject = Controller.GetFilteredSubCategories((Guid)cboCategories.SelectedValue);
+                subCategoryDataObject = CategoriesController.GetFilteredSubCategories((Guid)cboCategories.SelectedValue);
                 subCategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
             }            
         }

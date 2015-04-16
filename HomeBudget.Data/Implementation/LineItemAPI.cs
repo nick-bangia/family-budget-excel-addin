@@ -12,7 +12,7 @@ using HouseholdBudget.Data.Utilities;
 
 namespace HouseholdBudget.Data.Implementation
 {
-    public class LineItemMapper : ILineItemMapper
+    public class LineItemAPI : ILineItemAPI
     {
         #region Properties
         
@@ -22,7 +22,7 @@ namespace HouseholdBudget.Data.Implementation
 
         #region Constructor
 
-        public LineItemMapper()
+        public LineItemAPI()
         {
         }
 
@@ -351,6 +351,7 @@ namespace HouseholdBudget.Data.Implementation
                 CategoryKey = fli.Category.ParentCategory.CategoryKey,
                 SubCategory = fli.Category.SubCategoryName,
                 SubCategoryKey = fli.CategoryKey,
+                SubCategoryPrefix = fli.Category.SubCategoryPrefix,
                 Type = (LineItemType)fli.TypeId,
                 SubType = (LineItemSubType)fli.SubTypeId,
                 Quarter = (Quarters)fli.QuarterId,

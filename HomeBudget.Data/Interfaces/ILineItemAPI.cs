@@ -7,7 +7,7 @@ using HouseholdBudget.Data.Enums;
 
 namespace HouseholdBudget.Data.Interfaces
 {
-    public interface ILineItemMapper
+    public interface ILineItemAPI
     {
         DenormalizedLineItem AddNewLineItem(DenormalizedLineItem lineItem);
         OperationStatus UpdateLineItem(DenormalizedLineItem lineItem);

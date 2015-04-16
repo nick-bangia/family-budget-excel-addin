@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.IO;
 using log4net;
 using HouseholdBudget.Data.Domain;
-using HouseholdBudget.Data.Interfaces;
-using LumenWorks.Framework.IO.Csv;
 using HouseholdBudget.Data.Enums;
 using HouseholdBudget.Enums;
 using VstoExcel = Microsoft.Office.Tools.Excel;
-using HouseholdBudget.Utilities;
+using HouseholdBudget.DataControllers;
+using HouseholdBudget.Controllers;
 
-namespace HouseholdBudget.Tools
+namespace HouseholdBudget.Async
 {
-    partial class LineItemPreprocessor : BackgroundWorker
+    public partial class LineItemPreprocessor : BackgroundWorker
     {
         // properties
         private VstoExcel.ListObject listObject;
@@ -77,18 +75,17 @@ namespace HouseholdBudget.Tools
                             string description = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.DESCRIPTION].Value2;
                             object oAmount = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.AMOUNT].Value2;
                             decimal amount = oAmount != null ? Convert.ToDecimal(oAmount) : 0.00M;
-                            SubCategory categoryInfo = Controller.GetSubCategoryFor(description);
+                            SubCategory categoryInfo = CategoriesController.GetSubCategoryFor(description);
                             string enteredType = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.TYPE].Value2;
                             type = Enum.TryParse<LineItemType>(enteredType, true, out type) ? 
                                 type : LineItemType.EXPENSE;
                             string enteredStatus = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.STATUS].Value2;
                             status = Enum.TryParse<LineItemStatus>(enteredStatus, true, out status) ?
                                 status : LineItemStatus.RECONCILED;
-                            PaymentMethod paymentMethodInfo = Controller.GetPaymentMethodByName(
+                            PaymentMethod paymentMethodInfo = PaymentMethodsController.GetPaymentMethodByName(
                                 listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.PAYMENT_METHOD].Value2);
-                            PaymentMethod defaultPaymentMethodInfo = Controller.GetDefaultPaymentMethod();
+                            PaymentMethod defaultPaymentMethodInfo = PaymentMethodsController.GetDefaultPaymentMethod();
                             
-
                             // modify description to remove the category prefix, if the category was found
                             if (categoryInfo != null)
                             {
@@ -123,7 +120,7 @@ namespace HouseholdBudget.Tools
                             this.lineItems.Add(lineItem);
 
                             // update the list object with category information
-                            DataWorksheetManager.UpdateLineItem(lineItemIterator, lineItemIterator - 1, DataWorksheetType.NEW_ENTRIES, lineItem);
+                            WorksheetDataController.UpdateLineItem(lineItemIterator, lineItemIterator - 1, DataWorksheetType.NEW_ENTRIES, lineItem);
 
                             // advance the iterator and report progress
                             lineItemIterator += 1;

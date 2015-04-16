@@ -13,27 +13,27 @@ namespace HouseholdBudget.Enums
         [FriendlyName("Month-Year")]
         MONTH_YEAR = 3,
 
-        [FriendlyName("Quarter")]
-        QUARTER = 4,
+        [FriendlyName("Day-Month-Year")]
+        DAY_MONTH_YEAR = 4,
 
         [FriendlyName("Quarter-Year")]
         QUARTER_YEAR = 5,
-
-        [FriendlyName("Day Of Month")]
-        DAY = 6,
-
+        
         [FriendlyName("Day of Week")]
-        DAY_OF_WEEK = 7,
+        DAY_OF_WEEK = 6,
 
         [FriendlyName("Description")]
-        DESCRIPTION = 8,
+        DESCRIPTION = 7,
 
         [FriendlyName("Category")]
-        CATEGORY = 9,
+        CATEGORY = 8,
 
         [FriendlyName("SubCategory")]
-        SUBCATEGORY = 10,
+        SUBCATEGORY = 9,
 
+        [FriendlyName("Prefix - SubCategory")]
+        SUBCATEGORY_WITH_PREFIX = 10,
+        
         [FriendlyName("Amount")]
         AMOUNT = 11,
 

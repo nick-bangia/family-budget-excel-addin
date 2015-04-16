@@ -58,7 +58,6 @@
             this.PaymentMethodDataGrid.Name = "PaymentMethodDataGrid";
             this.PaymentMethodDataGrid.Size = new System.Drawing.Size(272, 155);
             this.PaymentMethodDataGrid.TabIndex = 0;
-            this.PaymentMethodDataGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.PaymentMethodDataGrid_CellEndEdit);
             // 
             // paymentMethodNameDataGridViewTextBoxColumn
             // 

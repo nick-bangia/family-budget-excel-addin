@@ -46,6 +46,67 @@ namespace HouseholdBudget.Data.Implementation
             return GetSubCategoryDataSource(categoryKey);
         }
 
+        public List<SubCategory> GetAllSubCategories()
+        {
+            return GetAllSubCategoriesFromDB();
+        }
+
+        private List<SubCategory> GetAllSubCategoriesFromDB()
+        {
+            // log start of method
+            logger.Info("Beginning retrieval of all subcategories from DB...");
+            List<SubCategory> allSubCategories;
+
+            try
+            {
+                using (BudgetEntities ctx = new BudgetEntities())
+                {
+                    logger.Info("Getting all subcategories from DB.");
+                    var subCategories = from sc in ctx.dimSubCategories
+                                        orderby sc.SubCategoryName
+                                        select sc;
+
+                    logger.Info("translating to subcategory list");
+                    allSubCategories = GetSubCategoryList(subCategories);
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An error occurred while retreiving subcategories.", ex);
+                throw ex;
+            }
+
+            logger.Info("Completed retrieval of all subcategories from DB.");
+            return allSubCategories;
+        }
+
+        private List<SubCategory> GetSubCategoryList(IQueryable<dimSubCategories> subCategories)
+        {
+            List<SubCategory> subCategoryList = new List<SubCategory>();
+
+            foreach (dimSubCategories sc in subCategories)
+            {
+                // convert the dimSubCategory to a SubCategory
+                SubCategory subCategory = new SubCategory()
+                {
+                    SubCategoryKey = sc.SubCategoryKey,
+                    SubCategoryName = sc.SubCategoryName,
+                    SubCategoryPrefix = sc.SubCategoryPrefix,
+                    CategoryKey = sc.CategoryKey,
+                    CategoryName = sc.ParentCategory.CategoryName,
+                    AccountName = sc.AccountName,
+                    IsActive = sc.IsActive,
+                    IsGoal = sc.IsGoal
+                };
+                
+                // save to the final list
+                subCategoryList.Add(subCategory);
+            }
+
+            // return the populated list
+            return subCategoryList;
+        }
+
         public Guid? GetCategoryKeyByName(string categoryName)
         {
             return GetCategoryKeyByNameFromDB(categoryName);

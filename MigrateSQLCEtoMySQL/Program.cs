@@ -15,7 +15,7 @@ namespace MigrateSQLCEtoMySQL
             try
             {
                 // setup MySQL Connection info
-                MySQLCommandExecutor.connectionInfo = new MySQLConnectionInfo("localhost", "HomeBudget", "root", "");
+                MySQLCommandExecutor.connectionInfo = new MySQLConnectionInfo("localhost", "FamilyBudget", "FamilyBudgetSvc", "FamilyBudgetSvc123!");
                 MySQLCommandExecutor.GetConnectionToDB();
                 MySQLCommandExecutor.dbConnection.Open();
 

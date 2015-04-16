@@ -14,6 +14,7 @@ namespace HouseholdBudget.Data.Interfaces
         LiveDataObject GetCategories();
         LiveDataObject GetSubCategories();
         LiveDataObject GetFilteredSubCategories(Guid categoryKey);
+        List<SubCategory> GetAllSubCategories();
         Guid? GetCategoryKeyByName(string categoryName);
         Guid? GetSubCategoryKeyByName(string subCategoryName);
         SubCategory GetSubCategoryFor(string itemDescription);

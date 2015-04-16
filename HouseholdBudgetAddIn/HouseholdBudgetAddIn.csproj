@@ -203,12 +203,16 @@
     can be found.
   -->
   <ItemGroup>
-    <Compile Include="Controller.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="../AssemblyVersioning.cs">
       <Link>Properties\SharedVersioning.cs</Link>
     </Compile>
-    <Compile Include="DataManager.cs" />
-    <Compile Include="DataWorksheetManager.cs" />
+    <Compile Include="Controllers\LineItemsController.cs" />
+    <Compile Include="Controllers\PaymentMethodsController.cs" />
+    <Compile Include="Enums\SubCategoryDataColumns.cs" />
+    <Compile Include="DataControllers\SubCategoriesDataController.cs" />
+    <Compile Include="DataControllers\MasterDataController.cs" />
+    <Compile Include="DataControllers\WorksheetDataController.cs" />
     <Compile Include="Enums\CategoryFormType.cs" />
     <Compile Include="Enums\DataColumns.cs" />
     <Compile Include="Enums\DataWorksheetColumns.cs" />
@@ -225,16 +229,16 @@
     </Compile>
     <Compile Include="EventArgs\CategoryEventArgs.cs" />
     <Compile Include="EventArgs\ActionEventArgs.cs" />
-    <Compile Include="Tools\LineItemPreProcessor.cs">
+    <Compile Include="Async\LineItemPreProcessor.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tools\LineItemPreProcessor.Designer.cs">
+    <Compile Include="Async\LineItemPreProcessor.Designer.cs">
       <DependentUpon>LineItemPreProcessor.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\LineItemImporter.cs">
+    <Compile Include="Async\LineItemImporter.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tools\LineItemImporter.Designer.cs">
+    <Compile Include="Async\LineItemImporter.Designer.cs">
       <DependentUpon>LineItemImporter.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Categories\NewGoal.cs">
@@ -282,10 +286,10 @@
     <Compile Include="UI\Categories\NewSubCategoryModal.Designer.cs">
       <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\Progress\ProgressModal.cs">
+    <Compile Include="UI\Misc\ProgressModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Progress\ProgressModal.designer.cs">
+    <Compile Include="UI\Misc\ProgressModal.designer.cs">
       <DependentUpon>ProgressModal.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Categories\UpdateCategoryModal.cs">
@@ -295,6 +299,7 @@
       <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\EnumUtil.cs" />
+    <Compile Include="Utilities\WorkbookUtil.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -325,7 +330,7 @@
       <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Progress\ProgressModal.resx">
+    <EmbeddedResource Include="UI\Misc\ProgressModal.resx">
       <DependentUpon>ProgressModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -358,7 +363,9 @@
   <ItemGroup>
     <None Include="Resources\arrow_refresh.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\loading.gif" />
+  </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->
