@@ -68,15 +68,6 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configuration.
-        /// </summary>
-        internal static string ConfigurationWorksheetName {
-            get {
-                return ResourceManager.GetString("ConfigurationWorksheetName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to $Q$2.
         /// </summary>
         internal static string DataListBottomRightRange {
@@ -242,15 +233,6 @@ namespace FamilyBudget.AddIn.Properties {
         internal static string SubCategoriesListTopLeftRange {
             get {
                 return ResourceManager.GetString("SubCategoriesListTopLeftRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Family Budget.
-        /// </summary>
-        internal static string WorkbookNameValue {
-            get {
-                return ResourceManager.GetString("WorkbookNameValue", resourceCulture);
             }
         }
     }

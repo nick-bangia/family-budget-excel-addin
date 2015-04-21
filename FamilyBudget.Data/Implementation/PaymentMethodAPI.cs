@@ -10,6 +10,7 @@ using FamilyBudget.DataModel;
 using System.ComponentModel;
 using FamilyBudget.Data.Utilities;
 using Newtonsoft.Json;
+using FamilyBudget.Common.Config;
 
 namespace FamilyBudget.Data.Implementation
 {
@@ -24,7 +25,7 @@ namespace FamilyBudget.Data.Implementation
 
         #region IPaymentMethodMapper
 
-        public BindingList<PaymentMethod> GetPaymentMethods(bool forceGet = false)
+        public BindingList<PaymentMethod> GetPaymentMethods(bool forceGet)
         {
             if (paymentMethods != null && !forceGet)
             {
@@ -44,7 +45,7 @@ namespace FamilyBudget.Data.Implementation
             if (paymentMethods != null)
             {
                 // make the call to the API if the paymentMethods list is not null
-                APIResponseObject response = PostToAPI(paymentMethods, "/add");
+                APIResponseObject response = PostToAPI(paymentMethods, AddInConfiguration.APIConfiguration.Routes.AddPaymentMethods);
 
                 // initialize the list of output items, and evaluate the response
                 // to get the list & status back
@@ -76,7 +77,7 @@ namespace FamilyBudget.Data.Implementation
 
         public OperationStatus UpdatePaymentMethods(List<PaymentMethod> paymentMethods)
         {
-            APIResponseObject response = PostToAPI(paymentMethods, "/update");
+            APIResponseObject response = PostToAPI(paymentMethods, AddInConfiguration.APIConfiguration.Routes.UpdatePaymentMethods);
 
             // get the operation status based on the API Response
             return APIUtil.EvaluateResponse(response);
@@ -102,7 +103,7 @@ namespace FamilyBudget.Data.Implementation
                 GetPaymentMethodsFromAPI();
             }
 
-            // get the first payment method whose name is the same as the passed in name
+            // get the first payment method
             return paymentMethods.ElementAt(0);
         }
         #endregion
@@ -113,10 +114,8 @@ namespace FamilyBudget.Data.Implementation
             // make the API call to get the data
             paymentMethods = new BindingList<PaymentMethod>();
 
-            string uri = "/paymentMethods/all";
-
             // make the call to the API
-            APIResponseObject response = APIUtil.Get(uri);
+            APIResponseObject response = APIUtil.Get(AddInConfiguration.APIConfiguration.Routes.GetPaymentMethods);
 
             if (APIUtil.IsSuccessful(response))
             {
@@ -142,8 +141,6 @@ namespace FamilyBudget.Data.Implementation
             // initialize the response
             APIResponseObject response = null;
 
-            string uri = "/paymentMethods" + target;
-
             // construct the data object that will be posted to the API
             APIDataObject postData = new APIDataObject();
             postData.data = new List<Object>();
@@ -159,7 +156,7 @@ namespace FamilyBudget.Data.Implementation
             }
 
             // make the POST request & return response
-            response = APIUtil.Post(uri, postData);
+            response = APIUtil.Post(target, postData);
 
             return response;
         }        

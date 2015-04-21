@@ -219,18 +219,18 @@ namespace FamilyBudget.AddIn.Controllers
         #endregion
 
         #region Internal Methods
-        internal static void PopulateSubCategoriesSheet()
+        internal static void PopulateSubCategoriesSheet(bool rebuild)
         {
+            if (rebuild)
+            {
+                logger.Info("Removing the subcategory data sheet.");
+                Globals.ThisAddIn.Application.DisplayAlerts = false;
+                SubCategoriesDataManager.RemoveSheet();
+                Globals.ThisAddIn.Application.DisplayAlerts = true;
+            }
+
             logger.Info("Populating the subcategory data sheet.");
             SubCategoriesDataManager.PopulateSubCategoriesDataTable(categoryMapper.GetAllSubCategories());
-        }
-
-        internal static void RebuildSubCategoryDataSheet()
-        {
-            Globals.ThisAddIn.Application.DisplayAlerts = false;
-            SubCategoriesDataManager.RemoveSheet();
-            Globals.ThisAddIn.Application.DisplayAlerts = true;
-            PopulateSubCategoriesSheet();
         }
 
         internal static LiveDataObject GetCategories()

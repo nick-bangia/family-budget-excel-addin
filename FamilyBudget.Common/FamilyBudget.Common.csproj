@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5A76D072-DD00-4248-8690-3CD76C7AB776}</ProjectGuid>
+    <ProjectGuid>{24739423-4801-450E-8276-CB3152C71A77}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FamilyBudget.Data</RootNamespace>
-    <AssemblyName>FamilyBudget.Data</AssemblyName>
+    <RootNamespace>FamilyBudget.Common</RootNamespace>
+    <AssemblyName>FamilyBudget.Common</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
@@ -46,17 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\Dependencies\Log4Net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.Entity" />
-    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -64,48 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\FriendlyNameAttribute.cs" />
-    <Compile Include="Attributes\ComparableAttribute.cs" />
-    <Compile Include="Domain\ApiHealth.cs" />
-    <Compile Include="Enums\ApiHealthState.cs" />
-    <Compile Include="Enums\ApiMethod.cs" />
-    <Compile Include="Protocol\APIDataObject.cs" />
-    <Compile Include="Protocol\APIResponseObject.cs" />
-    <Compile Include="Domain\Category.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\DenormalizedLineItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Domain\EnumListMember.cs" />
-    <Compile Include="Domain\PaymentMethod.cs" />
-    <Compile Include="Domain\SearchCriteria.cs" />
-    <Compile Include="Domain\SubCategory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Enums\Comparators.cs" />
-    <Compile Include="Enums\LineItemStatus.cs" />
-    <Compile Include="Enums\LineItemSubType.cs" />
-    <Compile Include="Enums\Months.cs" />
-    <Compile Include="Enums\OperationStatus.cs" />
-    <Compile Include="Enums\LineItemType.cs" />
-    <Compile Include="Enums\Quarters.cs" />
-    <Compile Include="Enums\SearchFields.cs" />
-    <Compile Include="Implementation\CategoryMapper.cs" />
-    <Compile Include="Implementation\PaymentMethodAPI.cs" />
-    <Compile Include="Interfaces\ICategoryMapper.cs" />
-    <Compile Include="Interfaces\ILineItemAPI.cs" />
-    <Compile Include="Implementation\LineItemAPI.cs" />
-    <Compile Include="Interfaces\IPaymentMethodAPI.cs" />
-    <Compile Include="MapResolver.cs" />
+    <Compile Include="Config\AddInConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="../AssemblyVersioning.cs">
-      <Link>Properties\AssemblyVersioning.cs</Link>
-    </Compile>
-    <Compile Include="Protocol\LiveDataObject.cs" />
-    <Compile Include="Utilities\DateUtil.cs" />
-    <Compile Include="Utilities\StringUtil.cs" />
-    <Compile Include="Utilities\APIUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -129,28 +81,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FamilyBudget.Common\FamilyBudget.Common.csproj">
-      <Project>{24739423-4801-450E-8276-CB3152C71A77}</Project>
-      <Name>FamilyBudget.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FamilyBudget.DataModel\FamilyBudget.DataModel.csproj">
-      <Project>{A1EF9403-667B-4B74-9E7C-E1DD19FDAC26}</Project>
-      <Name>FamilyBudget.DataModel</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" />
-    </VisualStudio>
-  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

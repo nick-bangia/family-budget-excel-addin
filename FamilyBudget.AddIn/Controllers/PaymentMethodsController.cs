@@ -52,9 +52,9 @@ namespace FamilyBudget.AddIn.Controllers
             paymentMethodsForm.Show();
         }
 
-        internal static BindingList<PaymentMethod> GetPaymentMethods()
+        internal static BindingList<PaymentMethod> GetPaymentMethods(bool force = false)
         {
-            return paymentMethodAPI.GetPaymentMethods();
+            return paymentMethodAPI.GetPaymentMethods(force);
         }
 
         internal static OperationStatus AddNewPaymentMethod(string paymentMethodName, bool isActive)

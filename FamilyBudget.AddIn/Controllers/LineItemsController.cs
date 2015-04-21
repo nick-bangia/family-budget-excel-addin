@@ -370,17 +370,17 @@ namespace FamilyBudget.AddIn.Controllers
         #endregion
 
         #region Internal Methods
-        internal static void RebuildDataSheet()
+        internal static void PopulateDataSheet(bool rebuild)
         {
-            Globals.ThisAddIn.Application.DisplayAlerts = false;
-            MasterDataController.RemoveSheet();
-            Globals.ThisAddIn.Application.DisplayAlerts = true;
-            PopulateDataSheet();
-        }
+            if (rebuild)
+            {
+                logger.Info("Removing the master data sheet.");
+                Globals.ThisAddIn.Application.DisplayAlerts = false;
+                MasterDataController.RemoveSheet();
+                Globals.ThisAddIn.Application.DisplayAlerts = true;
+            }
 
-        internal static void PopulateDataSheet()
-        {
-            logger.Info("Populating the data sheet.");
+            logger.Info("Populating the master data sheet.");
             MasterDataController.PopulateMasterDataTable(GetAllLineItems());
         }
 

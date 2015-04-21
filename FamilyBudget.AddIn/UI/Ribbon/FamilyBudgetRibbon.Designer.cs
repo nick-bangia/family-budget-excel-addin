@@ -37,7 +37,7 @@ namespace FamilyBudget.AddIn.UI
         private void InitializeComponent()
         {
             this.tabFamilyBudget = this.Factory.CreateRibbonTab();
-            this.NewItemsGroup = this.Factory.CreateRibbonGroup();
+            this.grpNewItems = this.Factory.CreateRibbonGroup();
             this.btnAddNewItems = this.Factory.CreateRibbonButton();
             this.btnPreProcessItems = this.Factory.CreateRibbonButton();
             this.btnSave = this.Factory.CreateRibbonButton();
@@ -49,30 +49,30 @@ namespace FamilyBudget.AddIn.UI
             this.grpManage = this.Factory.CreateRibbonGroup();
             this.btnAddCategory = this.Factory.CreateRibbonButton();
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
+            this.btnNewGoal = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
             this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
-            this.btnNewGoal = this.Factory.CreateRibbonButton();
             this.tabFamilyBudget.SuspendLayout();
-            this.NewItemsGroup.SuspendLayout();
+            this.grpNewItems.SuspendLayout();
             this.grpData.SuspendLayout();
             this.grpManage.SuspendLayout();
             // 
             // tabFamilyBudget
             // 
-            this.tabFamilyBudget.Groups.Add(this.NewItemsGroup);
+            this.tabFamilyBudget.Groups.Add(this.grpNewItems);
             this.tabFamilyBudget.Groups.Add(this.grpData);
             this.tabFamilyBudget.Groups.Add(this.grpManage);
             this.tabFamilyBudget.Label = "Family Budget";
             this.tabFamilyBudget.Name = "tabFamilyBudget";
             this.tabFamilyBudget.Visible = false;
             // 
-            // NewItemsGroup
+            // grpNewItems
             // 
-            this.NewItemsGroup.Items.Add(this.btnAddNewItems);
-            this.NewItemsGroup.Items.Add(this.btnPreProcessItems);
-            this.NewItemsGroup.Items.Add(this.btnSave);
-            this.NewItemsGroup.Label = "New Items";
-            this.NewItemsGroup.Name = "NewItemsGroup";
+            this.grpNewItems.Items.Add(this.btnAddNewItems);
+            this.grpNewItems.Items.Add(this.btnPreProcessItems);
+            this.grpNewItems.Items.Add(this.btnSave);
+            this.grpNewItems.Label = "New Items";
+            this.grpNewItems.Name = "grpNewItems";
             // 
             // btnAddNewItems
             // 
@@ -161,6 +161,14 @@ namespace FamilyBudget.AddIn.UI
             this.btnAddSubCategory.OfficeImageId = "AddAccount";
             this.btnAddSubCategory.ShowImage = true;
             // 
+            // btnNewGoal
+            // 
+            this.btnNewGoal.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnNewGoal.Label = "New Goal";
+            this.btnNewGoal.Name = "btnNewGoal";
+            this.btnNewGoal.OfficeImageId = "FlagCustom";
+            this.btnNewGoal.ShowImage = true;
+            // 
             // btnUpdateCategories
             // 
             this.btnUpdateCategories.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -177,14 +185,6 @@ namespace FamilyBudget.AddIn.UI
             this.btnManagePaymentMethods.OfficeImageId = "AccountingFormat";
             this.btnManagePaymentMethods.ShowImage = true;
             // 
-            // btnNewGoal
-            // 
-            this.btnNewGoal.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnNewGoal.Label = "New Goal";
-            this.btnNewGoal.Name = "btnNewGoal";
-            this.btnNewGoal.OfficeImageId = "FlagCustom";
-            this.btnNewGoal.ShowImage = true;
-            // 
             // FamilyBudgetRibbon
             // 
             this.Name = "FamilyBudgetRibbon";
@@ -193,8 +193,8 @@ namespace FamilyBudget.AddIn.UI
             this.Load += new Microsoft.Office.Tools.Ribbon.RibbonUIEventHandler(this.FamilyBudgetRibbon_Load);
             this.tabFamilyBudget.ResumeLayout(false);
             this.tabFamilyBudget.PerformLayout();
-            this.NewItemsGroup.ResumeLayout(false);
-            this.NewItemsGroup.PerformLayout();
+            this.grpNewItems.ResumeLayout(false);
+            this.grpNewItems.PerformLayout();
             this.grpData.ResumeLayout(false);
             this.grpData.PerformLayout();
             this.grpManage.ResumeLayout(false);
@@ -216,7 +216,7 @@ namespace FamilyBudget.AddIn.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetPendingItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetFutureItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSearch;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup NewItemsGroup;
+        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpNewItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnPreProcessItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnNewGoal;

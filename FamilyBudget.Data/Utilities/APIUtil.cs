@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using FamilyBudget.Common.Config;
 using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Protocol;
@@ -17,7 +18,6 @@ namespace FamilyBudget.Data.Utilities
     {
         #region Properties
         private static readonly ILog logger = LogManager.GetLogger("APIUtil");
-        private static string rootUri = ConfigurationManager.AppSettings["familyBudgetAPIRootURL"];
         #endregion
 
         public static APIResponseObject Get(string uri, Dictionary<string, string> queryParams = null)
@@ -106,16 +106,20 @@ namespace FamilyBudget.Data.Utilities
             ApiHealth health = null;
 
             // attempt to ping the API and check whether it is available, and whether this utility is authorized to use it
+            logger.Info("Checking the health of the API...");
             string uri = "/ping";
             APIResponseObject response = Get(uri);
             
             // Evaluate the response and determine the healthState of the API
             if (response.status.Contains("ok"))
             {
+                logger.Info("...API is Healthy!");
                 health = new ApiHealth(ApiHealthState.OK, "API is Healthy!");
             }
             else if (response.status.Contains("failure"))
             {
+                logger.Info("...API is unhealthy. Response from API on ping: " + response.status + ", Reason: " + response.reason);
+
                 // evaluate any failure responses and build the ApiHealth object
                 switch (response.reason)
                 {
@@ -159,8 +163,8 @@ namespace FamilyBudget.Data.Utilities
             
             // set up the request
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            string username = ConfigurationManager.AppSettings["familyBudgetAPIUsername"];
-            string password = ConfigurationManager.AppSettings["familyBudgetAPIPassword"];
+            string username = AddInConfiguration.APIConfiguration.Username;
+            string password = AddInConfiguration.APIConfiguration.Password;
             SetBasicAuthHeader(request, username, password);
             request.Method = method.ToString();
             
@@ -258,7 +262,7 @@ namespace FamilyBudget.Data.Utilities
             }
 
             // return the qualified uri
-            return rootUri + uri;
+            return AddInConfiguration.APIConfiguration.RootUri + uri;
         }
     }
 }

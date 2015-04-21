@@ -117,65 +117,7 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="arrow_refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\arrow_refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="DataListBottomRightRange" xml:space="preserve">
-    <value>$Q$2</value>
-  </data>
-  <data name="DataListObjectName" xml:space="preserve">
-    <value>PIVOT_DATA</value>
-  </data>
-  <data name="DataListObjectRange" xml:space="preserve">
-    <value>$A$1:$Q$1</value>
-  </data>
-  <data name="DataListRightMostColumn" xml:space="preserve">
-    <value>$Q</value>
-  </data>
-  <data name="DataListTopLeftRange" xml:space="preserve">
-    <value>$A$1</value>
-  </data>
-  <data name="MasterDataWorksheetName" xml:space="preserve">
-    <value>DATA</value>
-  </data>
-  <data name="DataWorksheetObjectRange" xml:space="preserve">
-    <value>$B$1:$J$1</value>
-  </data>
-  <data name="DataWorksheetName" xml:space="preserve">
-    <value>WORKSHEET_</value>
-  </data>
-  <data name="DataWorksheetBottomRightRange" xml:space="preserve">
-    <value>$J$2</value>
-  </data>
-  <data name="DataWorksheetRightMostColumn" xml:space="preserve">
-    <value>$J</value>
-  </data>
-  <data name="DataWorksheetTopLeftRange" xml:space="preserve">
-    <value>$B$1</value>
-  </data>
-  <data name="MaxSearchResults" xml:space="preserve">
-    <value>100</value>
-  </data>
-  <data name="SubCategoriesDataWorksheetName" xml:space="preserve">
-    <value>SUBCATEGORIES</value>
-  </data>
-  <data name="SubCategoriesListObjectName" xml:space="preserve">
-    <value>PIVOT_SUBCATEGORIES</value>
-  </data>
-  <data name="SubCategoriesListBottomRightRange" xml:space="preserve">
-    <value>$D$2</value>
-  </data>
-  <data name="SubCategoriesListObjectRange" xml:space="preserve">
-    <value>$A$1:$D$1</value>
-  </data>
-  <data name="SubCategoriesListRightMostColumn" xml:space="preserve">
-    <value>$D</value>
-  </data>
-  <data name="SubCategoriesListTopLeftRange" xml:space="preserve">
-    <value>$A$1</value>
-  </data>
-  <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
+  <metadata name="dialogSelectWorkbookPath.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

@@ -83,7 +83,7 @@ namespace FamilyBudget.AddIn.UI
                     // if delete is confirmed, do it, and refresh the data
                     LineItemsController.DeleteLineItem(originalLineItem.UniqueKey);
                     WorksheetDataController.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
-                    LineItemsController.RebuildDataSheet();
+                    LineItemsController.PopulateDataSheet(rebuild: true);
                     WorkbookUtil.RefreshPivotTables();
                 }
                 
@@ -114,7 +114,7 @@ namespace FamilyBudget.AddIn.UI
             if (originalLineItem.UniqueKey != Guid.Empty)
             {
                 LineItemsController.UpdateLineItem(originalLineItem);
-                LineItemsController.RebuildDataSheet();
+                LineItemsController.PopulateDataSheet(rebuild: true);
                 WorkbookUtil.RefreshPivotTables();
             }
 

@@ -11,7 +11,7 @@ namespace FamilyBudget.Data.Interfaces
 {
     public interface IPaymentMethodAPI
     {
-        BindingList<PaymentMethod> GetPaymentMethods(bool forceGet = false);
+        BindingList<PaymentMethod> GetPaymentMethods(bool forceGet);
         OperationStatus AddNewPaymentMethods(List<PaymentMethod> paymentMethods);
         OperationStatus UpdatePaymentMethods(List<PaymentMethod> paymentMethods);
         PaymentMethod GetPaymentMethodByName(string paymentMethodName);

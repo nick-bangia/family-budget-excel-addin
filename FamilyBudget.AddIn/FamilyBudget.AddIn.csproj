@@ -152,14 +152,13 @@
     <Reference Include="log4net">
       <HintPath>..\Dependencies\Log4Net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="LumenWorks.Framework.IO">
-      <HintPath>..\Dependencies\CSVReader\LumenWorks.Framework.IO.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Office.Tools.Excel.v4.0.Utilities, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -337,7 +336,9 @@
     <EmbeddedResource Include="UI\Categories\UpdateCategoryModal.resx">
       <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="FamilyBudget.AddIn_TemporaryKey.pfx" />
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
@@ -361,10 +362,17 @@
     <None Include="Resources\loading.gif" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FamilyBudget.Common\FamilyBudget.Common.csproj">
+      <Project>{24739423-4801-450E-8276-CB3152C71A77}</Project>
+      <Name>FamilyBudget.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FamilyBudget.Data\FamilyBudget.Data.csproj">
       <Project>{5A76D072-DD00-4248-8690-3CD76C7AB776}</Project>
       <Name>FamilyBudget.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="UI\Registration\" />
   </ItemGroup>
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
