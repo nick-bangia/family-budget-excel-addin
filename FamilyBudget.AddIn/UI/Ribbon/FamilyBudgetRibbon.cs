@@ -25,6 +25,9 @@ namespace FamilyBudget.AddIn.UI
             // Payment Methods
             this.btnManagePaymentMethods.Click += new RibbonControlEventHandler(PaymentMethodsController.btnManagePaymentMethods_Click);
 
+            // Accounts
+            this.btnManageAccounts.Click += new RibbonControlEventHandler(AccountsController.btnManageAccounts_Click);
+
             // Workbook
             this.btnRefresh.Click += new RibbonControlEventHandler(WorkbookUtil.btnRefresh_Click);
         }

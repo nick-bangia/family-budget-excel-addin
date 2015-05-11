@@ -12,24 +12,31 @@ namespace FamilyBudget.Data.Enums
         NO_COMPARE = -1,
 
         [FriendlyName("<")]
+        [ApiName("lt")]
         LESS_THAN = 0,
 
         [FriendlyName("<=")]
+        [ApiName("lte")]
         LESS_THAN_EQUAL = 1,
 
         [FriendlyName("=")]
+        [ApiName("eq")]
         EQUAL = 2,
 
-        [FriendlyName(">")]
+        [FriendlyName(">=")]
+        [ApiName("gte")]
         GREATER_THAN_EQUAL = 3,
 
-        [FriendlyName(">=")]
+        [FriendlyName(">")]
+        [ApiName("gt")]
         GREATER_THAN = 4,
 
         [FriendlyName("!=")]
+        [ApiName("ne")]
         NOT_EQUAL = 5,
 
         [FriendlyName("between")]
+        [ApiName("btw")]
         BETWEEN = 6
     }
 }

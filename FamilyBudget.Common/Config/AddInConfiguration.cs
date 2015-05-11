@@ -102,6 +102,76 @@ namespace FamilyBudget.Common.Config
                 {
                     get { return GetValue("apiUpdatePaymentMethods", ConfigType.CONFIG_FILE); }
                 }
+
+                public static string GetAccounts
+                {
+                    get { return GetValue("apiGetAccounts", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string AddAccounts
+                {
+                    get { return GetValue("apiAddAccounts", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string UpdateAccounts
+                {
+                    get { return GetValue("apiUpdateAccounts", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string GetCategories
+                {
+                    get { return GetValue("apiGetCategories", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string AddCategories
+                {
+                    get { return GetValue("apiAddCategories", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string UpdateCategories
+                {
+                    get { return GetValue("apiUpdateCategories", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string GetSubcategories
+                {
+                    get { return GetValue("apiGetSubcategories", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string AddSubcategories
+                {
+                    get { return GetValue("apiAddSubcategories", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string UpdateSubcategories
+                {
+                    get { return GetValue("apiUpdateSubcategories", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string GetLineItems
+                {
+                    get { return GetValue("apiGetAllLineItems", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string SearchLineItems
+                {
+                    get { return GetValue("apiSearchLineItems", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string AddLineItems
+                {
+                    get { return GetValue("apiAddLineItems", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string UpdateLineItems
+                {
+                    get { return GetValue("apiUpdateLineItems", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string DeleteLineItem
+                {
+                    get { return GetValue("apiDeleteLineItem", ConfigType.CONFIG_FILE); }
+                }
             }
         }
         #endregion

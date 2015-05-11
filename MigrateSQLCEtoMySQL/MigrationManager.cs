@@ -20,12 +20,12 @@ namespace MigrateSQLCEtoMySQL
                 int numCategories = categoryList.Count();
 
                 // create sql statement
-                string sql = @"INSERT INTO dimcategory (CategoryKey, CategoryName, LastUpdatedDate) VALUES ('{0}',@param_name,'{1}');";
+                string sql = @"INSERT INTO dimCategory (CategoryKey, CategoryName, IsActive, LastUpdatedDate) VALUES ('{0}',@param_name, 1, NOW());";
 
                 // loop through and add each category to the MySQL db
                 for (int i = 0; i < numCategories; i++)
                 {
-                    string commandText = String.Format(sql, categoryList[i].CategoryKey.ToString(), DateTime.Now.ToString("u"));
+                    string commandText = String.Format(sql, categoryList[i].CategoryKey.ToString());
 
                     List<KeyValuePair<string, object>> parameters = new List<KeyValuePair<string, object>>();
                     parameters.Add(new KeyValuePair<string, object>("@param_name", categoryList[i].CategoryName));
@@ -55,13 +55,13 @@ namespace MigrateSQLCEtoMySQL
                 int numSubCategories = subCategoryList.Count();
 
                 // create sql statement
-                string sql = @"INSERT INTO dimsubcategory (SubCategoryKey, CategoryKey, SubCategoryName, SubCategoryPrefix, IsActive, IsGoal, LastUpdatedDate) VALUES ('{0}','{1}',@param_name,'{2}',{3},'{4}','{5}');";
+                string sql = @"INSERT INTO dimSubcategory (SubCategoryKey, CategoryKey, SubCategoryName, SubCategoryPrefix, IsActive, IsGoal, LastUpdatedDate) VALUES ('{0}','{1}',@param_name,'{2}',{3},'{4}', NOW());";
 
                 // loop through and add each category to the MySQL db
                 for (int i = 0; i < numSubCategories; i++)
                 {
                     string commandText = String.Format(sql, 
-                        subCategoryList[i].SubCategoryKey.ToString(), subCategoryList[i].CategoryKey.ToString(), subCategoryList[i].SubCategoryPrefix, subCategoryList[i].IsActive ? 1 : 0, subCategoryList[i].IsGoal ? 1 : 0, DateTime.Now.ToString("u"));
+                        subCategoryList[i].SubCategoryKey.ToString(), subCategoryList[i].CategoryKey.ToString(), subCategoryList[i].SubCategoryPrefix, subCategoryList[i].IsActive ? 1 : 0, subCategoryList[i].IsGoal ? 1 : 0);
                     
                     List<KeyValuePair<string, object>> parameters = new List<KeyValuePair<string, object>>();
                     parameters.Add(new KeyValuePair<string, object>("@param_name", subCategoryList[i].SubCategoryName));
@@ -90,13 +90,13 @@ namespace MigrateSQLCEtoMySQL
                 int numPaymentMethods = pmList.Count();
 
                 // create sql statement
-                string sql = @"INSERT INTO dimpaymentmethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) VALUES ('{0}',@param_name,{1},'{2}')";
+                string sql = @"INSERT INTO dimPaymentMethod (PaymentMethodKey, PaymentMethodName, IsActive, LastUpdatedDate) VALUES ('{0}',@param_name,{1}, NOW())";
 
                 // loop through and add each payment method to the MySQL db
                 for (int i = 0; i < numPaymentMethods; i++)
                 {
                     string commandText = String.Format(sql,
-                        pmList[i].PaymentMethodKey.ToString(), pmList[i].IsActive ? 1 : 0, DateTime.Now.ToString("u"));
+                        pmList[i].PaymentMethodKey.ToString(), pmList[i].IsActive ? 1 : 0);
                     List<KeyValuePair<string, object>> parameters = new List<KeyValuePair<string, object>>();
                     parameters.Add(new KeyValuePair<string, object>("@param_name", pmList[i].PaymentMethodName));
 
@@ -124,10 +124,10 @@ namespace MigrateSQLCEtoMySQL
                 int numFacts = factsList.Count();
 
                 // create sql statement
-                string sql = @"INSERT INTO factlineitem (UniqueKey, MonthId, DayOfMonth, DayOfWeekId, YearId, SubCategoryKey, 
-                                                         Description, Amount, TypeId, SubTypeId, QuarterId, PaymentMethodKey, 
+                string sql = @"INSERT INTO factLineItem (UniqueKey, MonthId, DayOfMonth, DayOfWeekId, Year, SubCategoryKey, 
+                                                         Description, Amount, TypeId, SubtypeId, Quarter, PaymentMethodKey, 
                                                          StatusId, LastUpdatedDate) 
-                               VALUES ('{0}',{1},{2},{3},{4},'{5}',@param_description,{6},{7},{8},{9},'{10}',{11},'{12}')";
+                               VALUES ('{0}',{1},{2},{3},{4},'{5}',@param_description,{6},{7},{8},{9},'{10}',{11}, NOW())";
 
                 // loop through and add each payment method to the MySQL db
                 for (int i = 0; i < numFacts; i++)
@@ -136,7 +136,7 @@ namespace MigrateSQLCEtoMySQL
                         factsList[i].UniqueKey.ToString(), factsList[i].MonthId, factsList[i].DayOfMonthId,
                         factsList[i].DayOfWeekId, factsList[i].YearId, factsList[i].CategoryKey.ToString(),
                         factsList[i].Amount, factsList[i].TypeId, factsList[i].SubTypeId, factsList[i].QuarterId,
-                        factsList[i].PaymentMethodId.ToString(), factsList[i].StatusId, DateTime.Now.ToString("u"));
+                        factsList[i].PaymentMethodId.ToString(), factsList[i].StatusId);
 
                     List<KeyValuePair<string, object>> parameters = new List<KeyValuePair<string, object>>();
                     parameters.Add(new KeyValuePair<string,object>("@param_description", factsList[i].Description));

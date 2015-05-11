@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using log4net;
+using FamilyBudget.Common.Config;
+using FamilyBudget.Data.Domain;
+using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Interfaces;
 using FamilyBudget.Data.Protocol;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.DataModel;
-using System.ComponentModel;
 using FamilyBudget.Data.Utilities;
-using Newtonsoft.Json;
-using FamilyBudget.Common.Config;
+using log4net;
 
 namespace FamilyBudget.Data.Implementation
 {
@@ -42,10 +40,10 @@ namespace FamilyBudget.Data.Implementation
             // initialize the return value
             OperationStatus status = OperationStatus.FAILURE;
             
-            if (paymentMethods != null)
+            if (paymentMethods != null && paymentMethods.Count > 0)
             {
                 // make the call to the API if the paymentMethods list is not null
-                APIResponseObject response = PostToAPI(paymentMethods, AddInConfiguration.APIConfiguration.Routes.AddPaymentMethods);
+                APIResponseObject response = PutToAPI(paymentMethods, AddInConfiguration.APIConfiguration.Routes.AddPaymentMethods);
 
                 // initialize the list of output items, and evaluate the response
                 // to get the list & status back
@@ -56,14 +54,14 @@ namespace FamilyBudget.Data.Implementation
                 // and add each successful item to the persisted list
                 foreach (dynamic itemResponse in pmResults)
                 {
-                    dynamic dynPm = itemResponse.data;
+                    dynamic dynObj = itemResponse.data;
 
                     // create the PaymentMethod from each item dynamically
                     PaymentMethod pm = new PaymentMethod()
                     {
-                        PaymentMethodKey = dynPm.paymentMethodKey,
-                        PaymentMethodName = dynPm.paymentMethodName,
-                        IsActive = dynPm.isActive
+                        PaymentMethodKey = dynObj.paymentMethodKey,
+                        PaymentMethodName = dynObj.paymentMethodName,
+                        IsActive = dynObj.isActive
                     };
 
                     // add to the persisted list
@@ -77,10 +75,18 @@ namespace FamilyBudget.Data.Implementation
 
         public OperationStatus UpdatePaymentMethods(List<PaymentMethod> paymentMethods)
         {
-            APIResponseObject response = PostToAPI(paymentMethods, AddInConfiguration.APIConfiguration.Routes.UpdatePaymentMethods);
+            // Initialize the return value
+            OperationStatus status = OperationStatus.FAILURE;
 
-            // get the operation status based on the API Response
-            return APIUtil.EvaluateResponse(response);
+            if (paymentMethods != null && paymentMethods.Count > 0)
+            {
+                APIResponseObject response = PutToAPI(paymentMethods, AddInConfiguration.APIConfiguration.Routes.UpdatePaymentMethods);
+
+                // get the operation status based on the API Response
+                status = APIUtil.EvaluateResponse(response);
+            }
+
+            return status;
         }
                              
         public PaymentMethod GetPaymentMethodByName(string paymentMethodName)
@@ -111,7 +117,7 @@ namespace FamilyBudget.Data.Implementation
         #region Private Methods
         private BindingList<PaymentMethod> GetPaymentMethodsFromAPI()
         {
-            // make the API call to get the data
+            // initialize the list
             paymentMethods = new BindingList<PaymentMethod>();
 
             // make the call to the API
@@ -136,7 +142,7 @@ namespace FamilyBudget.Data.Implementation
             return paymentMethods;
         }
 
-        private APIResponseObject PostToAPI(List<PaymentMethod> pmsToPost, string target)
+        private APIResponseObject PutToAPI(List<PaymentMethod> pmsToPost, string target)
         {
             // initialize the response
             APIResponseObject response = null;
@@ -156,7 +162,7 @@ namespace FamilyBudget.Data.Implementation
             }
 
             // make the POST request & return response
-            response = APIUtil.Post(target, postData);
+            response = APIUtil.Put(target, postData);
 
             return response;
         }        

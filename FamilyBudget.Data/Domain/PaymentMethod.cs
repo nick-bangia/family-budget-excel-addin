@@ -1,20 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.ComponentModel;
 
 namespace FamilyBudget.Data.Domain
 {
-    public class PaymentMethod : INotifyPropertyChanged
+    public class PaymentMethod : ManagedDataObject
     {
-        private Guid _paymentMethodKey;
+        private string _paymentMethodKey;
         private string _paymentMethodName;
         private bool _isActive;
-        
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public Guid PaymentMethodKey
+        public string PaymentMethodKey
         {
             get
             {
@@ -49,14 +43,6 @@ namespace FamilyBudget.Data.Domain
             {
                 this._isActive = value;
                 NotifyPropertyChanged("IsActive");
-            }
-        }
-
-        private void NotifyPropertyChanged(string propertyName)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

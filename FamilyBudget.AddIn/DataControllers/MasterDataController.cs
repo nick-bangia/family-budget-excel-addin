@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using FamilyBudget.Data.Domain;
-using VstoExcel = Microsoft.Office.Tools.Excel;
-using NativeExcel = Microsoft.Office.Interop.Excel;
-using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Enums;
+using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
+using FamilyBudget.Data.Domain;
+using FamilyBudget.Data.Utilities;
 using log4net;
-using FamilyBudget.AddIn.Controllers;
+using NativeExcel = Microsoft.Office.Interop.Excel;
+using VstoExcel = Microsoft.Office.Tools.Excel;
 
 namespace FamilyBudget.AddIn.DataControllers
 {
@@ -165,7 +165,7 @@ namespace FamilyBudget.AddIn.DataControllers
                     value = EnumUtil.GetFriendlyName(lineItems[index].Status);
                     break;
                 case (int)DataColumns.IS_GOAL:
-                    value = lineItems[index].IsGoal;
+                    value = lineItems[index].IsGoal ? "Yes" : "No";
                     break;
                 default:
                     value = "N/A";

@@ -51,6 +51,7 @@ namespace FamilyBudget.AddIn.UI
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnNewGoal = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
+            this.btnManageAccounts = this.Factory.CreateRibbonButton();
             this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
             this.tabFamilyBudget.SuspendLayout();
             this.grpNewItems.SuspendLayout();
@@ -137,10 +138,11 @@ namespace FamilyBudget.AddIn.UI
             // 
             // grpManage
             // 
-            this.grpManage.Items.Add(this.btnAddCategory);
             this.grpManage.Items.Add(this.btnAddSubCategory);
             this.grpManage.Items.Add(this.btnNewGoal);
             this.grpManage.Items.Add(this.btnUpdateCategories);
+            this.grpManage.Items.Add(this.btnAddCategory);
+            this.grpManage.Items.Add(this.btnManageAccounts);
             this.grpManage.Items.Add(this.btnManagePaymentMethods);
             this.grpManage.Label = "Manage";
             this.grpManage.Name = "grpManage";
@@ -148,9 +150,9 @@ namespace FamilyBudget.AddIn.UI
             // btnAddCategory
             // 
             this.btnAddCategory.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnAddCategory.Label = "New Category";
+            this.btnAddCategory.Label = "Categories";
             this.btnAddCategory.Name = "btnAddCategory";
-            this.btnAddCategory.OfficeImageId = "AddAccount";
+            this.btnAddCategory.OfficeImageId = "CategorizeMenu";
             this.btnAddCategory.ShowImage = true;
             // 
             // btnAddSubCategory
@@ -172,10 +174,18 @@ namespace FamilyBudget.AddIn.UI
             // btnUpdateCategories
             // 
             this.btnUpdateCategories.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnUpdateCategories.Label = "Update Categories";
+            this.btnUpdateCategories.Label = "Update Subcategories";
             this.btnUpdateCategories.Name = "btnUpdateCategories";
             this.btnUpdateCategories.OfficeImageId = "EditItem";
             this.btnUpdateCategories.ShowImage = true;
+            // 
+            // btnManageAccounts
+            // 
+            this.btnManageAccounts.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
+            this.btnManageAccounts.Label = "Accounts";
+            this.btnManageAccounts.Name = "btnManageAccounts";
+            this.btnManageAccounts.OfficeImageId = "DatabaseSwitchboardManager";
+            this.btnManageAccounts.ShowImage = true;
             // 
             // btnManagePaymentMethods
             // 
@@ -220,6 +230,7 @@ namespace FamilyBudget.AddIn.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnPreProcessItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnNewGoal;
+        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnManageAccounts;
     }
 
     partial class ThisRibbonCollection

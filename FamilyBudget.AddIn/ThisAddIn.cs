@@ -41,6 +41,12 @@ namespace FamilyBudget.AddIn.UI
             }
         }
 
+        private void Application_WorkbookActivate(NativeExcel.Workbook wb)
+        {
+            // set the ribbon state based on if the workbook is valid or not
+            WorkbookUtil.SetRibbonState(WorkbookUtil.IsValidWorkbook(wb));
+        }
+
         private void Application_WorkbookBeforeClose(NativeExcel.Workbook Wb, ref bool Cancel)
         {
             if (WorkbookUtil.IsValidWorkbook(Wb))
@@ -86,6 +92,7 @@ namespace FamilyBudget.AddIn.UI
             this.Shutdown += new System.EventHandler(ThisAddIn_Shutdown);
             this.Application.WorkbookBeforeClose += new NativeExcel.AppEvents_WorkbookBeforeCloseEventHandler(Application_WorkbookBeforeClose);
             this.Application.WorkbookOpen += new NativeExcel.AppEvents_WorkbookOpenEventHandler(Application_WorkbookOpen);
+            this.Application.WorkbookActivate += new NativeExcel.AppEvents_WorkbookActivateEventHandler(Application_WorkbookActivate);
         }        
         #endregion
     }

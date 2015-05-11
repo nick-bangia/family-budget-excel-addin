@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.ComponentModel;
 using FamilyBudget.AddIn.DataControllers;
-using FamilyBudget.AddIn.Enums;
-using FamilyBudget.AddIn.Events;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
 using FamilyBudget.Data;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Interfaces;
-using FamilyBudget.Data.Protocol;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 
@@ -18,32 +16,32 @@ namespace FamilyBudget.AddIn.Controllers
     internal static class CategoriesController
     {
         #region Properties
-        private static frmNewCategory newCategoryForm;
-        private static frmNewSubCategory newSubCategoryForm;
+        private static frmCategories categoriesForm;
+        private static frmNewSubcategory newSubCategoryForm;
         private static frmUpdateCategories updateCategoriesForm;
         private static frmNewGoal newGoalForm;
 
         // category mapper interface
-        private static ICategoryMapper _categoryMapper;
-        private static ICategoryMapper categoryMapper
+        private static ICategoryAPI _categoryApi;
+        private static ICategoryAPI categoryApi
         {
             get
             {
-                if (_categoryMapper == null)
+                if (_categoryApi == null)
                 {
                     // get the configured name of the interface to use to import line items to the DB
-                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(ICategoryMapper));
+                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(ICategoryAPI));
                     if (mapperType != null)
                     {
-                        _categoryMapper = (ICategoryMapper)Activator.CreateInstance(mapperType);
+                        _categoryApi = (ICategoryAPI)Activator.CreateInstance(mapperType);
                     }
                     else
                     {
-                        _categoryMapper = null;
+                        _categoryApi = null;
                     }
                 }
 
-                return _categoryMapper;
+                return _categoryApi;
             }
         }
 
@@ -54,18 +52,14 @@ namespace FamilyBudget.AddIn.Controllers
         #region Event Handlers
         internal static void btnAddSubCategory_Click(object sender, RibbonControlEventArgs e)
         {
-            newSubCategoryForm = new frmNewSubCategory();
-            newSubCategoryForm.SubCategorySaved += new EventHandler<SubCategoryEventArgs>(newSubCategoryForm_SubCategorySaved);
-            newSubCategoryForm.UserCancelled += new EventHandler<CategoryControlEventArgs>(categoryForm_UserCancelled);
+            newSubCategoryForm = new frmNewSubcategory();
             newSubCategoryForm.Show();
         }
 
         internal static void btnAddCategory_Click(object sender, RibbonControlEventArgs e)
         {
-            newCategoryForm = new frmNewCategory();
-            newCategoryForm.CategorySaved += new EventHandler<CategoryEventArgs>(newCategoryForm_CategorySaved);
-            newCategoryForm.UserCancelled += new EventHandler<CategoryControlEventArgs>(categoryForm_UserCancelled);
-            newCategoryForm.Show();
+            categoriesForm = new frmCategories();
+            categoriesForm.Show();
         }
 
         internal static void btnUpdateCategories_Click(object sender, RibbonControlEventArgs e)
@@ -77,73 +71,32 @@ namespace FamilyBudget.AddIn.Controllers
         internal static void btnNewGoal_Click(object sender, RibbonControlEventArgs e)
         {
             newGoalForm = new frmNewGoal();
-            newGoalForm.GoalSaved += new EventHandler<GoalEventArgs>(newGoalForm_GoalSaved);
-            newGoalForm.UserCancelled += new EventHandler<CategoryControlEventArgs>(categoryForm_UserCancelled);
             newGoalForm.Show();
         }
 
-        internal static void categoryForm_UserCancelled(object sender, CategoryControlEventArgs e)
+        internal static OperationStatus AddNewSubcategory(Subcategory newSubcategory)
         {
-            if (e.formType == CategoryFormType.ParentCategory)
-            {
-                // on user request to cancel the New Category form, close the form
-                CloseNewCategoryForm();
-            }
-            else if (e.formType == CategoryFormType.SubCategory)
-            {
-                // on user request to cancel the New SubCategory form, close the form
-                CloseNewSubCategoryForm();
-            }
-            else if (e.formType == CategoryFormType.Goal)
-            {
-                CloseNewGoalForm();
-            }
+            // create the list of subcategories to add and add the new one to it
+            List<Subcategory> newSubcategories = new List<Subcategory>();
+            newSubcategories.Add(newSubcategory);
 
+            // send to the API and return the response
+            return categoryApi.AddNewSubcategories(newSubcategories);
         }
 
-        internal static void newSubCategoryForm_SubCategorySaved(object sender, SubCategoryEventArgs e)
+        internal static OperationStatus AddNewGoal(Goal newGoal)
         {
-            // attempt to add a new SubCategory to the DB
-            logger.Info("Adding a new SubCategory to the DB.");
-            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive, e.subCategory.IsGoal);
-            if (addedNewSubCategory == OperationStatus.FAILURE)
-            {
-                // if an error occurred while attempting to write the new subcategory, show a message box to that effect.
-                string errorText = "An error occurred while attempting to add a new SubCategory to the DB:" + Environment.NewLine +
-                                    "Check that:" + Environment.NewLine +
-                                    "\t1) The new SubCategory is not already in the DB." + Environment.NewLine +
-                                    "\t2) The DB exists." + Environment.NewLine +
-                                    "\t3) The required system files for this workbook are present." + Environment.NewLine +
-                                    "\t4) The subcategory's code is fits within the constraint of the system.";
-                logger.Error(errorText);
-                MessageBox.Show(errorText);
-            }
+            // create the list of subcategories to add and add the goal to it
+            List<Subcategory> newGoals = new List<Subcategory>();
+            newGoals.Add(newGoal);
 
-            // close the form, regardless.
-            CloseNewSubCategoryForm();
-        }
+            // send to the API and get the response
+            OperationStatus goalStatus = categoryApi.AddNewSubcategories(newGoals);
 
-        internal static void newGoalForm_GoalSaved(object sender, GoalEventArgs e)
-        {
-            // attempt to add a new goal to the DB. A goal is just a subcategory, but with an added fact of the negation of the goal amount (if it is a Logical goal)
-            logger.Info("Adding a new goal to the DB.");
-            OperationStatus addedNewSubCategory = categoryMapper.AddNewSubCategory(e.subCategory.CategoryKey, e.subCategory.SubCategoryName, e.subCategory.SubCategoryPrefix, e.subCategory.AccountName, e.subCategory.IsActive, e.subCategory.IsGoal);
-            if (addedNewSubCategory == OperationStatus.FAILURE)
-            {
-                // if an error occurred while attempting to write the new subcategory, show a message box to that effect.
-                string errorText = "An error occurred while attempting to add a new goal to the DB:" + Environment.NewLine +
-                                    "Check that:" + Environment.NewLine +
-                                    "\t1) The new goal (subcategory) is not already in the DB." + Environment.NewLine +
-                                    "\t2) The DB exists." + Environment.NewLine +
-                                    "\t3) The required system files for this workbook are present." + Environment.NewLine +
-                                    "\t4) The goal's (subcategory's) code fits within the constraint of the system.";
-                logger.Error(errorText);
-                MessageBox.Show(errorText);
-            }
-            else if (e.subCategory.IsGoal)
+            if (goalStatus == OperationStatus.SUCCESS)
             {
                 // Add the negation of the goal amount as a line item for the new subcategory
-                decimal negatedGoalAmount = -1 * e.GoalAmount;
+                decimal negatedGoalAmount = -1 * newGoal.GoalAmount;
 
                 // get the current date to use
                 DateTime currentDate = DateTime.Now;
@@ -156,9 +109,9 @@ namespace FamilyBudget.AddIn.Controllers
                 }
 
                 // get the new subcategory key
-                Guid? goalKey = GetSubCategoryID(e.subCategory.SubCategoryName);
+                string goalKey = categoryApi.GetSubcategoryKeyByName(newGoal.SubcategoryName);
 
-                if (goalKey.HasValue)
+                if (!String.IsNullOrWhiteSpace(goalKey))
                 {
                     // build out the line item that represents the new goal
                     DenormalizedLineItem goalLineItem = new DenormalizedLineItem()
@@ -168,8 +121,8 @@ namespace FamilyBudget.AddIn.Controllers
                         Day = (short)currentDate.Day,
                         DayOfWeekId = (short)currentDate.DayOfWeek,
                         Description = "New Goal Set",
-                        CategoryKey = e.subCategory.CategoryKey,
-                        SubCategoryKey = goalKey.Value,
+                        CategoryKey = newGoal.CategoryKey,
+                        SubCategoryKey = goalKey,
                         Amount = negatedGoalAmount,
                         Type = LineItemType.GOAL,
                         SubType = LineItemSubType.GOAL,
@@ -181,45 +134,17 @@ namespace FamilyBudget.AddIn.Controllers
                     LineItemsController.AddNewLineItem(goalLineItem);
 
                     // refresh data & pivot tables
-                    MasterDataController.PopulateMasterDataTable(LineItemsController.GetAllLineItems());
+                    MasterDataController.PopulateMasterDataTable(LineItemsController.GetAllLineItems(true));
                     WorkbookUtil.RefreshPivotTables();
                 }
-                else
-                {
-                    string noSubCategoryError = String.Format("Unable to save this goal ({0}), as it was not found in the DB.", e.subCategory.SubCategoryName);
-                    logger.Error(noSubCategoryError);
-                    MessageBox.Show(noSubCategoryError);
-                }
             }
-
-            // close the form, regardless.
-            CloseNewGoalForm();
-        }
-
-        internal static void newCategoryForm_CategorySaved(object sender, CategoryEventArgs e)
-        {
-            // attempt to add a new Category to the DB
-            logger.Info("Adding a new Category to the DB.");
-            OperationStatus addedNewCategory = categoryMapper.AddNewCategory(e.category.CategoryName);
-            if (addedNewCategory == OperationStatus.FAILURE)
-            {
-                // if an error occurred while attempting to write the new category, show a message box to that effect.
-                string errorText = "An error occurred while attempting to add a new Category to the DB:" + Environment.NewLine +
-                                    "Check that:" + Environment.NewLine +
-                                    "\t1) The new Category is not already in the DB." + Environment.NewLine +
-                                    "\t2) The DB exists." + Environment.NewLine +
-                                    "\t3) The required system files for this workbook are present.";
-                logger.Error(errorText);
-                MessageBox.Show(errorText);
-            }
-
-            // close the form, regardless.
-            CloseNewCategoryForm();
+            
+            return goalStatus;
         }
         #endregion
 
         #region Internal Methods
-        internal static void PopulateSubCategoriesSheet(bool rebuild)
+        internal static void PopulateSubcategoriesSheet(bool rebuild)
         {
             if (rebuild)
             {
@@ -230,64 +155,48 @@ namespace FamilyBudget.AddIn.Controllers
             }
 
             logger.Info("Populating the subcategory data sheet.");
-            SubCategoriesDataManager.PopulateSubCategoriesDataTable(categoryMapper.GetAllSubCategories());
+            SubCategoriesDataManager.PopulateSubcategoriesDataTable(categoryApi.GetSubcategories(rebuild));
         }
 
-        internal static LiveDataObject GetCategories()
+        internal static OperationStatus AddNewCategory(string categoryName, bool isActive)
         {
-            return categoryMapper.GetCategories();
+            List<Category> newCategories = new List<Category>();
+            newCategories.Add(new Category() { CategoryName = categoryName, IsActive = isActive });
+            return categoryApi.AddNewCategories(newCategories);
         }
 
-        internal static Guid? GetCategoryID(string categoryName)
+        internal static BindingList<Category> GetCategories(bool forceGet)
         {
-            return categoryMapper.GetCategoryKeyByName(categoryName);
+            return categoryApi.GetCategories(forceGet);
         }
 
-        internal static String GetCategoryValidationList()
+        internal static string GetCategoryID(string categoryName)
         {
-            return categoryMapper.GetCategoryList(',');
+            return categoryApi.GetCategoryKeyByName(categoryName);
         }
 
-        internal static LiveDataObject GetSubCategories()
+        internal static BindingList<Subcategory> GetSubcategories(bool forceGet)
         {
-            return categoryMapper.GetSubCategories();
+            return categoryApi.GetSubcategories(forceGet);
+        }
+                
+        internal static BindingList<Subcategory> GetFilteredSubcategories(string categoryKey, bool forceGet = false)
+        {
+            return categoryApi.GetFilteredSubcategories(categoryKey, forceGet);
         }
 
-        internal static String GetSubCategoryValidationList()
+        internal static string GetSubCategoryID(string subCategoryName)
         {
-            return categoryMapper.GetSubCategoryList(',');
+            return categoryApi.GetSubcategoryKeyByName(subCategoryName);
         }
 
-        internal static LiveDataObject GetFilteredSubCategories(Guid categoryKey)
+        internal static Subcategory GetSubCategoryFor(string description)
         {
-            return categoryMapper.GetFilteredSubCategories(categoryKey);
-        }
-
-        internal static Guid? GetSubCategoryID(string subCategoryName)
-        {
-            return categoryMapper.GetSubCategoryKeyByName(subCategoryName);
-        }
-
-        internal static SubCategory GetSubCategoryFor(string description)
-        {
-            return categoryMapper.GetSubCategoryFor(description);
+            return categoryApi.GetSubcategoryFor(description);
         }
         #endregion
 
         #region Private Methods
-        private static void CloseNewCategoryForm()
-        {
-            if (newCategoryForm != null)
-            {
-                if (!newCategoryForm.IsDisposed)
-                {
-                    newCategoryForm.Close();
-                }
-
-                newCategoryForm = null;
-            }
-        }
-
         private static void CloseNewSubCategoryForm()
         {
             if (newSubCategoryForm != null)

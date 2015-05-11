@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
 
@@ -9,12 +6,11 @@ namespace FamilyBudget.Data.Interfaces
 {
     public interface ILineItemAPI
     {
-        DenormalizedLineItem AddNewLineItem(DenormalizedLineItem lineItem);
-        OperationStatus UpdateLineItem(DenormalizedLineItem lineItem);
-        DenormalizedLineItem GetLineItem(DenormalizedLineItem lineItem);
-        List<DenormalizedLineItem> GetAllLineItems();
+        List<DenormalizedLineItem> GetAllLineItems(bool forceGet = false);
         List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria);
         DenormalizedLineItem GetFirstLineItemByCriteria(SearchCriteria searchCriteria);
-        OperationStatus DeleteLineItem(Guid itemKey);
+        List<DenormalizedLineItem> AddNewLineItems(List<DenormalizedLineItem> lineItemsToAdd);
+        List<DenormalizedLineItem> UpdateLineItems(List<DenormalizedLineItem> lineItemsToUpdate);        
+        OperationStatus DeleteLineItem(string itemKey);
     }
 }

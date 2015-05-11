@@ -64,11 +64,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ApiNameAttribute.cs" />
     <Compile Include="Attributes\FriendlyNameAttribute.cs" />
     <Compile Include="Attributes\ComparableAttribute.cs" />
+    <Compile Include="Domain\Account.cs" />
     <Compile Include="Domain\ApiHealth.cs" />
+    <Compile Include="Domain\Goal.cs" />
+    <Compile Include="Domain\ManagedDataObject.cs" />
     <Compile Include="Enums\ApiHealthState.cs" />
     <Compile Include="Enums\ApiMethod.cs" />
+    <Compile Include="Enums\DayOfWeek.cs" />
+    <Compile Include="Implementation\AccountAPI.cs" />
+    <Compile Include="Interfaces\IAccountAPI.cs" />
     <Compile Include="Protocol\APIDataObject.cs" />
     <Compile Include="Protocol\APIResponseObject.cs" />
     <Compile Include="Domain\Category.cs">
@@ -80,7 +87,7 @@
     <Compile Include="Domain\EnumListMember.cs" />
     <Compile Include="Domain\PaymentMethod.cs" />
     <Compile Include="Domain\SearchCriteria.cs" />
-    <Compile Include="Domain\SubCategory.cs">
+    <Compile Include="Domain\Subcategory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Enums\Comparators.cs" />
@@ -91,9 +98,9 @@
     <Compile Include="Enums\LineItemType.cs" />
     <Compile Include="Enums\Quarters.cs" />
     <Compile Include="Enums\SearchFields.cs" />
-    <Compile Include="Implementation\CategoryMapper.cs" />
+    <Compile Include="Implementation\CategoryAPI.cs" />
     <Compile Include="Implementation\PaymentMethodAPI.cs" />
-    <Compile Include="Interfaces\ICategoryMapper.cs" />
+    <Compile Include="Interfaces\ICategoryAPI.cs" />
     <Compile Include="Interfaces\ILineItemAPI.cs" />
     <Compile Include="Implementation\LineItemAPI.cs" />
     <Compile Include="Interfaces\IPaymentMethodAPI.cs" />
@@ -104,6 +111,7 @@
     </Compile>
     <Compile Include="Protocol\LiveDataObject.cs" />
     <Compile Include="Utilities\DateUtil.cs" />
+    <Compile Include="Utilities\EnumUtil.cs" />
     <Compile Include="Utilities\StringUtil.cs" />
     <Compile Include="Utilities\APIUtil.cs" />
   </ItemGroup>
@@ -133,10 +141,6 @@
     <ProjectReference Include="..\FamilyBudget.Common\FamilyBudget.Common.csproj">
       <Project>{24739423-4801-450E-8276-CB3152C71A77}</Project>
       <Name>FamilyBudget.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\FamilyBudget.DataModel\FamilyBudget.DataModel.csproj">
-      <Project>{A1EF9403-667B-4B74-9E7C-E1DD19FDAC26}</Project>
-      <Name>FamilyBudget.DataModel</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

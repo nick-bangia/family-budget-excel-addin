@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Forms;
+using FamilyBudget.AddIn.Async;
+using FamilyBudget.AddIn.DataControllers;
+using FamilyBudget.AddIn.Enums;
+using FamilyBudget.AddIn.Events;
+using FamilyBudget.AddIn.UI;
+using FamilyBudget.AddIn.Utilities;
 using FamilyBudget.Data;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Interfaces;
-using FamilyBudget.AddIn.DataControllers;
-using FamilyBudget.AddIn.Enums;
-using FamilyBudget.AddIn.Events;
-using FamilyBudget.AddIn.Async;
-using FamilyBudget.AddIn.UI;
-using FamilyBudget.AddIn.Utilities;
+using FamilyBudget.Data.Utilities;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 using VstoExcel = Microsoft.Office.Tools.Excel;
@@ -317,10 +318,10 @@ namespace FamilyBudget.AddIn.Controllers
                 if (e.Action == LineItemActions.EDIT)
                 {
                     logger.Info("Attempting to edit a single line item...");
-                    Guid itemKey = WorksheetDataController.GetItemKey(e.ListIndex, e.worksheetType);
+                    string itemKey = WorksheetDataController.GetItemKey(e.ListIndex, e.worksheetType);
 
                     DenormalizedLineItem item;
-                    if (itemKey != Guid.Empty)
+                    if (!String.IsNullOrWhiteSpace(itemKey))
                     {
                         SearchCriteria sc = new SearchCriteria() { UniqueId = itemKey };
                         item = lineItemAPI.GetFirstLineItemByCriteria(sc);
@@ -344,7 +345,7 @@ namespace FamilyBudget.AddIn.Controllers
                         // define the error message and log it, and show it to the user
                         string error = "Unable to access item!";
 
-                        if (itemKey != Guid.Empty)
+                        if (!String.IsNullOrWhiteSpace(itemKey))
                         {
                             error = error + " Unique ID: " + item.UniqueKey.ToString();
                         }
@@ -381,7 +382,7 @@ namespace FamilyBudget.AddIn.Controllers
             }
 
             logger.Info("Populating the master data sheet.");
-            MasterDataController.PopulateMasterDataTable(GetAllLineItems());
+            MasterDataController.PopulateMasterDataTable(GetAllLineItems(true));
         }
 
         internal static void PreprocessLineItems(VstoExcel.ListObject listObject, List<DenormalizedLineItem> lineItems)
@@ -417,7 +418,7 @@ namespace FamilyBudget.AddIn.Controllers
             }
         }
 
-        internal static void DeleteLineItem(Guid itemKey)
+        internal static void DeleteLineItem(string itemKey)
         {
             OperationStatus status = lineItemAPI.DeleteLineItem(itemKey);
 
@@ -430,12 +431,15 @@ namespace FamilyBudget.AddIn.Controllers
 
         internal static void UpdateLineItem(DenormalizedLineItem lineItem)
         {
-            OperationStatus status = lineItemAPI.UpdateLineItem(lineItem);
+            List<DenormalizedLineItem> lineItemsToUpdate = new List<DenormalizedLineItem>();
+            lineItemsToUpdate.Add(lineItem);
 
-            if (status == OperationStatus.FAILURE)
+            List<DenormalizedLineItem> updatedItems = lineItemAPI.UpdateLineItems(lineItemsToUpdate);
+
+            if (!String.IsNullOrWhiteSpace(updatedItems[0].APIState))
             {
                 MessageBox.Show("Unable to update item with key: " + lineItem.UniqueKey.ToString() + Environment.NewLine +
-                    "Check that the item exists, or check the log for more details.");
+                    "Details: " + updatedItems[0].APIState);
             }
         }
 
@@ -468,20 +472,24 @@ namespace FamilyBudget.AddIn.Controllers
                 searchItemsForm.Close();
             }
         }
-
-        internal static DenormalizedLineItem SaveNewLineItem(DenormalizedLineItem lineItem)
-        {
-            throw new NotImplementedException();
-        }
-
+                
         internal static void AddNewLineItem(DenormalizedLineItem goalLineItem)
         {
-            lineItemAPI.AddNewLineItem(goalLineItem);
+            List<DenormalizedLineItem> lineItemsToInsert = new List<DenormalizedLineItem>();
+            lineItemsToInsert.Add(goalLineItem);
+
+            DenormalizedLineItem insertedGoal = lineItemAPI.AddNewLineItems(lineItemsToInsert)[0];
+
+            if (!String.IsNullOrWhiteSpace(insertedGoal.APIState))
+            {
+                MessageBox.Show("Unable to save goal. Check the log for more details." + Environment.NewLine +
+                    "Details: " + insertedGoal.APIState);
+            }
         }
 
-        internal static List<DenormalizedLineItem> GetAllLineItems()
+        internal static List<DenormalizedLineItem> GetAllLineItems(bool forceGet)
         {
-            return lineItemAPI.GetAllLineItems();
+            return lineItemAPI.GetAllLineItems(forceGet);
         }
         #endregion
 

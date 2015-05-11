@@ -1,13 +1,28 @@
 ﻿using System;
-using FamilyBudget.Data.Attributes;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
+using FamilyBudget.Data.Attributes;
 using FamilyBudget.Data.Domain;
 
-namespace FamilyBudget.AddIn.Utilities
+namespace FamilyBudget.Data.Utilities
 {
-    internal static class EnumUtil
-    {        
+    public static class EnumUtil
+    {
+        public static string GetApiName(Enum anEnum)
+        {
+            string apiName = anEnum.ToString();
+
+            // get the friendly name of this enum, if it exists
+            object[] apiNameAttributes = GetCustomAttributes(typeof(ApiNameAttribute), anEnum);
+            if (apiNameAttributes.Length > 0)
+            {
+                apiName = ((ApiNameAttribute)apiNameAttributes[0]).Name;
+            }
+
+            // return the name, which is defaulted to the value of ToString() on the enum, if no FriendlyName attribute exists
+            return apiName;
+        }
+        
         public static string GetFriendlyName(Enum anEnum)
         {
             string friendlyName = anEnum.ToString();

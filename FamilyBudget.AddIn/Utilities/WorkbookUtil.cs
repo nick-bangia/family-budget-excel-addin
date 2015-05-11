@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Windows.Forms;
-using FamilyBudget.Common.Config;
 using FamilyBudget.AddIn.Controllers;
 using FamilyBudget.AddIn.DataControllers;
 using FamilyBudget.AddIn.UI;
+using FamilyBudget.Common.Config;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Utilities;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
-using Microsoft.Win32;
 using NativeExcel = Microsoft.Office.Interop.Excel;
-using System.IO;
 
 namespace FamilyBudget.AddIn.Utilities
 {
@@ -33,10 +31,13 @@ namespace FamilyBudget.AddIn.Utilities
         {
             // Build & Populate data sheets
             LineItemsController.PopulateDataSheet(userRefresh);
-            CategoriesController.PopulateSubCategoriesSheet(userRefresh);
+            CategoriesController.PopulateSubcategoriesSheet(userRefresh);
 
             // pre-populate any data service lists
             PaymentMethodsController.GetPaymentMethods(userRefresh);
+            AccountsController.GetAccounts(userRefresh);
+            CategoriesController.GetCategories(userRefresh);
+            CategoriesController.GetSubcategories(userRefresh);
 
             // Refresh Pivot Tables
             RefreshPivotTables();

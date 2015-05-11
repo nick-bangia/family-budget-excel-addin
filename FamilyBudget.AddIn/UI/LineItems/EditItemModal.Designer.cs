@@ -166,7 +166,7 @@
             // 
             // subcategoryBindingSource
             // 
-            this.subcategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.SubCategory);
+            this.subcategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Subcategory);
             // 
             // cbTxType
             // 

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using log4net;
+using FamilyBudget.AddIn.Controllers;
+using FamilyBudget.AddIn.DataControllers;
+using FamilyBudget.AddIn.Enums;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
-using FamilyBudget.AddIn.Enums;
+using FamilyBudget.Data.Utilities;
+using log4net;
 using VstoExcel = Microsoft.Office.Tools.Excel;
-using FamilyBudget.AddIn.DataControllers;
-using FamilyBudget.AddIn.Controllers;
 
 namespace FamilyBudget.AddIn.Async
 {
@@ -75,7 +76,7 @@ namespace FamilyBudget.AddIn.Async
                             string description = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.DESCRIPTION].Value2;
                             object oAmount = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.AMOUNT].Value2;
                             decimal amount = oAmount != null ? Convert.ToDecimal(oAmount) : 0.00M;
-                            SubCategory categoryInfo = CategoriesController.GetSubCategoryFor(description);
+                            Subcategory categoryInfo = CategoriesController.GetSubCategoryFor(description);
                             string enteredType = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.TYPE].Value2;
                             type = Enum.TryParse<LineItemType>(enteredType, true, out type) ? 
                                 type : LineItemType.EXPENSE;
@@ -95,16 +96,18 @@ namespace FamilyBudget.AddIn.Async
 
                             // populate the denormalized line item
                             DenormalizedLineItem lineItem = new DenormalizedLineItem();
-                            lineItem.UniqueKey = Guid.Empty;
+                            lineItem.UniqueKey = null;
                             lineItem.Year = date.Year;
                             lineItem.MonthInt = (short)date.Month;
                             lineItem.Day = (short)date.Day;
-                            lineItem.DayOfWeekId = (short)date.DayOfWeek;
+                            // add 1 to System.DayOfWeek to comply with ODBC standard
+                            lineItem.DayOfWeekId = (short)(((short)date.DayOfWeek) + 1);
+                            lineItem.Quarter = DateUtil.GetQuarterForMonth(lineItem.MonthInt);
                             lineItem.Description = description;
                             lineItem.Category = categoryInfo != null ? categoryInfo.CategoryName : null;
-                            lineItem.CategoryKey = categoryInfo != null ? categoryInfo.CategoryKey : Guid.Empty;
-                            lineItem.SubCategory = categoryInfo != null ? categoryInfo.SubCategoryName : null;
-                            lineItem.SubCategoryKey = categoryInfo != null ? categoryInfo.SubCategoryKey : Guid.Empty;
+                            lineItem.CategoryKey = categoryInfo != null ? categoryInfo.CategoryKey : null;
+                            lineItem.SubCategory = categoryInfo != null ? categoryInfo.SubcategoryName : null;
+                            lineItem.SubCategoryKey = categoryInfo != null ? categoryInfo.SubcategoryKey : null;
                             lineItem.PaymentMethod = paymentMethodInfo != null ? paymentMethodInfo.PaymentMethodName : defaultPaymentMethodInfo.PaymentMethodName;
                             lineItem.PaymentMethodKey = paymentMethodInfo != null ? paymentMethodInfo.PaymentMethodKey : defaultPaymentMethodInfo.PaymentMethodKey;
                             lineItem.Amount = amount;

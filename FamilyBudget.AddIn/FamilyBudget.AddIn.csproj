@@ -206,6 +206,7 @@
     <Compile Include="../AssemblyVersioning.cs">
       <Link>Properties\SharedVersioning.cs</Link>
     </Compile>
+    <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\LineItemsController.cs" />
     <Compile Include="Controllers\PaymentMethodsController.cs" />
     <Compile Include="Enums\SubCategoryDataColumns.cs" />
@@ -240,17 +241,23 @@
     <Compile Include="Async\LineItemImporter.Designer.cs">
       <DependentUpon>LineItemImporter.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Accounts\AccountsModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Accounts\AccountsModal.Designer.cs">
+      <DependentUpon>AccountsModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Categories\CategoryModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Categories\CategoryModal.Designer.cs">
+      <DependentUpon>CategoryModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\Categories\NewGoal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\Categories\NewGoal.Designer.cs">
       <DependentUpon>NewGoal.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\Categories\NewCategoryModal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\Categories\NewCategoryModal.Designer.cs">
-      <DependentUpon>NewCategoryModal.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\LineItems\EditItemModal.cs">
       <SubType>Form</SubType>
@@ -279,11 +286,11 @@
     <Compile Include="UI\Buttons\ActionButton.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\Categories\NewSubCategoryModal.cs">
+    <Compile Include="UI\Categories\NewSubcategoryModal.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Categories\NewSubCategoryModal.Designer.cs">
-      <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
+    <Compile Include="UI\Categories\NewSubcategoryModal.Designer.cs">
+      <DependentUpon>NewSubcategoryModal.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\Misc\ProgressModal.cs">
       <SubType>Form</SubType>
@@ -297,19 +304,20 @@
     <Compile Include="UI\Categories\UpdateCategoryModal.Designer.cs">
       <DependentUpon>UpdateCategoryModal.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\EnumUtil.cs" />
     <Compile Include="Utilities\WorkbookUtil.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Accounts\AccountsModal.resx">
+      <DependentUpon>AccountsModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\Categories\CategoryModal.resx">
+      <DependentUpon>CategoryModal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Categories\NewGoal.resx">
       <DependentUpon>NewGoal.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\Categories\NewCategoryModal.resx">
-      <DependentUpon>NewCategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\LineItems\EditItemModal.resx">
@@ -325,8 +333,8 @@
       <DependentUpon>FamilyBudgetRibbon.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\Categories\NewSubCategoryModal.resx">
-      <DependentUpon>NewSubCategoryModal.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Categories\NewSubcategoryModal.resx">
+      <DependentUpon>NewSubcategoryModal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Misc\ProgressModal.resx">
@@ -343,6 +351,7 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="Properties\DataSources\FamilyBudget.Data.Domain.Account.datasource" />
     <None Include="Properties\DataSources\FamilyBudget.Data.Domain.Category.datasource" />
     <None Include="Properties\DataSources\FamilyBudget.Data.Domain.EnumListMember.datasource" />
     <None Include="Properties\DataSources\FamilyBudget.Data.Domain.PaymentMethod.datasource" />
@@ -371,9 +380,7 @@
       <Name>FamilyBudget.Data</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="UI\Registration\" />
-  </ItemGroup>
+  <ItemGroup />
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->

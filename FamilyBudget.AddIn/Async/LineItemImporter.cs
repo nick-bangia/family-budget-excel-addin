@@ -70,7 +70,10 @@ namespace FamilyBudget.AddIn.Async
                                 // skip the item if it has been deleted by the user
                                 if (!lineItem.IsDeleted)
                                 {
-                                    this.lineItems[lineItemIterator] = this.dataMap.AddNewLineItem(this.lineItems[lineItemIterator]);
+                                    List<DenormalizedLineItem> lineItemsToInsert = new List<DenormalizedLineItem>();
+                                    lineItemsToInsert.Add(lineItem);
+
+                                    this.lineItems[lineItemIterator] = this.dataMap.AddNewLineItems(lineItemsToInsert)[0];
                                     WorksheetDataController.UpdateLineItem(lineItem.ItemSurrogateKey, lineItemIterator, DataWorksheetType.NEW_ENTRIES, this.lineItems[lineItemIterator]);
                                 }                               
                             }

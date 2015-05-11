@@ -57,10 +57,10 @@ namespace FamilyBudget.AddIn.Controllers
             return paymentMethodAPI.GetPaymentMethods(force);
         }
 
-        internal static OperationStatus AddNewPaymentMethod(string paymentMethodName, bool isActive)
+        internal static OperationStatus AddNewPaymentMethod(PaymentMethod newPaymentMethod)
         {
             List<PaymentMethod> paymentMethods = new List<PaymentMethod>();
-            paymentMethods.Add(new PaymentMethod() { PaymentMethodName = paymentMethodName, IsActive = isActive });
+            paymentMethods.Add(newPaymentMethod);
 
             return paymentMethodAPI.AddNewPaymentMethods(paymentMethods);
         }

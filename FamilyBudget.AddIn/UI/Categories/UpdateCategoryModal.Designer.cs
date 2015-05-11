@@ -33,19 +33,22 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.categoryDataGrid = new System.Windows.Forms.DataGridView();
-            this.categoryKeyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridCategoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.subCategoryNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.subCategoryPrefixDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AccountName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.isActiveDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.dataGridAccountBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.subCategoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.categoryBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.lblUpdateCategories = new System.Windows.Forms.Label();
             this.cboCategories = new System.Windows.Forms.ComboBox();
             this.btnRefresh = new System.Windows.Forms.Button();
+            this.categoryKeyDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.SubcategoryName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SubcategoryPrefix = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Account = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.IsGoal = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.isActiveDataGridViewCheckBoxColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.categoryDataGrid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridCategoryBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridAccountBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subCategoryBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.categoryBindingSource)).BeginInit();
             this.SuspendLayout();
@@ -67,9 +70,10 @@
             this.categoryDataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.categoryDataGrid.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.categoryKeyDataGridViewTextBoxColumn,
-            this.subCategoryNameDataGridViewTextBoxColumn,
-            this.subCategoryPrefixDataGridViewTextBoxColumn,
-            this.AccountName,
+            this.SubcategoryName,
+            this.SubcategoryPrefix,
+            this.Account,
+            this.IsGoal,
             this.isActiveDataGridViewCheckBoxColumn});
             this.categoryDataGrid.DataSource = this.subCategoryBindingSource;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -91,52 +95,20 @@
             dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
             this.categoryDataGrid.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.categoryDataGrid.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.categoryDataGrid.Size = new System.Drawing.Size(524, 176);
+            this.categoryDataGrid.Size = new System.Drawing.Size(578, 176);
             this.categoryDataGrid.TabIndex = 0;
-            this.categoryDataGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.categoryDataGrid_CellEndEdit);
-            // 
-            // categoryKeyDataGridViewTextBoxColumn
-            // 
-            this.categoryKeyDataGridViewTextBoxColumn.DataPropertyName = "CategoryKey";
-            this.categoryKeyDataGridViewTextBoxColumn.DataSource = this.dataGridCategoryBindingSource;
-            this.categoryKeyDataGridViewTextBoxColumn.DisplayMember = "CategoryName";
-            this.categoryKeyDataGridViewTextBoxColumn.HeaderText = "Category";
-            this.categoryKeyDataGridViewTextBoxColumn.Name = "categoryKeyDataGridViewTextBoxColumn";
-            this.categoryKeyDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.categoryKeyDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
-            this.categoryKeyDataGridViewTextBoxColumn.ValueMember = "CategoryKey";
             // 
             // dataGridCategoryBindingSource
             // 
             this.dataGridCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Category);
             // 
-            // subCategoryNameDataGridViewTextBoxColumn
+            // dataGridAccountBindingSource
             // 
-            this.subCategoryNameDataGridViewTextBoxColumn.DataPropertyName = "SubCategoryName";
-            this.subCategoryNameDataGridViewTextBoxColumn.HeaderText = "SubCategory";
-            this.subCategoryNameDataGridViewTextBoxColumn.Name = "subCategoryNameDataGridViewTextBoxColumn";
-            // 
-            // subCategoryPrefixDataGridViewTextBoxColumn
-            // 
-            this.subCategoryPrefixDataGridViewTextBoxColumn.DataPropertyName = "SubCategoryPrefix";
-            this.subCategoryPrefixDataGridViewTextBoxColumn.HeaderText = "Prefix";
-            this.subCategoryPrefixDataGridViewTextBoxColumn.Name = "subCategoryPrefixDataGridViewTextBoxColumn";
-            // 
-            // AccountName
-            // 
-            this.AccountName.DataPropertyName = "AccountName";
-            this.AccountName.HeaderText = "Account";
-            this.AccountName.Name = "AccountName";
-            // 
-            // isActiveDataGridViewCheckBoxColumn
-            // 
-            this.isActiveDataGridViewCheckBoxColumn.DataPropertyName = "IsActive";
-            this.isActiveDataGridViewCheckBoxColumn.HeaderText = "Enabled?";
-            this.isActiveDataGridViewCheckBoxColumn.Name = "isActiveDataGridViewCheckBoxColumn";
+            this.dataGridAccountBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Account);
             // 
             // subCategoryBindingSource
             // 
-            this.subCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.SubCategory);
+            this.subCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Subcategory);
             // 
             // categoryBindingSource
             // 
@@ -168,18 +140,69 @@
             // 
             this.btnRefresh.BackgroundImage = global::FamilyBudget.AddIn.Properties.Resources.arrow_refresh;
             this.btnRefresh.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.btnRefresh.Location = new System.Drawing.Point(512, 72);
+            this.btnRefresh.Location = new System.Drawing.Point(566, 72);
             this.btnRefresh.Name = "btnRefresh";
             this.btnRefresh.Size = new System.Drawing.Size(24, 24);
             this.btnRefresh.TabIndex = 3;
             this.btnRefresh.UseVisualStyleBackColor = true;
             this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
+            // categoryKeyDataGridViewTextBoxColumn
+            // 
+            this.categoryKeyDataGridViewTextBoxColumn.DataPropertyName = "CategoryKey";
+            this.categoryKeyDataGridViewTextBoxColumn.DataSource = this.dataGridCategoryBindingSource;
+            this.categoryKeyDataGridViewTextBoxColumn.DisplayMember = "CategoryName";
+            this.categoryKeyDataGridViewTextBoxColumn.HeaderText = "Category";
+            this.categoryKeyDataGridViewTextBoxColumn.Name = "categoryKeyDataGridViewTextBoxColumn";
+            this.categoryKeyDataGridViewTextBoxColumn.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.categoryKeyDataGridViewTextBoxColumn.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.categoryKeyDataGridViewTextBoxColumn.ValueMember = "CategoryKey";
+            // 
+            // SubcategoryName
+            // 
+            this.SubcategoryName.DataPropertyName = "SubcategoryName";
+            this.SubcategoryName.HeaderText = "Name";
+            this.SubcategoryName.Name = "SubcategoryName";
+            this.SubcategoryName.Width = 150;
+            // 
+            // SubcategoryPrefix
+            // 
+            this.SubcategoryPrefix.DataPropertyName = "SubcategoryPrefix";
+            this.SubcategoryPrefix.HeaderText = "Prefix";
+            this.SubcategoryPrefix.Name = "SubcategoryPrefix";
+            this.SubcategoryPrefix.Width = 65;
+            // 
+            // Account
+            // 
+            this.Account.DataPropertyName = "AccountKey";
+            this.Account.DataSource = this.dataGridAccountBindingSource;
+            this.Account.DisplayMember = "AccountName";
+            this.Account.HeaderText = "Account";
+            this.Account.Name = "Account";
+            this.Account.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.Account.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.Account.ValueMember = "AccountKey";
+            this.Account.Width = 85;
+            // 
+            // IsGoal
+            // 
+            this.IsGoal.DataPropertyName = "IsGoal";
+            this.IsGoal.HeaderText = "Goal?";
+            this.IsGoal.Name = "IsGoal";
+            this.IsGoal.Width = 50;
+            // 
+            // isActiveDataGridViewCheckBoxColumn
+            // 
+            this.isActiveDataGridViewCheckBoxColumn.DataPropertyName = "IsActive";
+            this.isActiveDataGridViewCheckBoxColumn.HeaderText = "Enabled?";
+            this.isActiveDataGridViewCheckBoxColumn.Name = "isActiveDataGridViewCheckBoxColumn";
+            this.isActiveDataGridViewCheckBoxColumn.Width = 80;
+            // 
             // frmUpdateCategories
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 291);
+            this.ClientSize = new System.Drawing.Size(602, 291);
             this.Controls.Add(this.btnRefresh);
             this.Controls.Add(this.cboCategories);
             this.Controls.Add(this.lblUpdateCategories);
@@ -190,6 +213,7 @@
             this.Load += new System.EventHandler(this.frmUpdateCategories_Load);
             ((System.ComponentModel.ISupportInitialize)(this.categoryDataGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridCategoryBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridAccountBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.subCategoryBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.categoryBindingSource)).EndInit();
             this.ResumeLayout(false);
@@ -206,10 +230,12 @@
         private System.Windows.Forms.ComboBox cboCategories;
         private System.Windows.Forms.Button btnRefresh;
         private System.Windows.Forms.BindingSource dataGridCategoryBindingSource;
+        private System.Windows.Forms.BindingSource dataGridAccountBindingSource;
         private System.Windows.Forms.DataGridViewComboBoxColumn categoryKeyDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn subCategoryNameDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn subCategoryPrefixDataGridViewTextBoxColumn;
-        private System.Windows.Forms.DataGridViewTextBoxColumn AccountName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SubcategoryName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SubcategoryPrefix;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Account;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsGoal;
         private System.Windows.Forms.DataGridViewCheckBoxColumn isActiveDataGridViewCheckBoxColumn;
     }
 }

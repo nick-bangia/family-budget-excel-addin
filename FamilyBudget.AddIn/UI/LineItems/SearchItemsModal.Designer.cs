@@ -294,7 +294,7 @@
             // 
             // SubCategoryBindingSource
             // 
-            this.SubCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.SubCategory);
+            this.SubCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Subcategory);
             // 
             // cbType
             // 

@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using FamilyBudget.Data.Domain;
-using VstoExcel = Microsoft.Office.Tools.Excel;
-using NativeExcel = Microsoft.Office.Interop.Excel;
-using FamilyBudget.AddIn.UI;
+﻿using System.ComponentModel;
 using FamilyBudget.AddIn.Enums;
+using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
+using FamilyBudget.Data.Domain;
+using FamilyBudget.Data.Utilities;
 using log4net;
-using FamilyBudget.AddIn.Controllers;
+using NativeExcel = Microsoft.Office.Interop.Excel;
+using VstoExcel = Microsoft.Office.Tools.Excel;
 
 namespace FamilyBudget.AddIn.DataControllers
 {
@@ -18,7 +18,7 @@ namespace FamilyBudget.AddIn.DataControllers
         private static readonly ILog logger = LogManager.GetLogger("FamilyBudget.AddIn_SubCategoriesManager");
         #endregion
 
-        public static void PopulateSubCategoriesDataTable(List<SubCategory> subCategories)
+        public static void PopulateSubcategoriesDataTable(BindingList<Subcategory> subCategories)
         {
             // log the status
             logger.Info("Beginning population of data sheet...");
@@ -97,7 +97,7 @@ namespace FamilyBudget.AddIn.DataControllers
             }
         }
 
-        private static object GetDataValue(int index, int colNum, List<SubCategory> lineItems)
+        private static object GetDataValue(int index, int colNum, BindingList<Subcategory> lineItems)
         {
             object value;
 
@@ -105,10 +105,10 @@ namespace FamilyBudget.AddIn.DataControllers
             switch (colNum)
             {
                 case (int)SubCategoryDataColumns.PREFIX:
-                    value = lineItems[index].SubCategoryPrefix;
+                    value = lineItems[index].SubcategoryPrefix;
                     break;
                 case (int)SubCategoryDataColumns.SUBCATEGORY:
-                    value = lineItems[index].SubCategoryName;
+                    value = lineItems[index].SubcategoryName;
                     break;
                 case (int)SubCategoryDataColumns.ACCOUNT_NAME:
                     value = lineItems[index].AccountName;

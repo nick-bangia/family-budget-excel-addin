@@ -7,7 +7,6 @@ using FamilyBudget.AddIn.Enums;
 using FamilyBudget.AddIn.Utilities;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Protocol;
 using FamilyBudget.Data.Utilities;
 
 namespace FamilyBudget.AddIn.UI
@@ -16,8 +15,8 @@ namespace FamilyBudget.AddIn.UI
     {
 
         #region Properties
-        private LiveDataObject categoryDataObject;
-        private LiveDataObject subCategoryDataObject;
+        private BindingList<Category> categoryDataObject;
+        private BindingList<Subcategory> subCategoryDataObject;
         private BindingList<PaymentMethod> paymentMethodDataObject;
         private DenormalizedLineItem originalLineItem;
         private int listObjectIndex;
@@ -45,8 +44,8 @@ namespace FamilyBudget.AddIn.UI
         private void frmItem_Load(object sender, EventArgs e)
         {
             // populate category combo box
-            categoryDataObject = CategoriesController.GetCategories();
-            categoryBindingSource.DataSource = categoryDataObject.dataSource;
+            categoryDataObject = CategoriesController.GetCategories(false);
+            categoryBindingSource.DataSource = categoryDataObject;
 
             // populate payment method combo box
             paymentMethodDataObject = PaymentMethodsController.GetPaymentMethods();
@@ -74,7 +73,7 @@ namespace FamilyBudget.AddIn.UI
 
             if (choice == DialogResult.Yes)
             {
-                if (originalLineItem.UniqueKey == Guid.Empty)
+                if (String.IsNullOrWhiteSpace(originalLineItem.UniqueKey))
                 {
                     WorksheetDataController.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
                 }
@@ -98,20 +97,21 @@ namespace FamilyBudget.AddIn.UI
             originalLineItem.Year = dtpTxDate.Value.Year;
             originalLineItem.MonthInt = (short)dtpTxDate.Value.Month;
             originalLineItem.Day = (short)dtpTxDate.Value.Day;
-            originalLineItem.DayOfWeekId = (short)dtpTxDate.Value.DayOfWeek;
+            // to comply with ODBC standard for Days Of Week, add 1 to the System.DayOfWeek Enumeration
+            originalLineItem.DayOfWeekId = (short)(((short)dtpTxDate.Value.DayOfWeek) + 1);
             originalLineItem.Quarter = DateUtil.GetQuarterForMonth(dtpTxDate.Value.Month);
             originalLineItem.Category = cbCategory.Text;
-            originalLineItem.CategoryKey = (Guid)cbCategory.SelectedValue;
+            originalLineItem.CategoryKey = (string)cbCategory.SelectedValue;
             originalLineItem.SubCategory = cbSubcategory.Text;
-            originalLineItem.SubCategoryKey = (Guid)cbSubcategory.SelectedValue;
+            originalLineItem.SubCategoryKey = (string)cbSubcategory.SelectedValue;
             originalLineItem.Description = txtDescription.Text;
             originalLineItem.Amount = Decimal.Parse(txtTxAmount.Text);
             originalLineItem.Type = (LineItemType)cbTxType.SelectedValue;
             originalLineItem.PaymentMethod = cbPaymentMethod.Text;
-            originalLineItem.PaymentMethodKey = (Guid)cbPaymentMethod.SelectedValue;
+            originalLineItem.PaymentMethodKey = (string)cbPaymentMethod.SelectedValue;
             originalLineItem.Status = (LineItemStatus)cbStatus.SelectedValue;
 
-            if (originalLineItem.UniqueKey != Guid.Empty)
+            if (!String.IsNullOrWhiteSpace(originalLineItem.UniqueKey))
             {
                 LineItemsController.UpdateLineItem(originalLineItem);
                 LineItemsController.PopulateDataSheet(rebuild: true);
@@ -130,8 +130,8 @@ namespace FamilyBudget.AddIn.UI
             // rehydrate the subcategories list with new subcategories
             if (cbCategory.SelectedValue != null)
             {
-                subCategoryDataObject = CategoriesController.GetFilteredSubCategories((Guid)cbCategory.SelectedValue);
-                subcategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
+                subCategoryDataObject = CategoriesController.GetFilteredSubcategories((string)cbCategory.SelectedValue);
+                subcategoryBindingSource.DataSource = subCategoryDataObject;
                 cbSubcategory.SelectedIndex = 0;
             }
         }
@@ -143,7 +143,7 @@ namespace FamilyBudget.AddIn.UI
             originalLineItem = lineItem.Clone() as DenormalizedLineItem;
 
             // check the line item to check if this is a new item, or current item
-            if (lineItem.UniqueKey == Guid.Empty)
+            if (String.IsNullOrWhiteSpace(lineItem.UniqueKey))
             {
                 this.Text = "New Line Item";
             }
@@ -154,12 +154,15 @@ namespace FamilyBudget.AddIn.UI
 
             // category
             // Otherwise, show messagebox error.
-            cbCategory.SelectedValue = lineItem.CategoryKey;
+            if (!String.IsNullOrWhiteSpace(lineItem.CategoryKey))
+            {
+                cbCategory.SelectedValue = lineItem.CategoryKey;
 
-            // get filtered subcategories by currently chosen category
-            subCategoryDataObject = CategoriesController.GetFilteredSubCategories(lineItem.CategoryKey);
-            subcategoryBindingSource.DataSource = subCategoryDataObject.dataSource;
-            cbSubcategory.SelectedValue = lineItem.SubCategoryKey;
+                // get filtered subcategories by currently chosen category
+                subCategoryDataObject = CategoriesController.GetFilteredSubcategories(lineItem.CategoryKey);
+                subcategoryBindingSource.DataSource = subCategoryDataObject;
+                cbSubcategory.SelectedValue = lineItem.SubCategoryKey;
+            }
 
             // description
             txtDescription.Text = lineItem.Description;
@@ -171,7 +174,7 @@ namespace FamilyBudget.AddIn.UI
             cbTxType.SelectedIndex = (int)lineItem.Type;
 
             // payment method
-            if (lineItem.PaymentMethodKey != Guid.Empty)
+            if (!String.IsNullOrWhiteSpace(lineItem.PaymentMethodKey))
             {
                 cbPaymentMethod.SelectedValue = lineItem.PaymentMethodKey;
             }

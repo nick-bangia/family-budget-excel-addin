@@ -1,17 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Attributes;
-using FamilyBudget.DataModel;
-using System.ComponentModel;
 
 namespace FamilyBudget.Data.Domain
 {
     public class SearchCriteria
     {
-        public Guid? UniqueId { get; set; }
+        public string UniqueId { get; set; }
 
         private Comparators _dateComparator = Comparators.NO_COMPARE;
         public Comparators DateCompareOperator
@@ -88,9 +82,9 @@ namespace FamilyBudget.Data.Domain
         
         public string DescriptionContains { get; set; }
         
-        public Guid? Category { get; set; }
+        public string Category { get; set; }
         
-        public Guid? SubCategory { get; set; }
+        public string SubCategory { get; set; }
 
         private Comparators _amountComparator = Comparators.NO_COMPARE;
         public Comparators AmountCompareOperator
@@ -151,7 +145,7 @@ namespace FamilyBudget.Data.Domain
         
         public short? SubType { get; set; }
         
-        public Guid? PaymentMethod { get; set; }
+        public string PaymentMethod { get; set; }
         
         public short? Status { get; set; }
 
@@ -160,7 +154,7 @@ namespace FamilyBudget.Data.Domain
         /// </summary>
         /// <param name="lineItemQuery"></param>
         /// <returns>IQueryable object for factLineItems</returns>
-        public IQueryable<factLineItems> BuildQueryFromCriteria(IQueryable<factLineItems> lineItemQuery)
+        /*public IQueryable<factLineItems> BuildQueryFromCriteria(IQueryable<factLineItems> lineItemQuery)
         {
             #region unique id
             // unique id
@@ -344,7 +338,7 @@ namespace FamilyBudget.Data.Domain
 
             // return the modified IQueryable
             return lineItemQuery;
-        }
+        }*/
 
         public void ClearField(SearchFields fieldToClear)
         {
@@ -356,7 +350,7 @@ namespace FamilyBudget.Data.Domain
                     this.CompareToMinAmount = (decimal?)null;
                     break;
                 case SearchFields.CATEGORY:
-                    this.Category = (Guid?)null;
+                    this.Category = null;
                     break;
                 case SearchFields.DATE:
                     this.DateCompareOperator = Comparators.NO_COMPARE;
@@ -376,7 +370,7 @@ namespace FamilyBudget.Data.Domain
                     this.Month = (short?)null;
                     break;
                 case SearchFields.PAYMENT_METHOD:
-                    this.PaymentMethod = (Guid?)null;
+                    this.PaymentMethod = null;
                     break;
                 case SearchFields.QUARTER:
                     this.Quarter = (short?)null;
@@ -385,7 +379,7 @@ namespace FamilyBudget.Data.Domain
                     this.Status = (short?)null;
                     break;
                 case SearchFields.SUBCATEGORY:
-                    this.SubCategory = (Guid?)null;
+                    this.SubCategory = null;
                     break;
                 case SearchFields.SUBTYPE:
                     this.SubType = (short?)null;

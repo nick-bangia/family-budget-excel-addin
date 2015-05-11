@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using log4net;
-using FamilyBudget.Data.Interfaces;
+using System.Dynamic;
+using FamilyBudget.Common.Config;
 using FamilyBudget.Data.Domain;
 using FamilyBudget.Data.Enums;
-using FamilyBudget.DataModel;
-using System.ComponentModel;
+using FamilyBudget.Data.Interfaces;
+using FamilyBudget.Data.Protocol;
 using FamilyBudget.Data.Utilities;
+using log4net;
 
 namespace FamilyBudget.Data.Implementation
 {
@@ -17,6 +16,7 @@ namespace FamilyBudget.Data.Implementation
         #region Properties
         
         private static readonly ILog logger = LogManager.GetLogger("DBLineItemMapper");
+        private static List<DenormalizedLineItem> lineItems;
         
         #endregion
 
@@ -30,31 +30,27 @@ namespace FamilyBudget.Data.Implementation
 
         #region  ILineItemMapper
 
-        public DenormalizedLineItem AddNewLineItem(DenormalizedLineItem lineItem)
+        public List<DenormalizedLineItem> GetAllLineItems(bool forceGet = false)
         {
-            // attempt to insert into the database, and get the status back
-            return SaveLineItemToDB(lineItem);
-        }
-
-        public OperationStatus UpdateLineItem(DenormalizedLineItem lineItem)
-        {
-            return UpdateLineItemInDB(lineItem);
-        }
-                
-        public List<DenormalizedLineItem> GetAllLineItems()
-        {
-            return GetAllItemsFromDB();
+            if (lineItems != null && !forceGet)
+            {
+                return lineItems;
+            }
+            else
+            {
+                return GetAllItemsFromAPI();
+            }
         }
 
         public List<DenormalizedLineItem> GetLineItemsByCriteria(SearchCriteria searchCriteria)
         {
-            return GetLineItemsFromDB(searchCriteria);
+            return GetLineItemsFromAPI(searchCriteria);
         }
 
         public DenormalizedLineItem GetFirstLineItemByCriteria(SearchCriteria searchCriteria)
         {
             List<DenormalizedLineItem> list = GetLineItemsByCriteria(searchCriteria);
-            
+
             // process list result
             if (list.Count == 0)
             {
@@ -68,12 +64,39 @@ namespace FamilyBudget.Data.Implementation
             }
         }
 
-        public DenormalizedLineItem GetLineItem(DenormalizedLineItem lineItem)
+        public List<DenormalizedLineItem> AddNewLineItems(List<DenormalizedLineItem> lineItemsToAdd)
         {
-            return CheckForDuplicate(lineItem);
+            // only perform the add if there are items to add
+            if (lineItemsToAdd != null && lineItemsToAdd.Count > 0)
+            {
+                // perform the operation & get the response
+                APIResponseObject response = PutToAPI(lineItemsToAdd, AddInConfiguration.APIConfiguration.Routes.AddLineItems);
+
+                // process the results into the original list
+                ProcessResults(response, lineItemsToAdd);
+            }
+
+            // return the items with updated fields
+            return lineItemsToAdd;
         }
 
-        public OperationStatus DeleteLineItem(Guid itemKey)
+        public List<DenormalizedLineItem> UpdateLineItems(List<DenormalizedLineItem> lineItemsToUpdate)
+        {
+            // only perform the update if there are items to update
+            if (lineItemsToUpdate != null && lineItemsToUpdate.Count > 0)
+            {
+                // perform the operation & get the response
+                APIResponseObject response = PutToAPI(lineItemsToUpdate, AddInConfiguration.APIConfiguration.Routes.UpdateLineItems);
+
+                // process the results into the original list
+                ProcessResults(response, lineItemsToUpdate);   
+            }
+
+            // return the items with updated fields
+            return lineItemsToUpdate;
+        }
+
+        public OperationStatus DeleteLineItem(string itemKey)
         {
             return DeleteLineItemFromDB(itemKey);
         }
@@ -82,319 +105,324 @@ namespace FamilyBudget.Data.Implementation
 
         #region Private Methods
 
-        private DenormalizedLineItem SaveLineItemToDB(DenormalizedLineItem lineItem)
+        private APIResponseObject PutToAPI(List<DenormalizedLineItem> lineItems, string target)
         {
-            try
+            logger.Info("About to begin a PUT operation to " + target);
+            APIResponseObject response = null;
+
+            // construct the data object that will be posted to the API
+            APIDataObject postData = new APIDataObject();
+            postData.data = new List<Object>();
+
+            // loop through each line item & add to the post data
+            foreach (DenormalizedLineItem lineItem in lineItems)
             {
-                DenormalizedLineItem duplicate = CheckForDuplicate(lineItem);
+                // check for duplicates only if the lineItem is new (empty UniqueKey)
+                DenormalizedLineItem duplicate = String.IsNullOrEmpty(lineItem.UniqueKey) ? CheckForDuplicate(lineItem) : null;
                 if (duplicate == null)
                 {
-                    using (BudgetEntities cxt = new BudgetEntities())
+                    postData.data.Add(new
                     {
-                        /* extract the IDs of the fields that need to be mapped */
-
-                        // if category key is not found, return UNMAPPABLE line item status
-                        Guid categoryKey = lineItem.SubCategoryKey;
-                        // month
-                        short monthId = (short)lineItem.MonthInt;
-                        //day of month
-                        short dayOfMonthId = (short)lineItem.Day;
-                        // day of week
-                        short dayOfWeekId = (short)lineItem.DayOfWeekId;
-                        // year
-                        int yearId = lineItem.Year;
-                        // type of transaction
-                        int type = (int)lineItem.Type;
-                        // subtype of transaction
-                        short subType = (short)(lineItem.SubType != LineItemSubType.GOAL ?
-                            (lineItem.Amount <= 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT) : lineItem.SubType);
-                        // compute the quarter
-                        short quarterId = (short)DateUtil.GetQuarterForMonth(monthId);
-                        // get the payment method key from the Line Item
-                        Guid paymentMethodKey = lineItem.PaymentMethodKey;
-                        // get the line item status
-                        short statusId = (short)lineItem.Status;
-
-                        factLineItems fact = factLineItems.CreatefactLineItems(Guid.NewGuid(), monthId, dayOfMonthId, dayOfWeekId, yearId, categoryKey,
-                            lineItem.Description, lineItem.Amount, type, quarterId, subType, paymentMethodKey, statusId);
-
-                        // save to DB
-                        cxt.factLineItems.AddObject(fact);
-                        cxt.SaveChanges();
-
-                        // return SAVED
-                        lineItem.UniqueKey = fact.UniqueKey;
-                        return lineItem;
-                    }
+                        uniqueKey = String.IsNullOrWhiteSpace(lineItem.UniqueKey) ? "nil" : lineItem.UniqueKey,
+                        monthId = lineItem.MonthInt,
+                        day = lineItem.Day,
+                        dayOfWeekId = lineItem.DayOfWeekId,
+                        year = lineItem.Year,
+                        subcategoryKey = lineItem.SubCategoryKey,
+                        description = lineItem.Description,
+                        amount = lineItem.Amount,
+                        typeId = (int)lineItem.Type,
+                        subtypeId = (int)lineItem.SubType,
+                        quarter = (int)lineItem.Quarter,
+                        paymentMethodKey = lineItem.PaymentMethodKey,
+                        statusId = (int)lineItem.Status
+                    });
                 }
                 else
                 {
-                    // if duplicate, return a status of duplicate
-                    return duplicate;
+                    // mark the line item if it is a duplicate
+                    lineItem.IsDuplicate = true;
                 }
             }
-            catch (Exception ex)
-            {
-                // if an exception is caught when attempting to save the item, return the SAVE_ERROR enum
-                logger.Error("An exception was caught while saving a line item!", ex);
-                return null;
-            }
+
+            // make the PUT request and return the response
+            response = APIUtil.Put(target, postData);
+
+            return response;
         }
 
-        private OperationStatus UpdateLineItemInDB(DenormalizedLineItem lineItem)
+        private void ProcessResults(APIResponseObject response, List<DenormalizedLineItem> lineItems)
         {
-            try
+            List<Object> lineItemResults;
+            OperationStatus status = APIUtil.EvaluateResponse(response, out lineItemResults, false);
+
+            for (int i = 0; i < lineItems.Count; i++)
             {
-                using (BudgetEntities ctx = new BudgetEntities())
+                if (!lineItems[i].IsDuplicate)
                 {
-                    factLineItems currentLineItem = (from fli in ctx.factLineItems
-                                                     where fli.UniqueKey == lineItem.UniqueKey
-                                                     select fli).ToList()[0];
+                    // if the line item is not a duplicate, evaluate the response, and update the
+                    // line item accordingly
+                    dynamic lineItemResponse = lineItemResults[i];
 
-                    currentLineItem.YearId = lineItem.Year;
-                    currentLineItem.MonthId = lineItem.MonthInt;
-                    currentLineItem.DayOfMonthId = lineItem.Day;
-                    currentLineItem.DayOfWeekId = lineItem.DayOfWeekId;
-                    currentLineItem.QuarterId = (short)lineItem.Quarter;
-                    currentLineItem.CategoryKey = lineItem.SubCategoryKey;
-                    currentLineItem.Category.CategoryKey = lineItem.CategoryKey;
-                    currentLineItem.Description = lineItem.Description;
-                    currentLineItem.Amount = lineItem.Amount;
-                    currentLineItem.TypeId = (int)lineItem.Type;
-                    currentLineItem.PaymentMethodId = lineItem.PaymentMethodKey;
-                    currentLineItem.StatusId = (short)lineItem.Status;
+                    if (APIUtil.IsSuccessful(lineItemResponse))
+                    {
+                        // if successful item, get the data from it
+                        dynamic lineItemObj = lineItemResponse.data;
 
-                    // save changes
-                    ctx.SaveChanges();
+                        lineItems[i].UniqueKey = lineItemObj.uniqueKey;
+                    }
+                    else
+                    {
+                        // if unsuccessful, set uniqueKey to Guid.Empty
+                        lineItems[i].APIState = "failed - " + lineItemResponse.reason;
+                    }
                 }
             }
-            catch (Exception ex)
-            {
-                // if an error occurs, log it, and return failure
-                logger.Error("An error occurred while attempting to update a line item." + Environment.NewLine +
-                    "Error Details:" + Environment.NewLine +
-                    ex.Message);
-
-                return OperationStatus.FAILURE;
-            }
-
-            // if code gets here, return success
-            return OperationStatus.SUCCESS;
         }
-
-        private List<DenormalizedLineItem> GetAllItemsFromDB()
+        
+        private List<DenormalizedLineItem> GetAllItemsFromAPI()
         {
             // log start of method
-            logger.Info("Beginning retrieval of all items for active categories from DB...");
-            List<DenormalizedLineItem> allLineItems;
+            logger.Info("Beginning retrieval of all items for active categories from the API...");
+            List<DenormalizedLineItem> allLineItems = null;
 
-            try
+            // make the call to the API
+            APIResponseObject response = APIUtil.Get(AddInConfiguration.APIConfiguration.Routes.GetLineItems);
+
+            if (APIUtil.IsSuccessful(response))
             {
-                using (BudgetEntities ctx = new BudgetEntities())
+                allLineItems = new List<DenormalizedLineItem>();
+                // loop through response data and add to the list
+                foreach (dynamic d in response.data)
                 {
-                    logger.Info("Getting all items from DB.");
-                    var lineItems = from fli in ctx.factLineItems
-                                    where fli.Category.IsActive
-                                    orderby fli.YearId descending, fli.MonthId descending, fli.DayOfMonthId descending
-                                    select fli;
+                    // get the lineItem from the data item
+                    DenormalizedLineItem lineItem = GetDenormalizedItemFromDynamic(d);
 
-                    logger.Info("Denormalizing line items.");
-                    allLineItems = DenormalizeLineItems(lineItems);
+                    // add it to the list
+                    allLineItems.Add(lineItem);
                 }
             }
-            catch (Exception ex)
-            {
-                logger.Error("An error occurred while retreiving denormalized line items.", ex);
-                throw ex;
-            }
-            
+                        
             logger.Info("Completed retrieval of all line items from DB.");
-            return allLineItems;
+            lineItems = allLineItems;
+            return lineItems;
         }
 
-        private List<DenormalizedLineItem> GetLineItemsFromDB(SearchCriteria searchCriteria)
+        private List<DenormalizedLineItem> GetLineItemsFromAPI(SearchCriteria searchCriteria)
         {
             // log start of method
             logger.Info("Beginning retrieval of all items matching search criteria");
-            List<DenormalizedLineItem> matchingLineItems;
+            List<DenormalizedLineItem> matchingLineItems = null;
 
-            try
+            // construct the search post data
+            APIDataObject searchPostData = new APIDataObject();
+            dynamic searchObject = GetSearchObject(searchCriteria);
+            searchPostData.data = new List<Object>();
+            searchPostData.data.Add(searchObject);
+
+            // make the call to the API & get the response
+            APIResponseObject response = APIUtil.Post(AddInConfiguration.APIConfiguration.Routes.SearchLineItems, searchPostData);
+            
+            // based on response, loop through and construct the final list
+            if (APIUtil.IsSuccessful(response))
             {
-                using (BudgetEntities ctx = new BudgetEntities())
+                matchingLineItems = new List<DenormalizedLineItem>();
+                // loop through response data and add to the list
+                foreach (dynamic d in response.data)
                 {
-                    logger.Info("Getting items from DB that match search criteria.");
-                        
-                    // set up the initial base query
-                    IQueryable<factLineItems> lineItemQuery = ctx.factLineItems.Where(fli => fli.Category.IsActive);
+                    // get the lineItem from the data item
+                    DenormalizedLineItem lineItem = GetDenormalizedItemFromDynamic(d);
 
-                    // build the query up based on the search criteria
-                    lineItemQuery = searchCriteria.BuildQueryFromCriteria(lineItemQuery);
-
-                    // add ordering to the query
-                    lineItemQuery = lineItemQuery.OrderByDescending(fli => fli.YearId)
-                                                 .ThenByDescending(fli => fli.MonthId)
-                                                 .ThenByDescending(fli => fli.DayOfMonthId);
-                    
-                    logger.Info("Denormalizing line items.");
-                    matchingLineItems = DenormalizeLineItems(lineItemQuery);
+                    // add it to the list
+                    matchingLineItems.Add(lineItem);
                 }
             }
-            catch (Exception ex)
-            {
-                logger.Error("An error occurred while retreiving denormalized line items.", ex);
-                throw ex;
-            }
-
+            
             logger.Info("Completed retrieval of all line items from DB.");
             return matchingLineItems;
         }
 
-        private List<DenormalizedLineItem> DenormalizeLineItems(IQueryable<factLineItems> lineItems)
+        private OperationStatus DeleteLineItemFromDB(string itemKey)
         {
-            List<DenormalizedLineItem> lineItemList = new List<DenormalizedLineItem>();
+            // set up the response object
+            APIResponseObject response;
 
-            foreach (factLineItems fli in lineItems)
-            {
-                // convert the factLineitem to a LineItem
-                DenormalizedLineItem lineItem = GetDenormalizedItemFromFact(fli);
-                
-                // save to the final list
-                lineItemList.Add(lineItem);
-            }
+            // set up the querystring dictionary
+            Dictionary<string, string> queryParams = new Dictionary<string,string>();
+            queryParams.Add("key", itemKey);
 
-            // return the populated list
-            return lineItemList;
-        }
-        
-        private SubCategory GetSubCategoryFor(string itemDescription)
-        {
-            using (BudgetEntities ctx = new BudgetEntities())
-            {
-                // find the category key for a given description by matching the prefix with
-                // the beginning of the description. First match wins.
-                var subCategories = from subCat in ctx.dimSubCategories
-                                    select subCat;
+            // make the call to the API to delete the item with key itemKey
+            response = APIUtil.Delete(AddInConfiguration.APIConfiguration.Routes.DeleteLineItem, queryParams);
 
-                dimSubCategories match = subCategories.FirstOrDefault(f => itemDescription.StartsWith(f.SubCategoryPrefix));
-                if (match != null)
-                {
-                    return new SubCategory()
-                    {
-                        SubCategoryKey = match.SubCategoryKey,
-                        SubCategoryName = match.SubCategoryName,
-                        SubCategoryPrefix = match.SubCategoryPrefix,
-                        CategoryKey = match.CategoryKey,
-                        CategoryName = match.ParentCategory.CategoryName
-                    }; 
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            // evaluate and return the operation status
+            return APIUtil.EvaluateResponse(response);
         }
 
         private DenormalizedLineItem CheckForDuplicate(DenormalizedLineItem lineItem)
         {
-            List<factLineItems> shortList = new List<factLineItems>();
-            
-            using (BudgetEntities ctx = new BudgetEntities())
+            // initialize a short list of potential matches
+            List<DenormalizedLineItem> shortList = null;
+            // set up the initial search criteria to find any duplicates (amount has to be the same)
+            SearchCriteria sc = new SearchCriteria() 
+            { 
+                AmountCompareOperator = Comparators.EQUAL,
+                CompareToMinAmount = lineItem.Amount 
+            };
+
+            // get the short list
+            shortList = GetLineItemsFromAPI(sc);
+
+            // if there is at least one item in the short list, do a full duplicate check on the uniqueness
+            // convert to a LineItem, and check the unique key against each other
+            foreach (DenormalizedLineItem item in shortList)
             {
-                // search for whether a line item w/ the same information already exists
-                List<factLineItems> factLineItems = (from fli in ctx.factLineItems
-                                                     where fli.Amount == lineItem.Amount
-                                                     select fli).ToList<factLineItems>();
-
-                // loop through the short list of same amounts, and check the date. Pull out any matches.
-                foreach (factLineItems item in factLineItems)
+                // if the checksum for the DB item and the to-be-inserted line item match, return true for duplicate
+                if (lineItem.CheckSum == item.CheckSum)
                 {
-                    if (lineItem.Year == item.YearId && lineItem.MonthInt == item.MonthId && lineItem.Day == item.DayOfMonthId)
-                    {
-                        // if the date matches, add to the short list
-                        shortList.Add(item);
-                    }
+                    lineItem.IsDuplicate = true;
+                    return lineItem;
                 }
-
-                // if there is at least one item in the short list, do a full duplicate check on the uniqueness
-                // convert to a LineItem, and check the unique key against each other
-                foreach (factLineItems item in shortList)
-                {
-                    DenormalizedLineItem actualLineItem = GetDenormalizedItemFromFact(item);
-                    
-                    // if the checksum for the DB item and the to-be-inserted line item match, return true for duplicate
-                    if (actualLineItem.CheckSum == lineItem.CheckSum)
-                    {
-                        actualLineItem.IsDuplicate = true;
-                        return actualLineItem;
-                    }
-                }
-
-                // if code reaches here, there is no sign of a duplicate item
-                return null;
             }
+
+            // if code reaches here, there is no sign of a duplicate item
+            return null;
         }
 
-        private DenormalizedLineItem GetDenormalizedItemFromFact(factLineItems fli)
+        private DenormalizedLineItem GetDenormalizedItemFromDynamic(dynamic d)
         {
             DenormalizedLineItem lineItem = new DenormalizedLineItem()
             {
-                UniqueKey = fli.UniqueKey,
-                Year = fli.YearId,
-                Month = fli.Month.MonthName,
-                MonthInt = fli.Month.MonthId,
-                Day = fli.DayOfMonthId,
-                DayOfWeek = fli.DayOfWeek.DayName,
-                DayOfWeekId = fli.DayOfWeekId,
-                Amount = fli.Amount,
-                Description = fli.Description,
-                Category = fli.Category.ParentCategory.CategoryName,
-                CategoryKey = fli.Category.ParentCategory.CategoryKey,
-                SubCategory = fli.Category.SubCategoryName,
-                SubCategoryKey = fli.CategoryKey,
-                SubCategoryPrefix = fli.Category.SubCategoryPrefix,
-                Type = (LineItemType)fli.TypeId,
-                SubType = (LineItemSubType)fli.SubTypeId,
-                Quarter = (Quarters)fli.QuarterId,
-                PaymentMethod = fli.PaymentMethod.PaymentMethodName,
-                PaymentMethodKey = fli.PaymentMethodId,
-                AccountName = fli.Category.AccountName,
-                IsGoal = fli.Category.IsGoal ? "Yes" : "No",
-                Status = (LineItemStatus)fli.Status.StatusId,
+                UniqueKey = d.uniqueKey,
+                Year = d.year,
+                Month = d.month,
+                MonthInt = d.monthId,
+                Day = d.day,
+                DayOfWeek = d.dayOfWeek,
+                DayOfWeekId = d.dayOfWeekId,
+                Amount = d.amount,
+                Description = d.description,
+                Category = d.categoryName,
+                CategoryKey = d.categoryKey,
+                SubCategory = d.subcategoryName,
+                SubCategoryKey = d.subcategoryKey,
+                SubCategoryPrefix = d.subcategoryPrefix,
+                Type = (LineItemType)d.typeId,
+                SubType = (LineItemSubType)d.subtypeId,
+                Quarter = (Quarters)d.quarter,
+                PaymentMethod = d.paymentMethodName,
+                PaymentMethodKey = d.paymentMethodKey,
+                AccountName = d.accountName,
+                IsGoal = d.isGoal,
+                Status = (LineItemStatus)d.statusId,
                 IsDeleted = false,
                 IsDuplicate = false
             };
 
             return lineItem;
         }
-        
-        private OperationStatus DeleteLineItemFromDB(Guid itemKey)
+
+        private dynamic GetSearchObject(SearchCriteria searchCriteria)
         {
-            try
-            {
-                using (BudgetEntities ctx = new BudgetEntities())
-                {
-                    factLineItems lineItem = (from fli in ctx.factLineItems
-                                              where fli.UniqueKey == itemKey
-                                              select fli).ToList()[0];
+            dynamic searchObject = new ExpandoObject();
 
-                    ctx.factLineItems.DeleteObject(lineItem);
-                    ctx.SaveChanges();
-                }
-            }
-            catch (Exception ex)
+            // evaluate each search criteria, and fill in the searchObject if it is valid
+            if (!String.IsNullOrWhiteSpace(searchCriteria.UniqueId))
             {
-                logger.Error("An error occurred while attempting to delete the line item with key: " +
-                    itemKey.ToString() + ". Please make sure this item exists in the DB before deleting it." +
-                    Environment.NewLine + Environment.NewLine +
-                    "Error Details: " + Environment.NewLine +
-                    ex.Message);
-
-                // return failed operation if an error occurs
-                return OperationStatus.FAILURE;
+                searchObject.uniqueKey = searchCriteria.UniqueId;
             }
 
-            // if we get here, return a successful operation
-            return OperationStatus.SUCCESS;
+            if (searchCriteria.DateCompareOperator != Comparators.NO_COMPARE)
+            {
+                searchObject.dateCompareOperator = EnumUtil.GetApiName(searchCriteria.DateCompareOperator);
+            }
+
+            if (searchCriteria.CompareToMinDate.HasValue)
+            {
+                searchObject.minDate = searchCriteria.CompareToMinDate.Value.ToString("u");
+            }
+
+            if (searchCriteria.CompareToMaxDate.HasValue)
+            {
+                searchObject.maxDate = searchCriteria.CompareToMaxDate.Value.ToString("u");
+            }
+
+            if (searchCriteria.Year.HasValue)
+            {
+                searchObject.year = searchCriteria.Year.Value;
+            }
+
+            if (searchCriteria.Quarter.HasValue)
+            {
+                searchObject.quarter = searchCriteria.Quarter.Value;
+            }
+
+            if (searchCriteria.Month.HasValue)
+            {
+                searchObject.month = searchCriteria.Month.Value;
+            }
+
+            if (searchCriteria.Day.HasValue)
+            {
+                searchObject.day = searchCriteria.Day.Value;
+            }
+
+            if (searchCriteria.DayOfWeek.HasValue)
+            {
+                searchObject.dayOfWeek = searchCriteria.DayOfWeek.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(searchCriteria.DescriptionContains))
+            {
+                searchObject.descriptionContains = searchCriteria.DescriptionContains;
+            }
+
+            if (!String.IsNullOrWhiteSpace(searchCriteria.Category))
+            {
+                searchObject.categoryKey = searchCriteria.Category;
+            }
+
+            if (!String.IsNullOrWhiteSpace(searchCriteria.SubCategory))
+            {
+                searchObject.subcategoryKey = searchCriteria.SubCategory;
+            }
+
+            if (searchCriteria.AmountCompareOperator != Comparators.NO_COMPARE)
+            {
+                searchObject.amountCompareOperator = EnumUtil.GetApiName(searchCriteria.AmountCompareOperator);
+            }
+
+            if (searchCriteria.CompareToMinAmount.HasValue)
+            {
+                searchObject.minAmount = searchCriteria.CompareToMinAmount.Value;
+            }
+
+            if (searchCriteria.CompareToMaxAmount.HasValue)
+            {
+                searchObject.maxAmount = searchCriteria.CompareToMaxAmount.Value;
+            }
+
+            if (searchCriteria.Type.HasValue)
+            {
+                searchObject.type = searchCriteria.Type.Value;
+            }
+
+            if (searchCriteria.SubType.HasValue)
+            {
+                searchObject.subtype = searchCriteria.SubType.Value;
+            }
+
+            if (!String.IsNullOrWhiteSpace(searchCriteria.PaymentMethod))
+            {
+                searchObject.paymentMethodKey = searchCriteria.PaymentMethod;
+            }
+
+            if (searchCriteria.Status.HasValue)
+            {
+                searchObject.status = searchCriteria.Status.Value;
+            }
+
+            // return the search object
+            return searchObject;
         }
 
         #endregion

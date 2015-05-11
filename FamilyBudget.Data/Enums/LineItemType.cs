@@ -19,6 +19,10 @@ namespace FamilyBudget.Data.Enums
         
         [FriendlyName("Savings Goal")]
         [Description("Describes a savings goal")]
-        GOAL = 3
+        GOAL = 3,
+
+        [FriendlyName("Mixed")]
+        [Description("Describes a mixed, rolled up value, usually condensed for brevity")]
+        MIXED = 4
     }
 }

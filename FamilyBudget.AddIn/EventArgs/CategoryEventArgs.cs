@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using FamilyBudget.AddIn.Enums;
 using FamilyBudget.Data.Domain;
 
@@ -14,12 +11,12 @@ namespace FamilyBudget.AddIn.Events
 
     internal class SubCategoryEventArgs : EventArgs
     {
-        public SubCategory subCategory { get; set; }
+        public Subcategory subCategory { get; set; }
     }
 
     internal class GoalEventArgs : EventArgs
     {
-        public SubCategory subCategory { get; set; }
+        public Subcategory subCategory { get; set; }
         public decimal GoalAmount { get; set; }
     }
 

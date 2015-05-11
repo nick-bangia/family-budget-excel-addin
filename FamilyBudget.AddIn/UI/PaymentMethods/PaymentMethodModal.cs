@@ -19,7 +19,6 @@ namespace FamilyBudget.AddIn.UI
     {
         #region Properties
 
-        private BindingList<PaymentMethod> paymentMethods { get; set; }
         private static readonly ILog logger = LogManager.GetLogger("frmPaymentModal");
 
         #endregion
@@ -31,24 +30,36 @@ namespace FamilyBudget.AddIn.UI
 
         private void PaymentMethodModal_Load(object sender, EventArgs e)
         {
-            paymentMethods = PaymentMethodsController.GetPaymentMethods();
-            PaymentMethodBindingSource.DataSource = paymentMethods;
+            PaymentMethodBindingSource.DataSource = PaymentMethodsController.GetPaymentMethods();
         }
        
         private void btnAddNewPaymentMethod_Click(object sender, EventArgs e)
         {
-            OperationStatus status = PaymentMethodsController.AddNewPaymentMethod(txtPaymentMethod.Text, chkEnabled.Checked);
+            // create the new payment method
+            PaymentMethod newPaymentMethod = new PaymentMethod()
+            {
+                PaymentMethodName = txtPaymentMethod.Text,
+                IsActive = chkEnabled.Checked
+            };
+
+            // ask the controller to add it
+            OperationStatus status = PaymentMethodsController.AddNewPaymentMethod(newPaymentMethod);
 
             string errorText = null;
             if (status == OperationStatus.FAILURE)
             {
                 // wasn't able to add the new payment method - notify user
-                 errorText = "An error occurred while attempting to add a new Payment Method to the DB:" + Environment.NewLine +
-                                    "Check that the API is available and try again.";
+                errorText = "An error occurred while attempting to add a new Payment Method to the DB:" + Environment.NewLine +
+                                   "Check that the API is available and try again.";
 
-                 logger.Error(errorText);
-                 MessageBox.Show(errorText);
-            }            
+                logger.Error(errorText);
+                MessageBox.Show(errorText);
+            }
+            else
+            {
+                // reset the text in the paymentMethod textbox
+                txtPaymentMethod.Text = null;
+            }
         }
     }
 }

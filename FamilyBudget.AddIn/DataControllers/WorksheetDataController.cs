@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using FamilyBudget.AddIn.Controllers;
-using FamilyBudget.Data.Domain;
 using FamilyBudget.AddIn.Enums;
 using FamilyBudget.AddIn.Events;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
+using FamilyBudget.Data.Domain;
+using FamilyBudget.Data.Utilities;
 using log4net;
 using NativeExcel = Microsoft.Office.Interop.Excel;
 using VstoExcel = Microsoft.Office.Tools.Excel;
@@ -181,11 +182,11 @@ namespace FamilyBudget.AddIn.DataControllers
             dataWorksheets.Clear();
         }
 
-        internal static Guid GetItemKey(int listObjectIndex, DataWorksheetType worksheetType)
+        internal static string GetItemKey(int listObjectIndex, DataWorksheetType worksheetType)
         {
             // get the unique key from the list object, so that it can be retreived
             // from the DB
-            Guid itemKey = Guid.Empty;
+            string itemKey = null;
             CompositeDataSheetObject dataSheetObject = dataWorksheets.Find(dso => dso.worksheetType == worksheetType);
 
             // get the item key using the list object index from the appropriate data sheet's list object
@@ -194,7 +195,7 @@ namespace FamilyBudget.AddIn.DataControllers
                 string uniqueIdValue = dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, DataWorksheetColumns.UNIQUE_ID].Value2;
                 if (!String.IsNullOrEmpty(uniqueIdValue))
                 {
-                    itemKey = Guid.Parse(uniqueIdValue);
+                    itemKey = uniqueIdValue;
                 }
                 
             }
@@ -261,7 +262,7 @@ namespace FamilyBudget.AddIn.DataControllers
                     DateTime date = new DateTime(updatedLineItem.Year, updatedLineItem.MonthInt, updatedLineItem.Day);
                     string type = EnumUtil.GetFriendlyName(updatedLineItem.Type);
                     string status = EnumUtil.GetFriendlyName(updatedLineItem.Status);
-                    string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : (updatedLineItem.UniqueKey != Guid.Empty ? updatedLineItem.UniqueKey.ToString() : String.Empty));
+                    string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : (!String.IsNullOrWhiteSpace(updatedLineItem.UniqueKey) ? updatedLineItem.UniqueKey.ToString() : String.Empty));
 
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = uniqueKey;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DATE].Value2 = date;
@@ -473,7 +474,7 @@ namespace FamilyBudget.AddIn.DataControllers
             switch (colNum)
             {
                 case (int)DataWorksheetColumns.UNIQUE_ID:
-                    value = lineItem.UniqueKey == Guid.Empty ? "" : lineItem.UniqueKey.ToString();
+                    value = String.IsNullOrWhiteSpace(lineItem.UniqueKey) ? "" : lineItem.UniqueKey.ToString();
                     break;
                 case (int)DataWorksheetColumns.DATE:
                     value = new DateTime(lineItem.Year, lineItem.MonthInt, lineItem.Day);

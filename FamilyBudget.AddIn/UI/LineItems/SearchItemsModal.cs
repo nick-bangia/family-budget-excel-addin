@@ -4,10 +4,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using FamilyBudget.AddIn.Utilities;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Domain;
 using FamilyBudget.AddIn.Controllers;
+using FamilyBudget.Data.Domain;
+using FamilyBudget.Data.Enums;
+using FamilyBudget.Data.Utilities;
 
 namespace FamilyBudget.AddIn.UI
 {
@@ -154,7 +154,7 @@ namespace FamilyBudget.AddIn.UI
                 case SearchFields.CATEGORY:
                     PositionControl(cbCategory);
                     cbCategory.Visible = true;
-                    CategoryBindingSource.DataSource = CategoriesController.GetCategories().dataSource;
+                    CategoryBindingSource.DataSource = CategoriesController.GetCategories(false);
                     break;
                 case SearchFields.DATE:
                     PositionControl(panelDates);
@@ -171,7 +171,7 @@ namespace FamilyBudget.AddIn.UI
                 case SearchFields.DAY_OF_WEEK:
                     PositionControl(cbDayOfWeek);
                     cbDayOfWeek.Visible = true;
-                    DayOfWeekBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(DayOfWeek));
+                    DayOfWeekBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(Data.Enums.DayOfWeek));
                     break;
                 case SearchFields.DESCRIPTION:
                     PositionControl(txtTextValue);
@@ -202,7 +202,7 @@ namespace FamilyBudget.AddIn.UI
                 case SearchFields.SUBCATEGORY:
                     PositionControl(cbSubCategory);
                     cbSubCategory.Visible = true;
-                    SubCategoryBindingSource.DataSource = CategoriesController.GetSubCategories().dataSource;
+                    SubCategoryBindingSource.DataSource = CategoriesController.GetSubcategories(false);
                     break;
                 case SearchFields.SUBTYPE:
                     PositionControl(cbSubType);
@@ -280,7 +280,7 @@ namespace FamilyBudget.AddIn.UI
                     #endregion
                     break;
                 case SearchFields.CATEGORY:
-                    searchCriteria.Category = (Guid)cbCategory.SelectedValue;
+                    searchCriteria.Category = (string)cbCategory.SelectedValue;
                     criteriaDescBuilder.AppendFormat("  =  {0}", cbCategory.Text);
                     break;
                 case SearchFields.DATE:
@@ -306,7 +306,7 @@ namespace FamilyBudget.AddIn.UI
                     break;
                 case SearchFields.DAY_OF_WEEK:
                     searchCriteria.DayOfWeek = Convert.ToInt16(cbDayOfWeek.SelectedValue);
-                    criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((DayOfWeek)searchCriteria.DayOfWeek.Value));
+                    criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((Data.Enums.DayOfWeek)searchCriteria.DayOfWeek.Value));
                     break;
                 case SearchFields.DESCRIPTION:
                     searchCriteria.DescriptionContains = txtTextValue.Text;
@@ -317,7 +317,7 @@ namespace FamilyBudget.AddIn.UI
                     criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((Months)searchCriteria.Month.Value));
                     break;
                 case SearchFields.PAYMENT_METHOD:
-                    searchCriteria.PaymentMethod = (Guid)cbPaymentMethod.SelectedValue;
+                    searchCriteria.PaymentMethod = (string)cbPaymentMethod.SelectedValue;
                     criteriaDescBuilder.AppendFormat("  =  {0}", cbPaymentMethod.Text);
                     break;
                 case SearchFields.QUARTER:
@@ -329,7 +329,7 @@ namespace FamilyBudget.AddIn.UI
                     criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((LineItemStatus)searchCriteria.Status.Value));
                     break;
                 case SearchFields.SUBCATEGORY:
-                    searchCriteria.SubCategory = (Guid)cbSubCategory.SelectedValue;
+                    searchCriteria.SubCategory = (string)cbSubCategory.SelectedValue;
                     criteriaDescBuilder.AppendFormat("  =  {0}", cbSubCategory.Text);
                     break;
                 case SearchFields.SUBTYPE:

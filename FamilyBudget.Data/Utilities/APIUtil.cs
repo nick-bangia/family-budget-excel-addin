@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using FamilyBudget.Common.Config;
-using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Domain;
+using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Protocol;
 using log4net;
 using Newtonsoft.Json;
@@ -80,7 +79,7 @@ namespace FamilyBudget.Data.Utilities
                 // assign failure if the number of items posted successfully is 0
                 // otherwise, keep the status the same
                 opStatus = (successCount > 0 && successCount != response.data.Count) ? OperationStatus.PARTIAL_SUCCESS :
-                           ((successCount == 0) ? OperationStatus.FAILURE : opStatus);
+                           ((successCount == 0 && response.data.Count != 0) ? OperationStatus.FAILURE : opStatus);
                 
             }
 
@@ -148,16 +147,16 @@ namespace FamilyBudget.Data.Utilities
                 for (int i = 0; i < queryParams.Count; i++)
                 {
                     // add the delimiter if it is not the first query parameter
-                    if (i != 0) { qs.Append("&"); }
+                    if (i != 0) { qs.Append("/"); }
 
                     // add the query parameter
-                    string queryString = queryParams.ElementAt(i) + "=" + queryParams.ElementAt(i).Value;
+                    string queryString = queryParams.ElementAt(i).Value;
                     logger.InfoFormat("Query string {0} is {1}", i, queryString);
                     qs.Append(queryString);
                 }
 
                 // append the query strings to the uri
-                uri += "?" + qs.ToString();
+                uri += "/" + qs.ToString();
                 logger.InfoFormat("Full URI to call on: {0}", uri);
             }
             

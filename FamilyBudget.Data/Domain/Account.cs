@@ -3,36 +3,35 @@ using System.ComponentModel;
 
 namespace FamilyBudget.Data.Domain
 {
-    public class Category : ManagedDataObject
+    public class Account : ManagedDataObject
     {
-        private string _categoryKey;
-        private string _categoryName;
+        private string _accountKey;
+        private string _accountName;
         private bool _isActive;
 
-        public string CategoryKey
+        public string AccountKey
         {
             get
             {
-                return this._categoryKey;
+                return this._accountKey;
             }
-
             set
             {
-                this._categoryKey = value;
+                this._accountKey = value;
             }
         }
 
-        public string CategoryName
+        public string AccountName
         {
             get
             {
-                return this._categoryName;
+                return this._accountName;
             }
 
             set
             {
-                this._categoryName = value;
-                NotifyPropertyChanged("CategoryName");
+                this._accountName = value;
+                NotifyPropertyChanged("AccountName");
             }
         }
 
