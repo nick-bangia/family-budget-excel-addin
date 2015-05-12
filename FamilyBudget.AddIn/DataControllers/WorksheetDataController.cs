@@ -262,7 +262,10 @@ namespace FamilyBudget.AddIn.DataControllers
                     DateTime date = new DateTime(updatedLineItem.Year, updatedLineItem.MonthInt, updatedLineItem.Day);
                     string type = EnumUtil.GetFriendlyName(updatedLineItem.Type);
                     string status = EnumUtil.GetFriendlyName(updatedLineItem.Status);
-                    string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : (!String.IsNullOrWhiteSpace(updatedLineItem.UniqueKey) ? updatedLineItem.UniqueKey.ToString() : String.Empty));
+                    string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : 
+                        (updatedLineItem.APIState.Contains("failed") ? updatedLineItem.APIState : 
+                        (!String.IsNullOrWhiteSpace(updatedLineItem.UniqueKey) ? updatedLineItem.UniqueKey : 
+                        String.Empty)));
 
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = uniqueKey;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DATE].Value2 = date;

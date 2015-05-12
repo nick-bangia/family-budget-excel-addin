@@ -119,6 +119,7 @@ namespace FamilyBudget.AddIn.Async
                             lineItem.IsDeleted = false;
                             lineItem.IsDuplicate = false;
                             lineItem.ItemSurrogateKey = lineItemIterator;
+                            lineItem.APIState = String.Empty;
 
                             this.lineItems.Add(lineItem);
 

@@ -162,19 +162,24 @@ namespace FamilyBudget.Data.Implementation
                 {
                     // if the line item is not a duplicate, evaluate the response, and update the
                     // line item accordingly
-                    dynamic lineItemResponse = lineItemResults[i];
+                    dynamic lineItemResponse = lineItemResults != null ? lineItemResults[i] : null;
 
-                    if (APIUtil.IsSuccessful(lineItemResponse))
+                    if (lineItemResponse != null && APIUtil.IsSuccessful(lineItemResponse))
                     {
                         // if successful item, get the data from it
                         dynamic lineItemObj = lineItemResponse.data;
 
                         lineItems[i].UniqueKey = lineItemObj.uniqueKey;
+                        lineItems[i].APIState = "success";
                     }
-                    else
+                    else if (lineItemResponse != null)
                     {
                         // if unsuccessful, set uniqueKey to Guid.Empty
                         lineItems[i].APIState = "failed - " + lineItemResponse.reason;
+                    }
+                    else
+                    {
+                        lineItems[i].APIState = "failed - " + response.reason;
                     }
                 }
             }

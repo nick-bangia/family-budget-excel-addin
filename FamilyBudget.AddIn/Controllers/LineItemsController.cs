@@ -157,7 +157,7 @@ namespace FamilyBudget.AddIn.Controllers
                     lineItems = e.Result as List<DenormalizedLineItem>;
 
                     // refresh the workbook
-                    MasterDataController.PopulateMasterDataTable(lineItemAPI.GetAllLineItems());
+                    MasterDataController.PopulateMasterDataTable(lineItemAPI.GetAllLineItems(true));
                     WorkbookUtil.RefreshPivotTables();
 
                     // update the new items worksheet object with the latest line items
@@ -321,7 +321,7 @@ namespace FamilyBudget.AddIn.Controllers
                     string itemKey = WorksheetDataController.GetItemKey(e.ListIndex, e.worksheetType);
 
                     DenormalizedLineItem item;
-                    if (!String.IsNullOrWhiteSpace(itemKey))
+                    if (!String.IsNullOrWhiteSpace(itemKey) && !itemKey.Contains("failed"))
                     {
                         SearchCriteria sc = new SearchCriteria() { UniqueId = itemKey };
                         item = lineItemAPI.GetFirstLineItemByCriteria(sc);
@@ -347,7 +347,7 @@ namespace FamilyBudget.AddIn.Controllers
 
                         if (!String.IsNullOrWhiteSpace(itemKey))
                         {
-                            error = error + " Unique ID: " + item.UniqueKey.ToString();
+                            error = error + " Unique ID: " + itemKey;
                         }
 
                         error = error + Environment.NewLine + Environment.NewLine + "Check that this item actually exists!";
@@ -429,18 +429,20 @@ namespace FamilyBudget.AddIn.Controllers
             }
         }
 
-        internal static void UpdateLineItem(DenormalizedLineItem lineItem)
+        internal static DenormalizedLineItem UpdateLineItem(DenormalizedLineItem lineItem)
         {
             List<DenormalizedLineItem> lineItemsToUpdate = new List<DenormalizedLineItem>();
             lineItemsToUpdate.Add(lineItem);
 
             List<DenormalizedLineItem> updatedItems = lineItemAPI.UpdateLineItems(lineItemsToUpdate);
 
-            if (!String.IsNullOrWhiteSpace(updatedItems[0].APIState))
+            if (updatedItems[0].APIState.Contains("failed"))
             {
                 MessageBox.Show("Unable to update item with key: " + lineItem.UniqueKey.ToString() + Environment.NewLine +
                     "Details: " + updatedItems[0].APIState);
             }
+
+            return updatedItems[0];
         }
 
         internal static void SearchSubmitted(SearchCriteria sc)
@@ -448,21 +450,30 @@ namespace FamilyBudget.AddIn.Controllers
             List<DenormalizedLineItem> items = lineItemAPI.GetLineItemsByCriteria(sc);
             bool displayResults = true;
 
-            if (items.Count == 0)
+            if (items != null)
             {
-                // if no line items are returned, then notify user
-                searchItemsForm.NotifyUser("No items found! Please change your search criteria.");
-                displayResults = false;
+                if (items.Count == 0)
+                {
+                    // if no line items are returned, then notify user
+                    searchItemsForm.NotifyUser("No items found! Please change your search criteria.");
+                    displayResults = false;
+                }
+                else if (items.Count > Convert.ToInt32(Properties.Resources.MaxSearchResults))
+                {
+                    // number of items exceeds the max search results, so truncate the results and notify user
+                    int startIndex = Convert.ToInt32(Properties.Resources.MaxSearchResults);
+                    items.RemoveRange(startIndex, items.Count - startIndex);
+                    searchItemsForm.NotifyUser(
+                        "Search results exceeded max results size of " +
+                        startIndex.ToString() + " items. Results have been truncated." + Environment.NewLine +
+                        Environment.NewLine + "Update your search criteria to limit number of results.");
+                }
             }
-            else if (items.Count > Convert.ToInt32(Properties.Resources.MaxSearchResults))
+            else
             {
-                // number of items exceeds the max search results, so truncate the results and notify user
-                int startIndex = Convert.ToInt32(Properties.Resources.MaxSearchResults);
-                items.RemoveRange(startIndex, items.Count - startIndex);
-                searchItemsForm.NotifyUser(
-                    "Search results exceeded max results size of " +
-                    startIndex.ToString() + " items. Results have been truncated." + Environment.NewLine +
-                    Environment.NewLine + "Update your search criteria to limit number of results.");
+                // if the results are null, an error occurred with the request
+                searchItemsForm.NotifyUser("An error occurred attempting to search line items. Check the log for more details.");
+                displayResults = false;
             }
 
             if (displayResults)
@@ -473,18 +484,20 @@ namespace FamilyBudget.AddIn.Controllers
             }
         }
                 
-        internal static void AddNewLineItem(DenormalizedLineItem goalLineItem)
+        internal static DenormalizedLineItem AddNewLineItem(DenormalizedLineItem lineItemToInsert)
         {
             List<DenormalizedLineItem> lineItemsToInsert = new List<DenormalizedLineItem>();
-            lineItemsToInsert.Add(goalLineItem);
+            lineItemsToInsert.Add(lineItemToInsert);
 
-            DenormalizedLineItem insertedGoal = lineItemAPI.AddNewLineItems(lineItemsToInsert)[0];
+            DenormalizedLineItem insertedItem = lineItemAPI.AddNewLineItems(lineItemsToInsert)[0];
 
-            if (!String.IsNullOrWhiteSpace(insertedGoal.APIState))
+            if (insertedItem.APIState.Contains("failed"))
             {
                 MessageBox.Show("Unable to save goal. Check the log for more details." + Environment.NewLine +
-                    "Details: " + insertedGoal.APIState);
+                    "Details: " + insertedItem.APIState);
             }
+
+            return insertedItem;
         }
 
         internal static List<DenormalizedLineItem> GetAllLineItems(bool forceGet)

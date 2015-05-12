@@ -111,15 +111,28 @@ namespace FamilyBudget.AddIn.UI
             originalLineItem.PaymentMethodKey = (string)cbPaymentMethod.SelectedValue;
             originalLineItem.Status = (LineItemStatus)cbStatus.SelectedValue;
 
-            if (!String.IsNullOrWhiteSpace(originalLineItem.UniqueKey))
+            Guid uniqueKey = Guid.Empty;
+            if (Guid.TryParse(originalLineItem.UniqueKey, out uniqueKey))
             {
-                LineItemsController.UpdateLineItem(originalLineItem);
-                LineItemsController.PopulateDataSheet(rebuild: true);
-                WorkbookUtil.RefreshPivotTables();
+                // if the uniqueKey field is a valid Guid, then update the item via the API
+                originalLineItem = LineItemsController.UpdateLineItem(originalLineItem);
+            }
+            else
+            {
+                // otherwise, add it
+                originalLineItem = LineItemsController.AddNewLineItem(originalLineItem);
             }
 
             // update the line item in the data worksheet
             WorksheetDataController.UpdateLineItem(this.listObjectIndex, this.lineItemIndex, this.worksheetType, originalLineItem);
+
+            // refresh the data sheet & pivot tables if the APIState of the lineItem is OK
+            if (originalLineItem.APIState.Contains("success"))
+            {
+                LineItemsController.PopulateDataSheet(rebuild: true);
+                WorkbookUtil.RefreshPivotTables();
+                WorkbookUtil.ShowWorksheetByName(Properties.Resources.DataWorksheetName + EnumUtil.GetFriendlyName(worksheetType));
+            }
 
             // close the form
             this.Close();
