@@ -1,9 +1,0 @@
--- Query to insert the status of transactions
-INSERT INTO dimStatus (StatusId, StatusName)
-VALUES (0, 'Reconciled');
-INSERT INTO dimStatus (StatusId, StatusName)
-VALUES (1, 'Pending');
-INSERT INTO dimStatus (StatusId, StatusName)
-VALUES (2, 'Future');
-INSERT INTO dimStatus (StatusId, StatusName)
-VALUES (3, 'Goal');
