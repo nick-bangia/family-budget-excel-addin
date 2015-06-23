@@ -24,6 +24,13 @@ namespace FamilyBudget.AddIn.Utilities
         {
             RefreshWorkbook(userRefresh: true);
         }
+
+        internal static void btnRefreshToken_Click(object sender, RibbonControlEventArgs e)
+        {
+            // simply login to the API again to refresh the token
+            ApiToken token = APIUtil.Login();
+            AddInConfiguration.APIConfiguration.AccessToken = token.accessToken;
+        }
         #endregion
 
         #region Internal Methods
@@ -68,18 +75,18 @@ namespace FamilyBudget.AddIn.Utilities
         internal static void SetupWorkbook()
         {
             // check the API health before continuing
-            ApiHealth apiHealth = APIUtil.CheckAPIHealth();
-            if (apiHealth.healthState == ApiHealthState.OK)
+            ApiToken apiToken = APIUtil.Login();
+            if (apiToken.accessToken != null)
             {
+                AddInConfiguration.APIConfiguration.AccessToken = apiToken.accessToken;
                 RefreshWorkbook(userRefresh: false);
             }
             else
             {
-                logger.ErrorFormat("The API is not in a healthy state. STATE = {0}, REASON = {1}", apiHealth.healthState.ToString(), apiHealth.healthReason);
+                logger.ErrorFormat("Unable to login to the API, REASON = {1}", apiToken.message);
                 string message =
-                    "The API is not in a healthy state." + Environment.NewLine +
-                    "Status: " + apiHealth.healthState.ToString() + Environment.NewLine +
-                    "Reason: " + apiHealth.healthReason + Environment.NewLine + Environment.NewLine +
+                    "Unable to login to the API" + Environment.NewLine +
+                    "Reason: " + apiToken.message + Environment.NewLine + Environment.NewLine +
                     "This will prevent you from interacting with this tool properly. Please resolve the issue and click Refresh to check the state";
 
                 MessageBox.Show(message);
@@ -142,6 +149,7 @@ namespace FamilyBudget.AddIn.Utilities
         {
             Globals.Ribbons.FamilyBudgetRibbon.tabFamilyBudget.Visible = isValidWorkbook;
         }
+
         #endregion
     }
 }

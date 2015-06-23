@@ -25,6 +25,8 @@ namespace FamilyBudget.Common.Config
         private static readonly string API_ROOT_URL = "APIRootUrl";
         private static readonly string USERNAME = "Username";
         private static readonly string PASSWORD = "Password";
+        private static readonly string ACCESS_TOKEN = "access_token";
+        private static readonly string DATETIME_FORMAT = "date_format";
         #endregion
 
         #region AddIn Configurations
@@ -83,6 +85,32 @@ namespace FamilyBudget.Common.Config
                 set
                 {
                     SetValue(PASSWORD, value, DEFAULT_CONFIG_TYPE);
+                }
+            }
+
+            public static string AccessToken
+            {
+                get
+                {
+                    return GetValue(ACCESS_TOKEN, DEFAULT_CONFIG_TYPE);
+                }
+
+                set
+                {
+                    SetValue(ACCESS_TOKEN, value, DEFAULT_CONFIG_TYPE);
+                }
+            }
+
+            public static string DateFormat
+            {
+                get
+                {
+                    return GetValue(DATETIME_FORMAT, DEFAULT_CONFIG_TYPE);
+                }
+
+                set
+                {
+                    SetValue(DATETIME_FORMAT, value, DEFAULT_CONFIG_TYPE);
                 }
             }
 

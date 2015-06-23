@@ -10,6 +10,7 @@ using FamilyBudget.Data.Enums;
 using FamilyBudget.Data.Protocol;
 using log4net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace FamilyBudget.Data.Utilities
 {
@@ -19,24 +20,24 @@ namespace FamilyBudget.Data.Utilities
         private static readonly ILog logger = LogManager.GetLogger("APIUtil");
         #endregion
 
-        public static APIResponseObject Get(string uri, Dictionary<string, string> queryParams = null)
+        public static APIResponseObject Get(string uri, bool useAccessToken = true, Dictionary<string, string> queryParams = null)
         {
-            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.GET, queryParams, null);
+            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.GET, queryParams, null, useAccessToken);
         }
         
         public static APIResponseObject Post(string uri, APIDataObject body, Dictionary<string, string> queryParams = null)
         {
-            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.POST, queryParams, body);
+            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.POST, queryParams, body, true);
         }
 
         public static APIResponseObject Put(string uri, APIDataObject body, Dictionary<string, string> queryParams = null)
         {
-            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.PUT, queryParams, body);
+            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.PUT, queryParams, body, true);
         }
 
         public static APIResponseObject Delete(string uri, Dictionary<string, string> queryParams = null)
         {
-            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.DELETE, queryParams, null);
+            return MakeAPICall(GetQualifiedUri(uri), ApiMethod.DELETE, queryParams, null, true);
         }
 
         public static OperationStatus EvaluateResponse(APIResponseObject response, out List<Object> responseData, bool successfulOnly)
@@ -99,43 +100,54 @@ namespace FamilyBudget.Data.Utilities
             return (response.status == "ok" && response.reason == "success");
         }
 
-        public static ApiHealth CheckAPIHealth()
+        public static ApiToken Login()
         {
             // initialize the return string
-            ApiHealth health = null;
+            ApiToken token = null;
 
             // attempt to ping the API and check whether it is available, and whether this utility is authorized to use it
-            logger.Info("Checking the health of the API...");
-            string uri = "/ping";
-            APIResponseObject response = Get(uri);
+            logger.Info("Logging into the API...");
+            string uri = "/login";
+            APIResponseObject response = Get(uri, false);
             
             // Evaluate the response and determine the healthState of the API
             if (response.status.Contains("ok"))
             {
-                logger.Info("...API is Healthy!");
-                health = new ApiHealth(ApiHealthState.OK, "API is Healthy!");
+                logger.Info("...and we're in!");
+                if (response.data.Count > 0)
+                {
+                    dynamic tokenInfo = response.data[0];
+                    DateTime tokenExpiryDate = new DateTime(tokenInfo.expires_on.Value.Ticks);
+                    token = new ApiToken((string)tokenInfo.access_token.Value, tokenExpiryDate);
+                }
+                else
+                {
+                    // if for any reason no token is provided in a successful response, return an failure message
+                    token = new ApiToken("No token provided from the API!");
+                }
+                
             }
             else if (response.status.Contains("failure"))
             {
-                logger.Info("...API is unhealthy. Response from API on ping: " + response.status + ", Reason: " + response.reason);
+                logger.Info("...login failure. Response from API on login: " + response.status + ", Reason: " + response.reason);
 
                 // evaluate any failure responses and build the ApiHealth object
                 switch (response.reason)
                 {
                     case "401 - Unauthorized":
-                        health = new ApiHealth(ApiHealthState.UNAUTHORIZED, "This utility is unauthorized to use the API. Please check your configured username & password");
+                        token = new ApiToken("This utility is unauthorized to use the API. Please check your configured username & password");
                         break;
                     default:
-                        health = new ApiHealth(ApiHealthState.OTHER, response.reason);
+                        token = new ApiToken(response.reason);
                         break;
                 }
             }
 
             // return the health state
-            return health;
+            return token;
         }
         
-        private static APIResponseObject MakeAPICall(string uri, ApiMethod method, Dictionary<string, string> queryParams, APIDataObject body)
+        private static APIResponseObject MakeAPICall(string uri, ApiMethod method, Dictionary<string, string> queryParams, APIDataObject body, bool useAccessToken)
         {
             // log the upcoming operation
             logger.InfoFormat("About to {0} from {1}", method.ToString(), uri);
@@ -162,10 +174,19 @@ namespace FamilyBudget.Data.Utilities
             
             // set up the request
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            string username = AddInConfiguration.APIConfiguration.Username;
-            string password = AddInConfiguration.APIConfiguration.Password;
-            SetBasicAuthHeader(request, username, password);
             request.Method = method.ToString();
+
+            if (!useAccessToken)
+            {
+                string username = AddInConfiguration.APIConfiguration.Username;
+                string password = AddInConfiguration.APIConfiguration.Password;
+                SetBasicAuthHeader(request, username, password);   
+            }
+            else
+            {
+                string token = AddInConfiguration.APIConfiguration.AccessToken;
+                SetTokenHeader(request, token);
+            }
             
             // get the body into the request if it is not null & the method is applicable
             if ((method == ApiMethod.POST || method == ApiMethod.PUT || method == ApiMethod.DELETE) && body != null)
@@ -203,7 +224,8 @@ namespace FamilyBudget.Data.Utilities
 
                             // log & convert to APIResponseObject
                             logger.InfoFormat("JSON response: {0}", jsonResponse);
-                            responseObject = JsonConvert.DeserializeObject<APIResponseObject>(jsonResponse);
+                            IsoDateTimeConverter dateTimeConverter = new IsoDateTimeConverter { DateTimeFormat = AddInConfiguration.APIConfiguration.DateFormat };
+                            responseObject = JsonConvert.DeserializeObject<APIResponseObject>(jsonResponse, dateTimeConverter);
                         }
                     }
                 }
@@ -250,6 +272,11 @@ namespace FamilyBudget.Data.Utilities
             string authInfo = username + ":" + password;
             authInfo = Convert.ToBase64String(Encoding.Default.GetBytes(authInfo));
             request.Headers["Authorization"] = "Basic " + authInfo;
+        }
+
+        private static void SetTokenHeader(WebRequest request, String token)
+        {
+            request.Headers["x_access_token"] = token;
         }
 
         private static string GetQualifiedUri(string uri)
