@@ -4,12 +4,14 @@ using FamilyBudget.AddIn.Controllers;
 using FamilyBudget.AddIn.DataControllers;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.Common.Config;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Utilities;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
+using FamilyBudget.Common.Utilities;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 using NativeExcel = Microsoft.Office.Interop.Excel;
+using FamilyBudget.Common.Interfaces;
+using FamilyBudget.Common;
 
 namespace FamilyBudget.AddIn.Utilities
 {
@@ -17,6 +19,28 @@ namespace FamilyBudget.AddIn.Utilities
     {
         #region Properties
         private static readonly ILog logger = LogManager.GetLogger("FamilyBudget.AddIn_WorkbookUtil");
+        private static IAuthentication _authenticator;
+        private static IAuthentication authenticator
+        {
+            get
+            {
+                if (_authenticator == null)
+                {
+                    // get the configured name of the interface to manage accounts
+                    Type mapperType = APIResolver.ResolveTypeForInterface(typeof(IAuthentication));
+                    if (mapperType != null)
+                    {
+                        _authenticator = (IAuthentication)Activator.CreateInstance(mapperType);
+                    }
+                    else
+                    {
+                        _authenticator = null;
+                    }
+                }
+
+                return _authenticator;
+            }
+        }
         #endregion
 
         #region Event Handlers
@@ -28,8 +52,7 @@ namespace FamilyBudget.AddIn.Utilities
         internal static void btnRefreshToken_Click(object sender, RibbonControlEventArgs e)
         {
             // simply login to the API again to refresh the token
-            ApiToken token = APIUtil.Login();
-            AddInConfiguration.APIConfiguration.AccessToken = token.accessToken;
+            authenticator.Authenticate();
         }
         #endregion
 
@@ -75,18 +98,15 @@ namespace FamilyBudget.AddIn.Utilities
         internal static void SetupWorkbook()
         {
             // check the API health before continuing
-            ApiToken apiToken = APIUtil.Login();
-            if (apiToken.accessToken != null)
+            if (authenticator.Authenticate())
             {
-                AddInConfiguration.APIConfiguration.AccessToken = apiToken.accessToken;
                 RefreshWorkbook(userRefresh: false);
             }
             else
             {
-                logger.ErrorFormat("Unable to login to the API, REASON = {1}", apiToken.message);
+                logger.ErrorFormat("Unable to login to the API");
                 string message =
                     "Unable to login to the API" + Environment.NewLine +
-                    "Reason: " + apiToken.message + Environment.NewLine + Environment.NewLine +
                     "This will prevent you from interacting with this tool properly. Please resolve the issue and click Refresh to check the state";
 
                 MessageBox.Show(message);

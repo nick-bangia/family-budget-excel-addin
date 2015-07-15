@@ -1,4 +1,4 @@
-﻿using FamilyBudget.Data.Attributes;
+﻿using FamilyBudget.Common.Attributes;
 
 namespace FamilyBudget.AddIn.Enums
 {

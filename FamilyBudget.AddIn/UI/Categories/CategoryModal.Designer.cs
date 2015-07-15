@@ -73,7 +73,7 @@
             // 
             // CategoryBindingSource
             // 
-            this.CategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Category);
+            this.CategoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Category);
             // 
             // label1
             // 

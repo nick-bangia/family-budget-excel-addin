@@ -1,14 +1,14 @@
 ﻿using FamilyBudget.AddIn.UI;
-using FamilyBudget.Data.Interfaces;
+using FamilyBudget.Common.Interfaces;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 using System.ComponentModel;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System;
-using FamilyBudget.Data;
+using FamilyBudget.Common;
 
 namespace FamilyBudget.AddIn.Controllers
 {
@@ -27,7 +27,7 @@ namespace FamilyBudget.AddIn.Controllers
                 if (_paymentMethodAPI == null)
                 {
                     // get the configured name of the interface to manage payment methods
-                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(IPaymentMethodAPI));
+                    Type mapperType = APIResolver.ResolveTypeForInterface(typeof(IPaymentMethodAPI));
                     if (mapperType != null)
                     {
                         _paymentMethodAPI = (IPaymentMethodAPI)Activator.CreateInstance(mapperType);

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using FamilyBudget.Data.Attributes;
+using FamilyBudget.Common.Attributes;
 
 namespace FamilyBudget.AddIn.Enums
 {

@@ -372,15 +372,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FamilyBudget.Common\FamilyBudget.Common.csproj">
-      <Project>{24739423-4801-450E-8276-CB3152C71A77}</Project>
+      <Project>{5A76D072-DD00-4248-8690-3CD76C7AB776}</Project>
       <Name>FamilyBudget.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\FamilyBudget.Data\FamilyBudget.Data.csproj">
-      <Project>{5A76D072-DD00-4248-8690-3CD76C7AB776}</Project>
-      <Name>FamilyBudget.Data</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <!-- Include the build rules for a C# project. -->
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- Include additional build rules for an Office application add-in. -->

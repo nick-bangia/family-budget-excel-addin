@@ -4,9 +4,9 @@ using System.ComponentModel;
 using FamilyBudget.AddIn.Controllers;
 using FamilyBudget.AddIn.DataControllers;
 using FamilyBudget.AddIn.Enums;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Utilities;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
+using FamilyBudget.Common.Utilities;
 using log4net;
 using VstoExcel = Microsoft.Office.Tools.Excel;
 

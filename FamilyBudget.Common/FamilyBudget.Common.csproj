@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{24739423-4801-450E-8276-CB3152C71A77}</ProjectGuid>
+    <ProjectGuid>{5A76D072-DD00-4248-8690-3CD76C7AB776}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FamilyBudget.Common</RootNamespace>
@@ -46,9 +46,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\Dependencies\Log4Net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -56,8 +64,48 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ApiNameAttribute.cs" />
+    <Compile Include="Attributes\DataImplementationAssemblyAttribute.cs" />
+    <Compile Include="Attributes\FriendlyNameAttribute.cs" />
+    <Compile Include="Attributes\ComparableAttribute.cs" />
     <Compile Include="Config\AddInConfiguration.cs" />
+    <Compile Include="Domain\Account.cs" />
+    <Compile Include="Domain\Goal.cs" />
+    <Compile Include="Domain\ManagedDataObject.cs" />
+    <Compile Include="Enums\DayOfWeek.cs" />
+    <Compile Include="Interfaces\IAccountAPI.cs" />
+    <Compile Include="Domain\Category.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\DenormalizedLineItem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Domain\EnumListMember.cs" />
+    <Compile Include="Domain\PaymentMethod.cs" />
+    <Compile Include="Domain\SearchCriteria.cs" />
+    <Compile Include="Domain\Subcategory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Enums\Comparators.cs" />
+    <Compile Include="Enums\LineItemStatus.cs" />
+    <Compile Include="Enums\LineItemSubType.cs" />
+    <Compile Include="Enums\Months.cs" />
+    <Compile Include="Enums\OperationStatus.cs" />
+    <Compile Include="Enums\LineItemType.cs" />
+    <Compile Include="Enums\Quarters.cs" />
+    <Compile Include="Enums\SearchFields.cs" />
+    <Compile Include="Interfaces\IAuthentication.cs" />
+    <Compile Include="Interfaces\ICategoryAPI.cs" />
+    <Compile Include="Interfaces\ILineItemAPI.cs" />
+    <Compile Include="Interfaces\IPaymentMethodAPI.cs" />
+    <Compile Include="APIResolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="../AssemblyVersioning.cs">
+      <Link>Properties\AssemblyVersioning.cs</Link>
+    </Compile>
+    <Compile Include="Utilities\DateUtil.cs" />
+    <Compile Include="Utilities\EnumUtil.cs" />
+    <Compile Include="Utilities\StringUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
@@ -81,7 +129,18 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties BuildVersion_UseGlobalSettings="False" />
+    </VisualStudio>
+  </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -100,12 +100,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FamilyBudget.Common\FamilyBudget.Common.csproj">
-      <Project>{24739423-4801-450E-8276-CB3152C71A77}</Project>
-      <Name>FamilyBudget.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
@@ -129,7 +123,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="FamilyBudgetRegistration.ico" />
-    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FamilyBudget.Common\FamilyBudget.Common.csproj">
+      <Project>{5A76D072-DD00-4248-8690-3CD76C7AB776}</Project>
+      <Name>FamilyBudget.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

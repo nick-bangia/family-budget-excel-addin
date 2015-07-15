@@ -5,9 +5,9 @@ using FamilyBudget.AddIn.Controllers;
 using FamilyBudget.AddIn.DataControllers;
 using FamilyBudget.AddIn.Enums;
 using FamilyBudget.AddIn.Utilities;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Utilities;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
+using FamilyBudget.Common.Utilities;
 
 namespace FamilyBudget.AddIn.UI
 {

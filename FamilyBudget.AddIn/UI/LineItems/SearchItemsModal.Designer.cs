@@ -143,7 +143,7 @@
             // 
             // SearchFieldBindingSource
             // 
-            this.SearchFieldBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.SearchFieldBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // label3
             // 
@@ -179,7 +179,7 @@
             // 
             // CompareOperatorBindingSource
             // 
-            this.CompareOperatorBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.CompareOperatorBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbQuarter
             // 
@@ -195,7 +195,7 @@
             // 
             // QuarterBindingSource
             // 
-            this.QuarterBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.QuarterBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // label5
             // 
@@ -230,7 +230,7 @@
             // 
             // MonthBindingSource
             // 
-            this.MonthBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.MonthBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbDay
             // 
@@ -246,7 +246,7 @@
             // 
             // DayBindingSource
             // 
-            this.DayBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.DayBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbDayOfWeek
             // 
@@ -262,7 +262,7 @@
             // 
             // DayOfWeekBindingSource
             // 
-            this.DayOfWeekBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.DayOfWeekBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbCategory
             // 
@@ -278,7 +278,7 @@
             // 
             // CategoryBindingSource
             // 
-            this.CategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Category);
+            this.CategoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Category);
             // 
             // cbSubCategory
             // 
@@ -294,7 +294,7 @@
             // 
             // SubCategoryBindingSource
             // 
-            this.SubCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Subcategory);
+            this.SubCategoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Subcategory);
             // 
             // cbType
             // 
@@ -310,7 +310,7 @@
             // 
             // TypeBindingSource
             // 
-            this.TypeBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.TypeBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbSubType
             // 
@@ -326,7 +326,7 @@
             // 
             // SubTypeBindingSource
             // 
-            this.SubTypeBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.SubTypeBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbPaymentMethod
             // 
@@ -342,7 +342,7 @@
             // 
             // PaymentMethodBindingSource
             // 
-            this.PaymentMethodBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.PaymentMethod);
+            this.PaymentMethodBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.PaymentMethod);
             // 
             // cbStatus
             // 
@@ -358,7 +358,7 @@
             // 
             // StatusBindingSource
             // 
-            this.StatusBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.StatusBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // txtTextValue
             // 

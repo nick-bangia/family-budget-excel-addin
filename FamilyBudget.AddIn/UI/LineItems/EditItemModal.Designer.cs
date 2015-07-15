@@ -151,7 +151,7 @@
             // 
             // categoryBindingSource
             // 
-            this.categoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Category);
+            this.categoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Category);
             // 
             // cbSubcategory
             // 
@@ -166,7 +166,7 @@
             // 
             // subcategoryBindingSource
             // 
-            this.subcategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Subcategory);
+            this.subcategoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Subcategory);
             // 
             // cbTxType
             // 
@@ -181,7 +181,7 @@
             // 
             // typeBindingSource
             // 
-            this.typeBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.typeBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // cbPaymentMethod
             // 
@@ -196,7 +196,7 @@
             // 
             // paymentMethodBindingSource
             // 
-            this.paymentMethodBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.PaymentMethod);
+            this.paymentMethodBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.PaymentMethod);
             // 
             // cbStatus
             // 
@@ -211,7 +211,7 @@
             // 
             // statusBindingSource
             // 
-            this.statusBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.EnumListMember);
+            this.statusBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.EnumListMember);
             // 
             // btnSave
             // 

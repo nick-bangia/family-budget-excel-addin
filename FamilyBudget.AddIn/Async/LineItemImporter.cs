@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using log4net;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Interfaces;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Interfaces;
 using FamilyBudget.AddIn.Enums;
 using FamilyBudget.AddIn.DataControllers;
 

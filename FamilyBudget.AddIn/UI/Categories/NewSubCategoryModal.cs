@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows.Forms;
 using FamilyBudget.AddIn.Controllers;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
 using log4net;
 
 namespace FamilyBudget.AddIn.UI

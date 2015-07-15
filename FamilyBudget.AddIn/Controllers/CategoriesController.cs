@@ -4,10 +4,10 @@ using System.ComponentModel;
 using FamilyBudget.AddIn.DataControllers;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
-using FamilyBudget.Data;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Interfaces;
+using FamilyBudget.Common;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
+using FamilyBudget.Common.Interfaces;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 
@@ -30,7 +30,7 @@ namespace FamilyBudget.AddIn.Controllers
                 if (_categoryApi == null)
                 {
                     // get the configured name of the interface to use to import line items to the DB
-                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(ICategoryAPI));
+                    Type mapperType = APIResolver.ResolveTypeForInterface(typeof(ICategoryAPI));
                     if (mapperType != null)
                     {
                         _categoryApi = (ICategoryAPI)Activator.CreateInstance(mapperType);

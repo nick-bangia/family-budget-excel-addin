@@ -2,8 +2,8 @@
 using FamilyBudget.AddIn.Enums;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Utilities;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Utilities;
 using log4net;
 using NativeExcel = Microsoft.Office.Interop.Excel;
 using VstoExcel = Microsoft.Office.Tools.Excel;

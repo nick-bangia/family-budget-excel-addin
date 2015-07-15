@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 using FamilyBudget.AddIn.Controllers;
-using FamilyBudget.Data.Domain;
+using FamilyBudget.Common.Domain;
 
 namespace FamilyBudget.AddIn.UI
 {

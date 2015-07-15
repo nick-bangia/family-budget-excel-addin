@@ -1,6 +1,6 @@
 ﻿using System;
 using FamilyBudget.AddIn.Enums;
-using FamilyBudget.Data.Domain;
+using FamilyBudget.Common.Domain;
 
 namespace FamilyBudget.AddIn.Events
 {

@@ -100,19 +100,19 @@
             // 
             // dataGridCategoryBindingSource
             // 
-            this.dataGridCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Category);
+            this.dataGridCategoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Category);
             // 
             // dataGridAccountBindingSource
             // 
-            this.dataGridAccountBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Account);
+            this.dataGridAccountBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Account);
             // 
             // subCategoryBindingSource
             // 
-            this.subCategoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Subcategory);
+            this.subCategoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Subcategory);
             // 
             // categoryBindingSource
             // 
-            this.categoryBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Category);
+            this.categoryBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Category);
             // 
             // lblUpdateCategories
             // 

@@ -61,7 +61,7 @@
             // 
             // AccountBindingSource
             // 
-            this.AccountBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.Account);
+            this.AccountBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.Account);
             // 
             // label1
             // 

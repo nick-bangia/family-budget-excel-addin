@@ -8,11 +8,11 @@ using FamilyBudget.AddIn.Enums;
 using FamilyBudget.AddIn.Events;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.AddIn.Utilities;
-using FamilyBudget.Data;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Interfaces;
-using FamilyBudget.Data.Utilities;
+using FamilyBudget.Common;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
+using FamilyBudget.Common.Interfaces;
+using FamilyBudget.Common.Utilities;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 using VstoExcel = Microsoft.Office.Tools.Excel;
@@ -40,7 +40,7 @@ namespace FamilyBudget.AddIn.Controllers
                 if (_lineItemAPI == null)
                 {
                     // get the configured name of the interface to use to import line items to the DB
-                    Type mapperType = MapResolver.ResolveTypeForInterface(typeof(ILineItemAPI));
+                    Type mapperType = APIResolver.ResolveTypeForInterface(typeof(ILineItemAPI));
                     if (mapperType != null)
                     {
                         _lineItemAPI = (ILineItemAPI)Activator.CreateInstance(mapperType);

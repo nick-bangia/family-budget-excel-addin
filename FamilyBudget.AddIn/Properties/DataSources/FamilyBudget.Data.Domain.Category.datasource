@@ -6,5 +6,5 @@
     cause the file to be unrecognizable by the program.
 -->
 <GenericObjectDataSource DisplayName="Category" Version="1.0" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
-   <TypeInfo>FamilyBudget.Data.Domain.Category, FamilyBudget.Data, Version=1.2.15113.1, Culture=neutral, PublicKeyToken=null</TypeInfo>
+   <TypeInfo>FamilyBudget.Common.Domain.Category, FamilyBudget.Common, Version=1.2.15113.1, Culture=neutral, PublicKeyToken=null</TypeInfo>
 </GenericObjectDataSource>

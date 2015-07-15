@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FamilyBudget.AddIn.Controllers;
-using FamilyBudget.Data.Domain;
-using FamilyBudget.Data.Enums;
-using FamilyBudget.Data.Utilities;
+using FamilyBudget.Common.Domain;
+using FamilyBudget.Common.Enums;
+using FamilyBudget.Common.Utilities;
 
 namespace FamilyBudget.AddIn.UI
 {
@@ -171,7 +171,7 @@ namespace FamilyBudget.AddIn.UI
                 case SearchFields.DAY_OF_WEEK:
                     PositionControl(cbDayOfWeek);
                     cbDayOfWeek.Visible = true;
-                    DayOfWeekBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(Data.Enums.DayOfWeek));
+                    DayOfWeekBindingSource.DataSource = EnumUtil.GetEnumMemberArray(typeof(Common.Enums.DayOfWeek));
                     break;
                 case SearchFields.DESCRIPTION:
                     PositionControl(txtTextValue);
@@ -306,7 +306,7 @@ namespace FamilyBudget.AddIn.UI
                     break;
                 case SearchFields.DAY_OF_WEEK:
                     searchCriteria.DayOfWeek = Convert.ToInt16(cbDayOfWeek.SelectedValue);
-                    criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((Data.Enums.DayOfWeek)searchCriteria.DayOfWeek.Value));
+                    criteriaDescBuilder.AppendFormat("  =  {0}", EnumUtil.GetFriendlyName((Common.Enums.DayOfWeek)searchCriteria.DayOfWeek.Value));
                     break;
                 case SearchFields.DESCRIPTION:
                     searchCriteria.DescriptionContains = txtTextValue.Text;

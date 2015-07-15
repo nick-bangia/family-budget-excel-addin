@@ -75,7 +75,7 @@
             // 
             // PaymentMethodBindingSource
             // 
-            this.PaymentMethodBindingSource.DataSource = typeof(FamilyBudget.Data.Domain.PaymentMethod);
+            this.PaymentMethodBindingSource.DataSource = typeof(FamilyBudget.Common.Domain.PaymentMethod);
             // 
             // label1
             // 
