@@ -101,7 +101,7 @@ namespace FamilyBudget.Data.API.Utilities
             return (response.status == "ok" && response.reason == "success");
         }
 
-        public static ApiToken Login()
+        public static ApiToken Login(bool renew = false)
         {
             // initialize the return string
             ApiToken token = null;
@@ -109,7 +109,12 @@ namespace FamilyBudget.Data.API.Utilities
             // attempt to ping the API and check whether it is available, and whether this utility is authorized to use it
             logger.Info("Logging into the API...");
             string uri = "/login";
-            APIResponseObject response = Get(uri, false);
+            if (renew)
+            {
+                uri = "/renew";
+            }
+            
+            APIResponseObject response = Get(uri, renew);
             
             // Evaluate the response and determine the healthState of the API
             if (response.status.Contains("ok"))
@@ -118,8 +123,9 @@ namespace FamilyBudget.Data.API.Utilities
                 if (response.data.Count > 0)
                 {
                     dynamic tokenInfo = response.data[0];
-                    DateTime tokenExpiryDate = new DateTime(tokenInfo.expires_on.Value.Ticks);
-                    token = new ApiToken((string)tokenInfo.access_token.Value, tokenExpiryDate);
+                    DateTime accessExpiryDate = new DateTime(tokenInfo.access_expires_on.Value.Ticks);
+                    DateTime refreshExpiryDate = new DateTime(tokenInfo.refresh_expires_on.Value.Ticks);
+                    token = new ApiToken((string)tokenInfo.access_token.Value, accessExpiryDate, (string)tokenInfo.refresh_token.Value, refreshExpiryDate);
                 }
                 else
                 {
@@ -185,8 +191,9 @@ namespace FamilyBudget.Data.API.Utilities
             }
             else
             {
-                string token = AddInConfiguration.APIConfiguration.AccessToken;
-                SetTokenHeader(request, token);
+                string accessToken = AddInConfiguration.APIConfiguration.AccessToken;
+                string refreshToken = AddInConfiguration.APIConfiguration.RefreshToken;
+                SetTokenHeader(request, accessToken, refreshToken);
             }
             
             // get the body into the request if it is not null & the method is applicable
@@ -275,9 +282,14 @@ namespace FamilyBudget.Data.API.Utilities
             request.Headers["Authorization"] = "Basic " + authInfo;
         }
 
-        private static void SetTokenHeader(WebRequest request, String token)
+        private static void SetTokenHeader(WebRequest request, String accessToken, String refreshToken = null)
         {
-            request.Headers["x_access_token"] = token;
+            request.Headers["x_access_token"] = accessToken;
+
+            if (!String.IsNullOrEmpty(refreshToken))
+            {
+                request.Headers["x_refresh_token"] = refreshToken;
+            }
         }
 
         private static string GetQualifiedUri(string uri)

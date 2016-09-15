@@ -26,6 +26,7 @@ namespace FamilyBudget.Common.Config
         private static readonly string USERNAME = "Username";
         private static readonly string PASSWORD = "Password";
         private static readonly string ACCESS_TOKEN = "access_token";
+        private static readonly string REFRESH_TOKEN = "refresh_token";
         private static readonly string DATETIME_FORMAT = "date_format";
         #endregion
 
@@ -98,6 +99,19 @@ namespace FamilyBudget.Common.Config
                 set
                 {
                     SetValue(ACCESS_TOKEN, value, DEFAULT_CONFIG_TYPE);
+                }
+            }
+
+            public static string RefreshToken
+            {
+                get
+                {
+                    return GetValue(REFRESH_TOKEN, DEFAULT_CONFIG_TYPE);
+                }
+
+                set
+                {
+                    SetValue(REFRESH_TOKEN, value, DEFAULT_CONFIG_TYPE);
                 }
             }
 
