@@ -15,14 +15,6 @@ namespace FamilyBudget.Common.Enums
 
         [FriendlyName("Bucket Adjustment")]
         [Description("Describes a line item that is not budget bound to adjust a particular bucket's value")]
-        ADJUSTMENT = 2,
-        
-        [FriendlyName("Savings Goal")]
-        [Description("Describes a savings goal")]
-        GOAL = 3,
-
-        [FriendlyName("Mixed")]
-        [Description("Describes a mixed, rolled up value, usually condensed for brevity")]
-        MIXED = 4
+        ADJUSTMENT = 2
     }
 }

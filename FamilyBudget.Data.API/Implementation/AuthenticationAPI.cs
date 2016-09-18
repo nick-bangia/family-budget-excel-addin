@@ -13,6 +13,10 @@ namespace FamilyBudget.Data.API.Implementation
             if (apiToken.accessToken != null)
             {
                 AddInConfiguration.APIConfiguration.AccessToken = apiToken.accessToken;
+                AddInConfiguration.APIConfiguration.AccessExpires = apiToken.accessExpiresOn.ToString("o");
+                AddInConfiguration.APIConfiguration.RefreshToken = apiToken.refreshToken;
+                AddInConfiguration.APIConfiguration.RefreshExpires = apiToken.refreshExpiresOn.ToString("o");
+
                 return true;
             }
 

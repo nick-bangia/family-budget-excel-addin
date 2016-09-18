@@ -19,6 +19,8 @@ namespace FamilyBudget.Data.API.Utilities
     {
         #region Properties
         private static readonly ILog logger = LogManager.GetLogger("APIUtil");
+        private static readonly string LOGIN_URI = "/login";
+        private static readonly string RENEW_URI = "/renew";
         #endregion
 
         public static APIResponseObject Get(string uri, bool useAccessToken = true, Dictionary<string, string> queryParams = null)
@@ -108,15 +110,15 @@ namespace FamilyBudget.Data.API.Utilities
 
             // attempt to ping the API and check whether it is available, and whether this utility is authorized to use it
             logger.Info("Logging into the API...");
-            string uri = "/login";
+            string uri = LOGIN_URI;
             if (renew)
             {
-                uri = "/renew";
+                uri = RENEW_URI;
             }
             
             APIResponseObject response = Get(uri, renew);
             
-            // Evaluate the response and determine the healthState of the API
+            // Evaluate the response
             if (response.status.Contains("ok"))
             {
                 logger.Info("...and we're in!");
@@ -153,9 +155,41 @@ namespace FamilyBudget.Data.API.Utilities
             // return the health state
             return token;
         }
-        
+
+        private static void CheckAccess(string uri)
+        {
+            // don't check access if the uri currently being requested is to request access
+            if (!uri.Contains(LOGIN_URI) && !uri.Contains(RENEW_URI))
+            {
+                // initialize variables
+                DateTime currentTime = DateTime.UtcNow;
+                DateTime accessExpires = DateTime.Parse(AddInConfiguration.APIConfiguration.AccessExpires);
+                DateTime refreshExpires = DateTime.Parse(AddInConfiguration.APIConfiguration.RefreshExpires);
+
+                // check if the current date/time is between the access expiration and refresh expiration dates. If so, renew access
+                if (currentTime < accessExpires)
+                {
+                    // access has not expired yet, so return
+                    return;
+                }
+                else if (currentTime >= accessExpires && currentTime < refreshExpires)
+                {
+                    // renew access
+                    Login(true);
+                }
+                else if (currentTime >= refreshExpires)
+                {
+                    // login again
+                    Login();
+                }
+            }
+        }
+
         private static APIResponseObject MakeAPICall(string uri, ApiMethod method, Dictionary<string, string> queryParams, APIDataObject body, bool useAccessToken)
         {
+            // Check if access to the API is still valid, and if not, either login or renew the access token
+            CheckAccess(uri);
+            
             // log the upcoming operation
             logger.InfoFormat("About to {0} from {1}", method.ToString(), uri);
             

@@ -51,8 +51,5 @@ namespace FamilyBudget.AddIn.Enums
 
         [FriendlyName("Status")]
         STATUS = 16,
-
-        [FriendlyName("Is Goal?")]
-        IS_GOAL = 17
     }
 }

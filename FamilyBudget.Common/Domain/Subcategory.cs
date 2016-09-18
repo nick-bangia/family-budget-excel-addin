@@ -12,7 +12,6 @@ namespace FamilyBudget.Common.Domain
         protected string _subcategoryName;
         protected string _subcategoryPrefix;
         protected bool _isActive;
-        protected bool _isGoal;
 
         public string SubcategoryKey
         {
@@ -120,20 +119,6 @@ namespace FamilyBudget.Common.Domain
             {
                 this._isActive = value;
                 NotifyPropertyChanged("IsActive");
-            }
-        }
-
-        public bool IsGoal
-        {
-            get
-            {
-                return this._isGoal;
-            }
-
-            set
-            {
-                this._isGoal = value;
-                NotifyPropertyChanged("IsGoal");
             }
         }
     }

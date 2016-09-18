@@ -84,62 +84,63 @@ namespace FamilyBudget.AddIn.Controllers
             return categoryApi.AddNewSubcategories(newSubcategories);
         }
 
-        internal static OperationStatus AddNewGoal(Goal newGoal)
+        internal static OperationStatus AddNewGoal(/*Goal newGoal*/)
         {
-            // create the list of subcategories to add and add the goal to it
-            List<Subcategory> newGoals = new List<Subcategory>();
-            newGoals.Add(newGoal);
+            //// create the list of subcategories to add and add the goal to it
+            //List<Subcategory> newGoals = new List<Subcategory>();
+            //newGoals.Add(newGoal);
 
-            // send to the API and get the response
-            OperationStatus goalStatus = categoryApi.AddNewSubcategories(newGoals);
+            //// send to the API and get the response
+            //OperationStatus goalStatus = categoryApi.AddNewSubcategories(newGoals);
 
-            if (goalStatus == OperationStatus.SUCCESS)
-            {
-                // Add the negation of the goal amount as a line item for the new subcategory
-                decimal negatedGoalAmount = -1 * newGoal.GoalAmount;
+            //if (goalStatus == OperationStatus.SUCCESS)
+            //{
+            //    // Add the negation of the goal amount as a line item for the new subcategory
+            //    decimal negatedGoalAmount = -1 * newGoal.GoalAmount;
 
-                // get the current date to use
-                DateTime currentDate = DateTime.Now;
+            //    // get the current date to use
+            //    DateTime currentDate = DateTime.Now;
 
-                // get the Payment method to use
-                PaymentMethod paymentMethod = PaymentMethodsController.GetPaymentMethodByName("Logical");
-                if (paymentMethod == null)
-                {
-                    paymentMethod = PaymentMethodsController.GetDefaultPaymentMethod();
-                }
+            //    // get the Payment method to use
+            //    PaymentMethod paymentMethod = PaymentMethodsController.GetPaymentMethodByName("Logical");
+            //    if (paymentMethod == null)
+            //    {
+            //        paymentMethod = PaymentMethodsController.GetDefaultPaymentMethod();
+            //    }
 
-                // get the new subcategory key
-                string goalKey = categoryApi.GetSubcategoryKeyByName(newGoal.SubcategoryName);
+            //    // get the new subcategory key
+            //    string goalKey = categoryApi.GetSubcategoryKeyByName(newGoal.SubcategoryName);
 
-                if (!String.IsNullOrWhiteSpace(goalKey))
-                {
-                    // build out the line item that represents the new goal
-                    DenormalizedLineItem goalLineItem = new DenormalizedLineItem()
-                    {
-                        Year = currentDate.Year,
-                        MonthInt = (short)currentDate.Month,
-                        Day = (short)currentDate.Day,
-                        DayOfWeekId = (short)currentDate.DayOfWeek,
-                        Description = "New Goal Set",
-                        CategoryKey = newGoal.CategoryKey,
-                        SubCategoryKey = goalKey,
-                        Amount = negatedGoalAmount,
-                        Type = LineItemType.GOAL,
-                        SubType = LineItemSubType.GOAL,
-                        PaymentMethodKey = paymentMethod.PaymentMethodKey,
-                        Status = LineItemStatus.GOAL
-                    };
+            //    if (!String.IsNullOrWhiteSpace(goalKey))
+            //    {
+            //        // build out the line item that represents the new goal
+            //        DenormalizedLineItem goalLineItem = new DenormalizedLineItem()
+            //        {
+            //            Year = currentDate.Year,
+            //            MonthInt = (short)currentDate.Month,
+            //            Day = (short)currentDate.Day,
+            //            DayOfWeekId = (short)currentDate.DayOfWeek,
+            //            Description = "New Goal Set",
+            //            CategoryKey = newGoal.CategoryKey,
+            //            SubCategoryKey = goalKey,
+            //            Amount = negatedGoalAmount,
+            //            Type = LineItemType.GOAL,
+            //            SubType = LineItemSubType.GOAL,
+            //            PaymentMethodKey = paymentMethod.PaymentMethodKey,
+            //            Status = LineItemStatus.GOAL
+            //        };
 
-                    // save the line item
-                    LineItemsController.AddNewLineItem(goalLineItem);
+            //        // save the line item
+            //        LineItemsController.AddNewLineItem(goalLineItem);
 
-                    // refresh data & pivot tables
-                    MasterDataController.PopulateMasterDataTable(LineItemsController.GetAllLineItems(true));
-                    WorkbookUtil.RefreshPivotTables();
-                }
-            }
-            
-            return goalStatus;
+            //        // refresh data & pivot tables
+            //        MasterDataController.PopulateMasterDataTable(LineItemsController.GetAllLineItems(true));
+            //        WorkbookUtil.RefreshPivotTables();
+            //    }
+            //}
+
+            //return goalStatus;
+            return OperationStatus.FAILURE;
         }
         #endregion
 

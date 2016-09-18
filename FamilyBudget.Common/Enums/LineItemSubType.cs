@@ -8,12 +8,6 @@ namespace FamilyBudget.Common.Enums
         DEBIT = 0,
 
         [FriendlyName("Credit")]
-        CREDIT = 1,
-
-        [FriendlyName("Goal")]
-        GOAL = 2,
-
-        [FriendlyName("Mixed")]
-        MIXED = 3
+        CREDIT = 1
     }
 }

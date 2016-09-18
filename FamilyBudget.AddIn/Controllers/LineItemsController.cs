@@ -265,27 +265,6 @@ namespace FamilyBudget.AddIn.Controllers
             }
         }
 
-        internal static void btnGetFutureItems_Click(object sender, RibbonControlEventArgs e)
-        {
-            SearchCriteria sc = new SearchCriteria()
-            {
-                Status = (short)LineItemStatus.FUTURE
-            };
-
-            List<DenormalizedLineItem> items = lineItemAPI.GetLineItemsByCriteria(sc);
-
-            if (items.Count == 0)
-            {
-                // if no line items are returned, then notify user
-                MessageBox.Show("No future items were found.");
-            }
-            else
-            {
-                // otherwise, populate the worksheet
-                WorksheetDataController.PopulateNewWorksheet(DataWorksheetType.FUTURE, items);
-            }
-        }
-
         internal static void btnSearch_Click(object sender, RibbonControlEventArgs e)
         {
             searchItemsForm = new frmSearchItems();

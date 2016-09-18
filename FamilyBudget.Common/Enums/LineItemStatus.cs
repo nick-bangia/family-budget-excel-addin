@@ -12,12 +12,6 @@ namespace FamilyBudget.Common.Enums
         RECONCILED = 0,
 
         [FriendlyName("Pending")]
-        PENDING = 1,
-
-        [FriendlyName("Future")]
-        FUTURE = 2,
-
-        [FriendlyName("Goal")]
-        GOAL = 3
+        PENDING = 1
     }
 }

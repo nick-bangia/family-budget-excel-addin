@@ -44,7 +44,6 @@ namespace FamilyBudget.AddIn.UI
             this.grpData = this.Factory.CreateRibbonGroup();
             this.btnRefresh = this.Factory.CreateRibbonButton();
             this.btnGetPendingItems = this.Factory.CreateRibbonButton();
-            this.btnGetFutureItems = this.Factory.CreateRibbonButton();
             this.btnSearch = this.Factory.CreateRibbonButton();
             this.grpManage = this.Factory.CreateRibbonGroup();
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
@@ -60,6 +59,7 @@ namespace FamilyBudget.AddIn.UI
             this.grpData.SuspendLayout();
             this.grpManage.SuspendLayout();
             this.grpAPIAccess.SuspendLayout();
+            this.SuspendLayout();
             // 
             // tabFamilyBudget
             // 
@@ -109,7 +109,6 @@ namespace FamilyBudget.AddIn.UI
             // 
             this.grpData.Items.Add(this.btnRefresh);
             this.grpData.Items.Add(this.btnGetPendingItems);
-            this.grpData.Items.Add(this.btnGetFutureItems);
             this.grpData.Items.Add(this.btnSearch);
             this.grpData.Label = "Data";
             this.grpData.Name = "grpData";
@@ -124,13 +123,11 @@ namespace FamilyBudget.AddIn.UI
             // 
             // btnGetPendingItems
             // 
+            this.btnGetPendingItems.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
             this.btnGetPendingItems.Label = "Pending Items";
             this.btnGetPendingItems.Name = "btnGetPendingItems";
-            // 
-            // btnGetFutureItems
-            // 
-            this.btnGetFutureItems.Label = "Future Items";
-            this.btnGetFutureItems.Name = "btnGetFutureItems";
+            this.btnGetPendingItems.OfficeImageId = "RuleLinesMenu";
+            this.btnGetPendingItems.ShowImage = true;
             // 
             // btnSearch
             // 
@@ -229,6 +226,7 @@ namespace FamilyBudget.AddIn.UI
             this.grpManage.PerformLayout();
             this.grpAPIAccess.ResumeLayout(false);
             this.grpAPIAccess.PerformLayout();
+            this.ResumeLayout(false);
 
         }
 
@@ -244,7 +242,6 @@ namespace FamilyBudget.AddIn.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddSubCategory;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnManagePaymentMethods;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetPendingItems;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnGetFutureItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSearch;
         internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpNewItems;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnPreProcessItems;

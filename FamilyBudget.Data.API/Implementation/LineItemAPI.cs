@@ -318,7 +318,6 @@ namespace FamilyBudget.Data.API.Implementation
                 PaymentMethod = d.paymentMethodName,
                 PaymentMethodKey = d.paymentMethodKey,
                 AccountName = d.accountName,
-                IsGoal = d.isGoal,
                 Status = (LineItemStatus)d.statusId,
                 IsDeleted = false,
                 IsDuplicate = false

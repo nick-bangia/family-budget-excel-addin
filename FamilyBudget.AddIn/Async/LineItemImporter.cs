@@ -83,10 +83,10 @@ namespace FamilyBudget.AddIn.Async
                             ReportProgress(Convert.ToInt32(Math.Floor((((double)lineItemIterator) / ((double)lineItems.Count)) * 100)),
                                 String.Format("Imported {0} out of {1} line item(s)...", lineItemIterator, lineItems.Count));
                         }
-                        catch (Exception ex)
+                        catch (Exception)
                         {
                             // throw the exception back to the foreground
-                            throw ex;
+                            throw;
                         }
                     }
                 }

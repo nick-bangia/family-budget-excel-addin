@@ -38,7 +38,7 @@ namespace FamilyBudget.AddIn.UI
 
             if (goalAmount > 0.0M && !String.IsNullOrWhiteSpace(categoryKey))
             {
-                Goal newGoal = new Goal()
+                /*Goal newGoal = new Goal()
                 {
                     CategoryKey = categoryKey,
                     SubcategoryName = txtGoalName.Text,
@@ -64,7 +64,7 @@ namespace FamilyBudget.AddIn.UI
                 {
                     // successful, so close the modal
                     this.Close();
-                }
+                }*/
             }
             else
             {

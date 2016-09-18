@@ -69,8 +69,7 @@ namespace FamilyBudget.Data.API.Implementation
                         AccountName = sc.AccountName,
                         SubcategoryName = sc.SubcategoryName,
                         SubcategoryPrefix = sc.SubcategoryPrefix,
-                        IsActive = sc.IsActive,
-                        IsGoal = sc.IsGoal
+                        IsActive = sc.IsActive
                     }
                 );
             }
@@ -177,8 +176,7 @@ namespace FamilyBudget.Data.API.Implementation
                         AccountName = dynObj.accountName,
                         SubcategoryName = dynObj.subcategoryName,
                         SubcategoryPrefix = dynObj.subcategoryPrefix,
-                        IsActive = dynObj.isActive,
-                        IsGoal = dynObj.isGoal
+                        IsActive = dynObj.isActive
                     };
 
                     // resolve the category name & account name before adding it to the list
@@ -280,8 +278,7 @@ namespace FamilyBudget.Data.API.Implementation
                         AccountName = d.accountName,
                         SubcategoryName = d.subcategoryName,
                         SubcategoryPrefix = d.subcategoryPrefix,
-                        IsActive = d.isActive,
-                        IsGoal = d.isGoal
+                        IsActive = d.isActive
                     };
 
                     // resolve category name & account name fields and add to the list
@@ -339,8 +336,7 @@ namespace FamilyBudget.Data.API.Implementation
                     accountKey = sc.AccountKey,
                     subcategoryName = sc.SubcategoryName,
                     subcategoryPrefix = sc.SubcategoryPrefix,
-                    isActive = sc.IsActive,
-                    isGoal = sc.IsGoal
+                    isActive = sc.IsActive
                 });
             }
 

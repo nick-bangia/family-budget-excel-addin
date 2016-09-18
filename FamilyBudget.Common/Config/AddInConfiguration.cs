@@ -26,7 +26,9 @@ namespace FamilyBudget.Common.Config
         private static readonly string USERNAME = "Username";
         private static readonly string PASSWORD = "Password";
         private static readonly string ACCESS_TOKEN = "access_token";
+        private static readonly string ACCESS_EXPIRES = "access_expires";
         private static readonly string REFRESH_TOKEN = "refresh_token";
+        private static readonly string REFRESH_EXPIRES = "refresh_expires";
         private static readonly string DATETIME_FORMAT = "date_format";
         #endregion
 
@@ -102,6 +104,19 @@ namespace FamilyBudget.Common.Config
                 }
             }
 
+            public static string AccessExpires
+            {
+                get
+                {
+                    return GetValue(ACCESS_EXPIRES, DEFAULT_CONFIG_TYPE);
+                }
+
+                set
+                {
+                    SetValue(ACCESS_EXPIRES, value, DEFAULT_CONFIG_TYPE);
+                }
+            }
+
             public static string RefreshToken
             {
                 get
@@ -112,6 +127,19 @@ namespace FamilyBudget.Common.Config
                 set
                 {
                     SetValue(REFRESH_TOKEN, value, DEFAULT_CONFIG_TYPE);
+                }
+            }
+
+            public static string RefreshExpires
+            {
+                get
+                {
+                    return GetValue(REFRESH_EXPIRES, DEFAULT_CONFIG_TYPE);
+                }
+
+                set
+                {
+                    SetValue(REFRESH_EXPIRES, value, DEFAULT_CONFIG_TYPE);
                 }
             }
 

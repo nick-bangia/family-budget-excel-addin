@@ -40,8 +40,7 @@ namespace FamilyBudget.AddIn.UI
                 SubcategoryName = txtSubCategoryName.Text,
                 SubcategoryPrefix = txtSubCategoryPrefix.Text,
                 AccountKey = (string)cbAccount.SelectedValue,
-                IsActive = chkEnabled.Checked,
-                IsGoal = false
+                IsActive = chkEnabled.Checked
             };
 
             // ask the controller to add it

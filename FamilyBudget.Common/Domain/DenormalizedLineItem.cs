@@ -27,7 +27,6 @@ namespace FamilyBudget.Common.Domain
         public string PaymentMethod { get; set; }
         public string AccountName { get; set; }
         public LineItemStatus Status { get; set; }
-        public bool IsGoal { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsDuplicate { get; set; }
@@ -59,7 +58,6 @@ namespace FamilyBudget.Common.Domain
                 PaymentMethod = this.PaymentMethod,
                 AccountName = this.AccountName,
                 Status = this.Status,
-                IsGoal = this.IsGoal,
                 IsDeleted = this.IsDeleted,
                 ItemSurrogateKey = this.ItemSurrogateKey
             };
