@@ -20,19 +20,22 @@ namespace FamilyBudget.AddIn.Enums
         [FriendlyName("Amount")]
         AMOUNT = 4,
 
+        [FriendlyName("Tax Deductible?")]
+        TAX_DEDUCTIBLE = 5,
+
         [FriendlyName("Category")]
-        CATEGORY = 5,
+        CATEGORY = 6,
 
         [FriendlyName("SubCategory")]
-        SUBCATEGORY = 6,
+        SUBCATEGORY = 7,
 
         [FriendlyName("Type")]
-        TYPE = 7,
+        TYPE = 8,
 
         [FriendlyName("Payment Method")]
-        PAYMENT_METHOD = 8,
+        PAYMENT_METHOD = 9,
 
         [FriendlyName("Status")]
-        STATUS = 9
+        STATUS = 10
     }
 }

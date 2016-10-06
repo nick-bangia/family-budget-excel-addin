@@ -50,6 +50,9 @@ namespace FamilyBudget.Common.Enums
         PAYMENT_METHOD = 12,
 
         [FriendlyName("Status")]
-        STATUS = 13
+        STATUS = 13,
+
+        [FriendlyName("Tax Deductible?")]
+        TAX_DEDUCTIBLE = 14
     }
 }

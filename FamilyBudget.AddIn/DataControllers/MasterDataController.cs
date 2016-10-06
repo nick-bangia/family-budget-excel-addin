@@ -29,7 +29,7 @@ namespace FamilyBudget.AddIn.DataControllers
 
             // disable screen updating, events, & alerts
             WorkbookUtil.ToggleUpdatingAndAlerts(false);
-                        
+
             if (lineItemsListObject == null)
             {
                 lineItemsListObject = vstoDataSheet.Controls.AddListObject(vstoDataSheet.get_Range(Properties.Resources.DataListObjectRange),
@@ -54,12 +54,18 @@ namespace FamilyBudget.AddIn.DataControllers
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.PAYMENT_METHOD].Value2 = EnumUtil.GetFriendlyName(DataColumns.PAYMENT_METHOD);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.ACCOUNT].Value2 = EnumUtil.GetFriendlyName(DataColumns.ACCOUNT);
                 lineItemsListObject.HeaderRowRange[1, (int)DataColumns.STATUS].Value2 = EnumUtil.GetFriendlyName(DataColumns.STATUS);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.GOAL_AMOUNT].Value2 = EnumUtil.GetFriendlyName(DataColumns.GOAL_AMOUNT);
+                lineItemsListObject.HeaderRowRange[1, (int)DataColumns.IS_TAX_DEDUCTIBLE].Value2 = EnumUtil.GetFriendlyName(DataColumns.IS_TAX_DEDUCTIBLE);
             }
             else
             {
                 logger.Info("Clearing current data.");
 
-                lineItemsListObject.DataBodyRange.Clear();
+                if (lineItemsListObject.DataBodyRange != null)
+                {
+                    lineItemsListObject.DataBodyRange.Clear();
+                }
+
                 lineItemsListObject.Resize(
                     vstoDataSheet.Range[Properties.Resources.DataListTopLeftRange,
                                         Properties.Resources.DataListBottomRightRange]);
@@ -80,17 +86,35 @@ namespace FamilyBudget.AddIn.DataControllers
                 }
             }
 
+            // if there is only 1 row, increase it by 1, to avoid a null data body range
+            bool oneRow = false;
+            if (rows == 1)
+            {
+                rows += 1;
+                oneRow = true;
+            }
+
             // size the list object appropriately
             lineItemsListObject.Resize(
                 vstoDataSheet.Range[Properties.Resources.DataListTopLeftRange,
                                     Properties.Resources.DataListRightMostColumn + "$" + (rows + 1).ToString()]);
             
-            // update the data range of list object
-            logger.Info("Applying data to worksheet.");
-            lineItemsListObject.DataBodyRange.Value2 = data;
-            
-            // autofit the list object
-            lineItemsListObject.Range.Columns.AutoFit();
+            // apply data if it exists
+            if (rows > 0)
+            {
+                // update the data range of list object
+                logger.Info("Applying data to worksheet.");
+                lineItemsListObject.DataBodyRange.Value2 = data;
+
+                // autofit the list object
+                lineItemsListObject.Range.Columns.AutoFit();
+            }
+
+            // delete the last row, if only 1 row was entered
+            if (oneRow)
+            {
+                vstoDataSheet.Rows[rows + 1].Delete();
+            }
 
             // enable screen updating, events, & alerts
             WorkbookUtil.ToggleUpdatingAndAlerts(true);
@@ -163,6 +187,12 @@ namespace FamilyBudget.AddIn.DataControllers
                     break;
                 case (int)DataColumns.STATUS:
                     value = EnumUtil.GetFriendlyName(lineItems[index].Status);
+                    break;
+                case (int)DataColumns.GOAL_AMOUNT:
+                    value = lineItems[index].GoalAmount;
+                    break;
+                case (int)DataColumns.IS_TAX_DEDUCTIBLE:
+                    value = lineItems[index].IsTaxDeductible ? "Yes" : "No";
                     break;
                 default:
                     value = "N/A";

@@ -58,7 +58,7 @@ namespace FamilyBudget.Data.API.Implementation
                     // create the PaymentMethod from each item dynamically
                     Account acc = new Account()
                     {
-                        AccountKey = dynObj.accountKey,
+                        Key = dynObj.key,
                         AccountName = dynObj.accountName,
                         IsActive = dynObj.isActive
                     };
@@ -105,7 +105,7 @@ namespace FamilyBudget.Data.API.Implementation
                 foreach (dynamic d in response.data)
                 {
                     Account acc = new Account();
-                    acc.AccountKey = d.accountKey;
+                    acc.Key = d.key;
                     acc.AccountName = d.accountName;
                     acc.IsActive = d.isActive;
                     accounts.Add(acc);
@@ -131,7 +131,7 @@ namespace FamilyBudget.Data.API.Implementation
             {
                 postData.data.Add(new
                 {
-                    accountKey = acc.AccountKey,
+                    key = acc.Key,
                     accountName = acc.AccountName,
                     isActive = acc.IsActive
                 });

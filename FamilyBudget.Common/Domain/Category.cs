@@ -5,20 +5,20 @@ namespace FamilyBudget.Common.Domain
 {
     public class Category : ManagedDataObject
     {
-        private string _categoryKey;
+        private string _key;
         private string _categoryName;
         private bool _isActive;
 
-        public string CategoryKey
+        public string Key
         {
             get
             {
-                return this._categoryKey;
+                return this._key;
             }
 
             set
             {
-                this._categoryKey = value;
+                this._key = value;
             }
         }
 

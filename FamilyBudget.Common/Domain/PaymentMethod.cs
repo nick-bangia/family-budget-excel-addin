@@ -4,19 +4,19 @@ namespace FamilyBudget.Common.Domain
 {
     public class PaymentMethod : ManagedDataObject
     {
-        private string _paymentMethodKey;
+        private string _key;
         private string _paymentMethodName;
         private bool _isActive;
 
-        public string PaymentMethodKey
+        public string Key
         {
             get
             {
-                return this._paymentMethodKey;
+                return this._key;
             }
             set
             {
-                this._paymentMethodKey = value;
+                this._key = value;
             }
         }
 

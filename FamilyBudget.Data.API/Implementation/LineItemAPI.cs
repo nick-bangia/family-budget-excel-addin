@@ -119,12 +119,12 @@ namespace FamilyBudget.Data.API.Implementation
             foreach (DenormalizedLineItem lineItem in lineItems)
             {
                 // check for duplicates only if the lineItem is new (empty UniqueKey)
-                DenormalizedLineItem duplicate = String.IsNullOrEmpty(lineItem.UniqueKey) ? CheckForDuplicate(lineItem) : null;
+                DenormalizedLineItem duplicate = String.IsNullOrEmpty(lineItem.Key) ? CheckForDuplicate(lineItem) : null;
                 if (duplicate == null)
                 {
                     postData.data.Add(new
                     {
-                        uniqueKey = String.IsNullOrWhiteSpace(lineItem.UniqueKey) ? "nil" : lineItem.UniqueKey,
+                        key = String.IsNullOrWhiteSpace(lineItem.Key) ? "nil" : lineItem.Key,
                         monthId = lineItem.MonthInt,
                         day = lineItem.Day,
                         dayOfWeekId = lineItem.DayOfWeekId,
@@ -136,7 +136,8 @@ namespace FamilyBudget.Data.API.Implementation
                         subtypeId = (int)lineItem.SubType,
                         quarter = (int)lineItem.Quarter,
                         paymentMethodKey = lineItem.PaymentMethodKey,
-                        statusId = (int)lineItem.Status
+                        statusId = (int)lineItem.Status,
+                        isTaxDeductible = lineItem.IsTaxDeductible
                     });
                 }
                 else
@@ -170,7 +171,7 @@ namespace FamilyBudget.Data.API.Implementation
                         // if successful item, get the data from it
                         dynamic lineItemObj = lineItemResponse.data;
 
-                        lineItems[i].UniqueKey = lineItemObj.uniqueKey;
+                        lineItems[i].Key = lineItemObj.key;
                         lineItems[i].APIState = "success";
                     }
                     else if (lineItemResponse != null)
@@ -296,9 +297,12 @@ namespace FamilyBudget.Data.API.Implementation
 
         private DenormalizedLineItem GetDenormalizedItemFromDynamic(dynamic d)
         {
+            // convert the dynamic goalAmount into a nullable decimal (decimal?)
+            decimal? goalAmount = d.goalAmount == null ? (decimal?)null : (decimal)d.goalAmount;
+
             DenormalizedLineItem lineItem = new DenormalizedLineItem()
             {
-                UniqueKey = d.uniqueKey,
+                Key = d.key,
                 Year = d.year,
                 Month = d.month,
                 MonthInt = d.monthId,
@@ -306,6 +310,7 @@ namespace FamilyBudget.Data.API.Implementation
                 DayOfWeek = d.dayOfWeek,
                 DayOfWeekId = d.dayOfWeekId,
                 Amount = d.amount,
+                GoalAmount = goalAmount,
                 Description = d.description,
                 Category = d.categoryName,
                 CategoryKey = d.categoryKey,
@@ -319,6 +324,7 @@ namespace FamilyBudget.Data.API.Implementation
                 PaymentMethodKey = d.paymentMethodKey,
                 AccountName = d.accountName,
                 Status = (LineItemStatus)d.statusId,
+                IsTaxDeductible = d.isTaxDeductible,
                 IsDeleted = false,
                 IsDuplicate = false
             };
@@ -424,6 +430,11 @@ namespace FamilyBudget.Data.API.Implementation
             if (searchCriteria.Status.HasValue)
             {
                 searchObject.status = searchCriteria.Status.Value;
+            }
+
+            if (searchCriteria.IsTaxDeductible.HasValue)
+            {
+                searchObject.isTaxDeductible = searchCriteria.IsTaxDeductible.Value;
             }
 
             // return the search object

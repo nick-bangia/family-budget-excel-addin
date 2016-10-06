@@ -71,7 +71,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $P$2.
+        ///   Looks up a localized string similar to $R$2.
         /// </summary>
         internal static string DataListBottomRightRange {
             get {
@@ -89,7 +89,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $A$1:$P$1.
+        ///   Looks up a localized string similar to $A$1:$R$1.
         /// </summary>
         internal static string DataListObjectRange {
             get {
@@ -98,7 +98,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $P.
+        ///   Looks up a localized string similar to $R.
         /// </summary>
         internal static string DataListRightMostColumn {
             get {
@@ -116,7 +116,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $J$2.
+        ///   Looks up a localized string similar to $K$2.
         /// </summary>
         internal static string DataWorksheetBottomRightRange {
             get {
@@ -134,7 +134,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $B$1:$J$1.
+        ///   Looks up a localized string similar to $B$1:$K$1.
         /// </summary>
         internal static string DataWorksheetObjectRange {
             get {
@@ -143,7 +143,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $J.
+        ///   Looks up a localized string similar to $K.
         /// </summary>
         internal static string DataWorksheetRightMostColumn {
             get {
@@ -157,6 +157,60 @@ namespace FamilyBudget.AddIn.Properties {
         internal static string DataWorksheetTopLeftRange {
             get {
                 return ResourceManager.GetString("DataWorksheetTopLeftRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GOAL_SUMMARY.
+        /// </summary>
+        internal static string GoalsDataWorksheetName {
+            get {
+                return ResourceManager.GetString("GoalsDataWorksheetName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $D$2.
+        /// </summary>
+        internal static string GoalsListBottomRightRange {
+            get {
+                return ResourceManager.GetString("GoalsListBottomRightRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIVOT_GOALS.
+        /// </summary>
+        internal static string GoalsListObjectName {
+            get {
+                return ResourceManager.GetString("GoalsListObjectName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $A$1:$D$1.
+        /// </summary>
+        internal static string GoalsListObjectRange {
+            get {
+                return ResourceManager.GetString("GoalsListObjectRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $D.
+        /// </summary>
+        internal static string GoalsListRightMostColumn {
+            get {
+                return ResourceManager.GetString("GoalsListRightMostColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to $A$1.
+        /// </summary>
+        internal static string GoalsListTopLeftRange {
+            get {
+                return ResourceManager.GetString("GoalsListTopLeftRange", resourceCulture);
             }
         }
         
@@ -198,7 +252,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $D$2.
+        ///   Looks up a localized string similar to $E$2.
         /// </summary>
         internal static string SubCategoriesListBottomRightRange {
             get {
@@ -216,7 +270,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $A$1:$D$1.
+        ///   Looks up a localized string similar to $A$1:$E$1.
         /// </summary>
         internal static string SubCategoriesListObjectRange {
             get {
@@ -225,7 +279,7 @@ namespace FamilyBudget.AddIn.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to $D.
+        ///   Looks up a localized string similar to $E.
         /// </summary>
         internal static string SubCategoriesListRightMostColumn {
             get {

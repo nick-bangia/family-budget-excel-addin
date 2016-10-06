@@ -25,6 +25,7 @@ namespace FamilyBudget.AddIn.Controllers
         // modals
         private static ProgressModal progressModal;
         private static frmSearchItems searchItemsForm;
+        private static frmEnterJournalEntries journalEntriesForm;
 
         // importing items
         private static LineItemImporter importer;
@@ -55,6 +56,30 @@ namespace FamilyBudget.AddIn.Controllers
             }
         }
 
+        // category API interface
+        private static ICategoryAPI _categoryAPI;
+        private static ICategoryAPI categoryAPI
+        {
+            get
+            {
+                if (_categoryAPI == null)
+                {
+                    // get the configured name of the interface to use to work with goals
+                    Type mapperType = APIResolver.ResolveTypeForInterface(typeof(ICategoryAPI));
+                    if (mapperType != null)
+                    {
+                        _categoryAPI = (ICategoryAPI)Activator.CreateInstance(mapperType);
+                    }
+                    else
+                    {
+                        _categoryAPI = null;
+                    }
+                }
+
+                return _categoryAPI;
+            }
+        }
+
         // logger
         private static readonly ILog logger = LogManager.GetLogger("FamilyBudget.AddIn_LineItemsController");
         #endregion
@@ -74,35 +99,8 @@ namespace FamilyBudget.AddIn.Controllers
 
         internal static void btnSave_Click(object sender, RibbonControlEventArgs e)
         {
-            try
-            {
-                // get an instance of the line item mapper being used, and create the importer
-                importer = new LineItemImporter(lineItemAPI, WorksheetDataController.GetLineItemsToSave(DataWorksheetType.NEW_ENTRIES));
-                importer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(importer_RunWorkerCompleted);
-                importer.ProgressChanged += new ProgressChangedEventHandler(backgroundThread_ProgressChanged);
-
-                // Show a status modal on the main thread.
-                // attempt to close it first in case it is still open
-                CloseProgressModal();
-
-                progressModal = new ProgressModal();
-                progressModal.OnCancelBtnClicked += new EventHandler(progressModal_importerCancelled);
-                progressModal.Show();
-
-                // disable screen updating
-                WorkbookUtil.ToggleUpdatingAndAlerts(false);
-
-                importer.RunWorkerAsync();
-            }
-            catch (Exception ex)
-            {
-                // close the progress modal in case it was opened
-                CloseProgressModal();
-                // notify that an exception occurred
-                MessageBox.Show("An error occurred while attempting to import the statement: " + Environment.NewLine + Environment.NewLine +
-                                "Error Details: " + Environment.NewLine +
-                                ex.Message);
-            }
+            List<DenormalizedLineItem> worksheetItems = WorksheetDataController.GetLineItemsToSave(DataWorksheetType.NEW_ENTRIES);
+            SaveLineItems(updateWorksheet: true, lineItemsToSave: worksheetItems);
         }
 
         internal static void backgroundThread_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -158,6 +156,7 @@ namespace FamilyBudget.AddIn.Controllers
 
                     // refresh the workbook
                     MasterDataController.PopulateMasterDataTable(lineItemAPI.GetAllLineItems(true));
+                    GoalsDataController.PopulateGoalsDataTable(categoryAPI.GetGoalSummaries(true));
                     WorkbookUtil.RefreshPivotTables();
 
                     // update the new items worksheet object with the latest line items
@@ -265,6 +264,12 @@ namespace FamilyBudget.AddIn.Controllers
             }
         }
 
+        internal static void btnAddJournalEntries_Click(object sender, RibbonControlEventArgs e)
+        {
+            journalEntriesForm = new frmEnterJournalEntries();
+            journalEntriesForm.Show();
+        }
+
         internal static void btnSearch_Click(object sender, RibbonControlEventArgs e)
         {
             searchItemsForm = new frmSearchItems();
@@ -350,6 +355,69 @@ namespace FamilyBudget.AddIn.Controllers
         #endregion
 
         #region Internal Methods
+        internal static void SaveJournalEntries(BindingList<JournalEntry> journalEntries)
+        {
+            // initialize the line items list
+            List<DenormalizedLineItem> lineItems = new List<DenormalizedLineItem>();
+            
+            foreach (JournalEntry je in journalEntries)
+            {
+                DenormalizedLineItem lineItem1 = new DenormalizedLineItem()
+                {
+                    Year = je.OnDate.Year,
+                    MonthInt = (short)je.OnDate.Month,
+                    Day = (short)je.OnDate.Day,
+                    DayOfWeekId = (short)(((short)je.OnDate.DayOfWeek) + 1),
+                    Quarter = DateUtil.GetQuarterForMonth(je.OnDate.Month),
+                    Description = String.Format("Journal: From {0} to {1}; Reason: {2}",
+                        je.FromSubcategory.Name, je.ToSubcategory.Name, je.Reason),
+                    CategoryKey = je.FromSubcategory.CategoryKey,
+                    SubCategoryKey = je.FromSubcategory.Key,
+                    PaymentMethodKey = PaymentMethodsController.GetDefaultPaymentMethod().Key,
+                    Amount = je.Amount * -1,
+                    IsTaxDeductible = false,
+                    Type = LineItemType.JOURNAL,
+                    Status = LineItemStatus.RECONCILED,
+                    SubType = LineItemSubType.DEBIT,
+                    IsDeleted = false,
+                    IsDuplicate = false,
+                    ItemSurrogateKey = -1,
+                    APIState = String.Empty
+                };
+
+                // add the from line item to the list
+                lineItems.Add(lineItem1);
+
+                DenormalizedLineItem lineItem2 = new DenormalizedLineItem()
+                {
+                    Year = je.OnDate.Year,
+                    MonthInt = (short)je.OnDate.Month,
+                    Day = (short)je.OnDate.Day,
+                    DayOfWeekId = (short)(((short)je.OnDate.DayOfWeek) + 1),
+                    Quarter = DateUtil.GetQuarterForMonth(je.OnDate.Month),
+                    Description = String.Format("Journal: From {0} to {1}; Reason: {2}",
+                        je.FromSubcategory.Name, je.ToSubcategory.Name, je.Reason),
+                    CategoryKey = je.ToSubcategory.CategoryKey,
+                    SubCategoryKey = je.ToSubcategory.Key,
+                    PaymentMethodKey = PaymentMethodsController.GetDefaultPaymentMethod().Key,
+                    Amount = je.Amount,
+                    IsTaxDeductible = false,
+                    Type = LineItemType.JOURNAL,
+                    Status = LineItemStatus.RECONCILED,
+                    SubType = LineItemSubType.CREDIT,
+                    IsDeleted = false,
+                    IsDuplicate = false,
+                    ItemSurrogateKey = -1,
+                    APIState = String.Empty
+                };
+
+                // add the to line item to the list
+                lineItems.Add(lineItem2);
+            }
+
+            // save the line items to via the API
+            SaveLineItems(false, lineItems);
+        }
         internal static void PopulateDataSheet(bool rebuild)
         {
             if (rebuild)
@@ -417,7 +485,7 @@ namespace FamilyBudget.AddIn.Controllers
 
             if (updatedItems[0].APIState.Contains("failed"))
             {
-                MessageBox.Show("Unable to update item with key: " + lineItem.UniqueKey.ToString() + Environment.NewLine +
+                MessageBox.Show("Unable to update item with key: " + lineItem.Key.ToString() + Environment.NewLine +
                     "Details: " + updatedItems[0].APIState);
             }
 
@@ -486,6 +554,39 @@ namespace FamilyBudget.AddIn.Controllers
         #endregion
 
         #region Private Methods
+        private static void SaveLineItems(bool updateWorksheet, List<DenormalizedLineItem> lineItemsToSave)
+        {
+            try
+            {
+                // get an instance of the line item mapper being used, and create the importer
+                importer = new LineItemImporter(lineItemAPI, lineItemsToSave, updateWorksheet);
+                importer.RunWorkerCompleted += new RunWorkerCompletedEventHandler(importer_RunWorkerCompleted);
+                importer.ProgressChanged += new ProgressChangedEventHandler(backgroundThread_ProgressChanged);
+
+                // Show a status modal on the main thread.
+                // attempt to close it first in case it is still open
+                CloseProgressModal();
+
+                progressModal = new ProgressModal();
+                progressModal.OnCancelBtnClicked += new EventHandler(progressModal_importerCancelled);
+                progressModal.Show();
+
+                // disable screen updating
+                WorkbookUtil.ToggleUpdatingAndAlerts(false);
+
+                importer.RunWorkerAsync();
+            }
+            catch (Exception ex)
+            {
+                // close the progress modal in case it was opened
+                CloseProgressModal();
+                // notify that an exception occurred
+                MessageBox.Show("An error occurred while attempting to import the statement: " + Environment.NewLine + Environment.NewLine +
+                                "Error Details: " + Environment.NewLine +
+                                ex.Message);
+            }
+        }
+
         private static void CloseProgressModal()
         {
             if (progressModal != null)

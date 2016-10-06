@@ -6,7 +6,7 @@ namespace FamilyBudget.Common.Domain
 {
     public class DenormalizedLineItem : ICloneable
     {
-        public string UniqueKey { get; set; }
+        public string Key { get; set; }
         public int Year { get; set; }
         public short MonthInt { get; set; }
         public string Month { get; set; }
@@ -27,6 +27,8 @@ namespace FamilyBudget.Common.Domain
         public string PaymentMethod { get; set; }
         public string AccountName { get; set; }
         public LineItemStatus Status { get; set; }
+        public decimal? GoalAmount { get; set; }
+        public bool IsTaxDeductible { get; set; }
 
         public bool IsDeleted { get; set; }
         public bool IsDuplicate { get; set; }
@@ -37,7 +39,7 @@ namespace FamilyBudget.Common.Domain
         {
             return new DenormalizedLineItem()
             {
-                UniqueKey = this.UniqueKey,
+                Key = this.Key,
                 Year = this.Year,
                 MonthInt = this.MonthInt,
                 Month = this.Month,
@@ -51,6 +53,7 @@ namespace FamilyBudget.Common.Domain
                 SubCategory = this.SubCategory,
                 SubCategoryPrefix = this.SubCategoryPrefix,
                 Amount = this.Amount,
+                GoalAmount = this.GoalAmount,
                 Type = this.Type,
                 SubType = this.SubType,
                 Quarter = this.Quarter,
@@ -58,6 +61,7 @@ namespace FamilyBudget.Common.Domain
                 PaymentMethod = this.PaymentMethod,
                 AccountName = this.AccountName,
                 Status = this.Status,
+                IsTaxDeductible = this.IsTaxDeductible,
                 IsDeleted = this.IsDeleted,
                 ItemSurrogateKey = this.ItemSurrogateKey
             };

@@ -4,25 +4,26 @@ namespace FamilyBudget.Common.Domain
 {
     public class Subcategory : ManagedDataObject
     {
-        protected string _subcategoryKey;
+        protected string _key;
         protected string _categoryName;
         protected string _categoryKey;
         protected string _accountKey;
         protected string _accountName;
-        protected string _subcategoryName;
-        protected string _subcategoryPrefix;
+        protected string _name;
+        protected string _prefix;
+        protected bool _isAllocatable;
         protected bool _isActive;
 
-        public string SubcategoryKey
+        public string Key
         {
             get
             {
-                return this._subcategoryKey;
+                return this._key;
             }
 
             set
             {
-                this._subcategoryKey = value;
+                this._key = value;
             }
         }
 
@@ -80,31 +81,45 @@ namespace FamilyBudget.Common.Domain
             }
         }
 
-        public string SubcategoryName
+        public string Name
         {
             get
             {
-                return this._subcategoryName;
+                return this._name;
             }
 
             set
             {
-                this._subcategoryName = value;
-                NotifyPropertyChanged("SubcategoryName");
+                this._name = value;
+                NotifyPropertyChanged("Name");
             }
         }
 
-        public string SubcategoryPrefix
+        public string Prefix
         {
             get
             {
-                return this._subcategoryPrefix;
+                return this._prefix;
             }
 
             set
             {
-                this._subcategoryPrefix = value;
-                NotifyPropertyChanged("SubcategoryPrefix");
+                this._prefix = value;
+                NotifyPropertyChanged("Prefix");
+            }
+        }
+
+        public bool IsAllocatable
+        {
+            get
+            {
+                return this._isAllocatable;
+            }
+
+            set
+            {
+                this._isAllocatable = value;
+                NotifyPropertyChanged("IsAllocatable");
             }
         }
 

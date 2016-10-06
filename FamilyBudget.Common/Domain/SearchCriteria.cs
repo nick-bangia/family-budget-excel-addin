@@ -149,6 +149,8 @@ namespace FamilyBudget.Common.Domain
         
         public short? Status { get; set; }
 
+        public bool? IsTaxDeductible { get; set; }
+
         /// <summary>
         /// Builds on a query using terms from the object
         /// </summary>

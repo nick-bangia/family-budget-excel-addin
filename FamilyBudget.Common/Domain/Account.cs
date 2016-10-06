@@ -5,19 +5,19 @@ namespace FamilyBudget.Common.Domain
 {
     public class Account : ManagedDataObject
     {
-        private string _accountKey;
+        private string _key;
         private string _accountName;
         private bool _isActive;
 
-        public string AccountKey
+        public string Key
         {
             get
             {
-                return this._accountKey;
+                return this._key;
             }
             set
             {
-                this._accountKey = value;
+                this._key = value;
             }
         }
 

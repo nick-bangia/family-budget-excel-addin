@@ -59,7 +59,7 @@ namespace FamilyBudget.Data.API.Implementation
                     // create the PaymentMethod from each item dynamically
                     PaymentMethod pm = new PaymentMethod()
                     {
-                        PaymentMethodKey = dynObj.paymentMethodKey,
+                        Key = dynObj.key,
                         PaymentMethodName = dynObj.paymentMethodName,
                         IsActive = dynObj.isActive
                     };
@@ -110,7 +110,14 @@ namespace FamilyBudget.Data.API.Implementation
             }
 
             // get the first payment method
-            return paymentMethods.ElementAt(0);
+            PaymentMethod defaultPm = paymentMethods.FirstOrDefault(pm => pm.PaymentMethodName == "Logical");
+            if (defaultPm == null)
+            {
+                defaultPm = paymentMethods.ElementAt(0);
+            }
+
+            // return the default payment method
+            return defaultPm;
         }
         #endregion
 
@@ -129,7 +136,7 @@ namespace FamilyBudget.Data.API.Implementation
                 foreach (dynamic d in response.data)
                 {
                     PaymentMethod pm = new PaymentMethod();
-                    pm.PaymentMethodKey = d.paymentMethodKey;
+                    pm.Key = d.key;
                     pm.PaymentMethodName = d.paymentMethodName;
                     pm.IsActive = d.isActive;
                     paymentMethods.Add(pm);
@@ -155,7 +162,7 @@ namespace FamilyBudget.Data.API.Implementation
             {
                 postData.data.Add(new
                 {
-                    paymentMethodKey = pm.PaymentMethodKey,
+                    key = pm.Key,
                     paymentMethodName = pm.PaymentMethodName,
                     isActive = pm.IsActive
                 });

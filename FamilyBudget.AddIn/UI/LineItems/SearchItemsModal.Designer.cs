@@ -74,6 +74,7 @@
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnRemoveSelectedCriteria = new System.Windows.Forms.Button();
+            this.chkTaxDeductible = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SearchFieldBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.CompareOperatorBindingSource)).BeginInit();
@@ -115,7 +116,7 @@
             this.label1.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(4, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 18);
+            this.label1.Size = new System.Drawing.Size(98, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Search Criteria:";
             // 
@@ -125,7 +126,7 @@
             this.label2.Font = new System.Drawing.Font("Calibri", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(12, 147);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 18);
+            this.label2.Size = new System.Drawing.Size(110, 18);
             this.label2.TabIndex = 2;
             this.label2.Text = "Add new criteria:";
             // 
@@ -476,11 +477,22 @@
             this.btnRemoveSelectedCriteria.UseVisualStyleBackColor = true;
             this.btnRemoveSelectedCriteria.Click += new System.EventHandler(this.btnRemoveSelectedCriteria_Click);
             // 
+            // chkTaxDeductible
+            // 
+            this.chkTaxDeductible.AutoSize = true;
+            this.chkTaxDeductible.Location = new System.Drawing.Point(253, 216);
+            this.chkTaxDeductible.Name = "chkTaxDeductible";
+            this.chkTaxDeductible.Size = new System.Drawing.Size(15, 14);
+            this.chkTaxDeductible.TabIndex = 32;
+            this.chkTaxDeductible.UseVisualStyleBackColor = true;
+            this.chkTaxDeductible.Visible = false;
+            // 
             // frmSearchItems
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(556, 280);
+            this.Controls.Add(this.chkTaxDeductible);
             this.Controls.Add(this.btnRemoveSelectedCriteria);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSearch);
@@ -580,5 +592,6 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnRemoveSelectedCriteria;
+        private System.Windows.Forms.CheckBox chkTaxDeductible;
     }
 }

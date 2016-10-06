@@ -4,9 +4,6 @@ using FamilyBudget.AddIn.Controllers;
 using FamilyBudget.AddIn.DataControllers;
 using FamilyBudget.AddIn.UI;
 using FamilyBudget.Common.Config;
-using FamilyBudget.Common.Domain;
-using FamilyBudget.Common.Enums;
-using FamilyBudget.Common.Utilities;
 using log4net;
 using Microsoft.Office.Tools.Ribbon;
 using NativeExcel = Microsoft.Office.Interop.Excel;
@@ -62,12 +59,14 @@ namespace FamilyBudget.AddIn.Utilities
             // Build & Populate data sheets
             LineItemsController.PopulateDataSheet(userRefresh);
             CategoriesController.PopulateSubcategoriesSheet(userRefresh);
+            CategoriesController.PopulateGoalsSheet(userRefresh);
 
             // pre-populate any data service lists
             PaymentMethodsController.GetPaymentMethods(userRefresh);
             AccountsController.GetAccounts(userRefresh);
             CategoriesController.GetCategories(userRefresh);
             CategoriesController.GetSubcategories(userRefresh);
+            CategoriesController.GetGoals(userRefresh);
 
             // Refresh Pivot Tables
             RefreshPivotTables();
@@ -161,7 +160,8 @@ namespace FamilyBudget.AddIn.Utilities
         {
             // remove the sheets
             MasterDataController.RemoveSheet();
-            SubCategoriesDataManager.RemoveSheet();
+            SubCategoriesDataController.RemoveSheet();
+            GoalsDataController.RemoveSheet();
             WorksheetDataController.RemoveAllSheets();
         }
 

@@ -122,16 +122,16 @@
     <value>..\Resources\arrow_refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DataListBottomRightRange" xml:space="preserve">
-    <value>$P$2</value>
+    <value>$R$2</value>
   </data>
   <data name="DataListObjectName" xml:space="preserve">
     <value>PIVOT_DATA</value>
   </data>
   <data name="DataListObjectRange" xml:space="preserve">
-    <value>$A$1:$P$1</value>
+    <value>$A$1:$R$1</value>
   </data>
   <data name="DataListRightMostColumn" xml:space="preserve">
-    <value>$P</value>
+    <value>$R</value>
   </data>
   <data name="DataListTopLeftRange" xml:space="preserve">
     <value>$A$1</value>
@@ -140,16 +140,16 @@
     <value>DATA</value>
   </data>
   <data name="DataWorksheetObjectRange" xml:space="preserve">
-    <value>$B$1:$J$1</value>
+    <value>$B$1:$K$1</value>
   </data>
   <data name="DataWorksheetName" xml:space="preserve">
     <value>WORKSHEET_</value>
   </data>
   <data name="DataWorksheetBottomRightRange" xml:space="preserve">
-    <value>$J$2</value>
+    <value>$K$2</value>
   </data>
   <data name="DataWorksheetRightMostColumn" xml:space="preserve">
-    <value>$J</value>
+    <value>$K</value>
   </data>
   <data name="DataWorksheetTopLeftRange" xml:space="preserve">
     <value>$B$1</value>
@@ -164,18 +164,36 @@
     <value>PIVOT_SUBCATEGORIES</value>
   </data>
   <data name="SubCategoriesListBottomRightRange" xml:space="preserve">
-    <value>$D$2</value>
+    <value>$E$2</value>
   </data>
   <data name="SubCategoriesListObjectRange" xml:space="preserve">
-    <value>$A$1:$D$1</value>
+    <value>$A$1:$E$1</value>
   </data>
   <data name="SubCategoriesListRightMostColumn" xml:space="preserve">
-    <value>$D</value>
+    <value>$E</value>
   </data>
   <data name="SubCategoriesListTopLeftRange" xml:space="preserve">
     <value>$A$1</value>
   </data>
   <data name="loading" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\loading.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="GoalsDataWorksheetName" xml:space="preserve">
+    <value>GOAL_SUMMARY</value>
+  </data>
+  <data name="GoalsListBottomRightRange" xml:space="preserve">
+    <value>$D$2</value>
+  </data>
+  <data name="GoalsListObjectName" xml:space="preserve">
+    <value>PIVOT_GOALS</value>
+  </data>
+  <data name="GoalsListObjectRange" xml:space="preserve">
+    <value>$A$1:$D$1</value>
+  </data>
+  <data name="GoalsListRightMostColumn" xml:space="preserve">
+    <value>$D</value>
+  </data>
+  <data name="GoalsListTopLeftRange" xml:space="preserve">
+    <value>$A$1</value>
   </data>
 </root>

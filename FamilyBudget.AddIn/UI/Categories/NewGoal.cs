@@ -10,7 +10,6 @@ namespace FamilyBudget.AddIn.UI
 {
     internal partial class frmNewGoal : Form
     {
-        private BindingList<Account> accounts;
         private static readonly ILog logger = LogManager.GetLogger("frmNewGoal");
 
         internal frmNewGoal()
@@ -21,10 +20,15 @@ namespace FamilyBudget.AddIn.UI
 
         private void frmNewGoal_Load(object sender, EventArgs e)
         {
-            accounts = AccountsController.GetAccounts();
-            cbAccounts.DataSource = accounts;
+            // set up the category drop down
+            cbParentCategory.DataSource = CategoriesController.GetCategories(false);
+            cbParentCategory.DisplayMember = "CategoryName";
+            cbParentCategory.ValueMember = "Key";
+
+            // set up the accounts drop down
+            cbAccounts.DataSource = AccountsController.GetAccounts();
             cbAccounts.DisplayMember = "AccountName";
-            cbAccounts.ValueMember = "AccountKey";
+            cbAccounts.ValueMember = "Key";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -33,43 +37,34 @@ namespace FamilyBudget.AddIn.UI
             decimal goalAmount = 0.0M;
             Decimal.TryParse(txtGoalAmount.Text, out goalAmount);
 
-            // get the Goals category, if it exists. If it doesn't, don't save this goal and notify user
-            string categoryKey = CategoriesController.GetCategoryID("Goals");
-
-            if (goalAmount > 0.0M && !String.IsNullOrWhiteSpace(categoryKey))
+            Goal newGoal = new Goal()
             {
-                /*Goal newGoal = new Goal()
-                {
-                    CategoryKey = categoryKey,
-                    SubcategoryName = txtGoalName.Text,
-                    SubcategoryPrefix = txtGoalPrefix.Text,
-                    AccountKey = (string)cbAccounts.SelectedValue,
-                    IsActive = chkEnabled.Checked,
-                    GoalAmount = goalAmount
-                };
+                CategoryKey = (string)cbParentCategory.SelectedValue,
+                Name = txtGoalName.Text,
+                Prefix = txtGoalPrefix.Text,
+                AccountKey = (string)cbAccounts.SelectedValue,
+                IsActive = chkEnabled.Checked,
+                IsAllocatable = chkAllocatable.Checked,
+                GoalAmount = goalAmount,
+                EstimatedCompletionDate = dtEstimatedCompletionDate.Value.Date
+            };
 
-                // ask the controller to add it
-                OperationStatus status = CategoriesController.AddNewGoal(newGoal);
+            // ask the controller to add it
+            OperationStatus status = CategoriesController.AddNewGoal(newGoal);
 
-                string errorText = null;
-                if (status == OperationStatus.FAILURE)
-                {
-                    // wasn't able to add the new goal, notify user
-                    errorText = "An error occurred while attempting to add a new Goal to the DB." + Environment.NewLine +
-                                "Check that the API Is available and try again.";
-                    logger.Error(errorText);
-                    MessageBox.Show(errorText);
-                }
-                else
-                {
-                    // successful, so close the modal
-                    this.Close();
-                }*/
+            string errorText = null;
+            if (status == OperationStatus.FAILURE)
+            {
+                // wasn't able to add the new goal, notify user
+                errorText = "An error occurred while attempting to add a new goal to the DB." + Environment.NewLine +
+                            "Check that the API Is available and try again.";
+                logger.Error(errorText);
+                MessageBox.Show(errorText);
             }
             else
             {
-                // validation failed. notify user
-                MessageBox.Show("Invalid Goal Amount, or there is no category named Goals in the system. Please fix errors & try again.");
+                // successful, so close the modal
+                this.Close();
             }
         }
     }

@@ -87,6 +87,7 @@ namespace FamilyBudget.AddIn.DataControllers
                 lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.DATE].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.DATE);
                 lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.DESCRIPTION].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.DESCRIPTION);
                 lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.AMOUNT].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.AMOUNT);
+                lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.TAX_DEDUCTIBLE].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.TAX_DEDUCTIBLE);
                 lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.CATEGORY].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.CATEGORY);
                 lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.SUBCATEGORY].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.SUBCATEGORY);
                 lineItemsListObject.HeaderRowRange[1, (int)DataWorksheetColumns.TYPE].Value2 = EnumUtil.GetFriendlyName(DataWorksheetColumns.TYPE);
@@ -133,9 +134,13 @@ namespace FamilyBudget.AddIn.DataControllers
                         dataSheet.Range[Properties.Resources.DataWorksheetTopLeftRange,
                                         Properties.Resources.DataWorksheetRightMostColumn + "$" + (rows + 1).ToString()]);
 
-                    // update the data range of the list object
-                    logger.Info("Applying data to worksheet.");
-                    lineItemsListObject.DataBodyRange.Value2 = data;
+                    // apply the data if it exists
+                    if (rows > 0)
+                    {
+                        // update the data range of the list object
+                        logger.Info("Applying data to worksheet.");
+                        lineItemsListObject.DataBodyRange.Value2 = data;
+                    }
 
                     // delete the last row, if only 1 row was entered
                     if (oneRow)
@@ -241,6 +246,7 @@ namespace FamilyBudget.AddIn.DataControllers
                 dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DATE].Value2 = null;
                 dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DESCRIPTION].Value2 = null;
                 dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.AMOUNT].Value2 = null;
+                dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.TAX_DEDUCTIBLE].Value2 = null;
                 dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.CATEGORY].Value2 = null;
                 dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.SUBCATEGORY].Value2 = null;
                 dso.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.TYPE].Value2 = null;
@@ -264,13 +270,14 @@ namespace FamilyBudget.AddIn.DataControllers
                     string status = EnumUtil.GetFriendlyName(updatedLineItem.Status);
                     string uniqueKey = (updatedLineItem.IsDuplicate ? "DUPLICATE" : 
                         (updatedLineItem.APIState.Contains("failed") ? updatedLineItem.APIState : 
-                        (!String.IsNullOrWhiteSpace(updatedLineItem.UniqueKey) ? updatedLineItem.UniqueKey : 
+                        (!String.IsNullOrWhiteSpace(updatedLineItem.Key) ? updatedLineItem.Key : 
                         String.Empty)));
 
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.UNIQUE_ID].Value2 = uniqueKey;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DATE].Value2 = date;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.DESCRIPTION].Value2 = updatedLineItem.Description;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.AMOUNT].Value2 = updatedLineItem.Amount;
+                    dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.TAX_DEDUCTIBLE].Value2 = updatedLineItem.IsTaxDeductible ? "Yes" : "No";
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.CATEGORY].Value2 = updatedLineItem.Category;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.SUBCATEGORY].Value2 = updatedLineItem.SubCategory;
                     dataSheetObject.listObject.DataBodyRange.Cells[listObjectIndex, (int)DataWorksheetColumns.TYPE].Value2 = type;
@@ -477,7 +484,7 @@ namespace FamilyBudget.AddIn.DataControllers
             switch (colNum)
             {
                 case (int)DataWorksheetColumns.UNIQUE_ID:
-                    value = String.IsNullOrWhiteSpace(lineItem.UniqueKey) ? "" : lineItem.UniqueKey.ToString();
+                    value = String.IsNullOrWhiteSpace(lineItem.Key) ? "" : lineItem.Key.ToString();
                     break;
                 case (int)DataWorksheetColumns.DATE:
                     value = new DateTime(lineItem.Year, lineItem.MonthInt, lineItem.Day);
@@ -487,6 +494,9 @@ namespace FamilyBudget.AddIn.DataControllers
                     break;
                 case (int)DataWorksheetColumns.AMOUNT:
                     value = lineItem.Amount;
+                    break;
+                case (int)DataWorksheetColumns.TAX_DEDUCTIBLE:
+                    value = lineItem.IsTaxDeductible ? "Yes" : "No";
                     break;
                 case (int)DataWorksheetColumns.CATEGORY:
                     value = lineItem.Category;

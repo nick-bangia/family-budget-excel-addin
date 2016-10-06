@@ -13,8 +13,16 @@ namespace FamilyBudget.Common.Enums
         [Description("Describes a budget bound allocation or deallocation of a bucket")]
         ALLOCATION = 1,
 
-        [FriendlyName("Bucket Adjustment")]
+        [FriendlyName("Adjustment")]
         [Description("Describes a line item that is not budget bound to adjust a particular bucket's value")]
-        ADJUSTMENT = 2
+        ADJUSTMENT = 2,
+
+        [FriendlyName("Income")]
+        [Description("Describes a budget bound credit due to income")]
+        INCOME = 3,
+
+        [FriendlyName("Journal Entry")]
+        [Description("Describes a special adjustment that usually comes in pairs and nets to 0 for moving money between buckets")]
+        JOURNAL = 4
     }
 }

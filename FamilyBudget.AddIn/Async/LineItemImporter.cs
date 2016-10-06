@@ -16,12 +16,13 @@ namespace FamilyBudget.AddIn.Async
 
         // properties
         private List<DenormalizedLineItem> lineItems;
+        private bool updateWorksheet = true;
 
         // ILog interface
         private static readonly ILog logger = LogManager.GetLogger("LineItemImporter");
 
         // constructor
-        public LineItemImporter(ILineItemAPI lineItemMapper, List<DenormalizedLineItem> itemsToImport)
+        public LineItemImporter(ILineItemAPI lineItemMapper, List<DenormalizedLineItem> itemsToImport, bool updateWorksheet)
         {
             // set up background worker properties
             WorkerReportsProgress = true;
@@ -29,6 +30,7 @@ namespace FamilyBudget.AddIn.Async
 
             this.lineItems = itemsToImport;
             this.dataMap = lineItemMapper;
+            this.updateWorksheet = updateWorksheet;
         }
 
         // method that is called when RunWorkerAsync is called from foreground
@@ -74,7 +76,10 @@ namespace FamilyBudget.AddIn.Async
                                     lineItemsToInsert.Add(lineItem);
 
                                     this.lineItems[lineItemIterator] = this.dataMap.AddNewLineItems(lineItemsToInsert)[0];
-                                    WorksheetDataController.UpdateLineItem(lineItem.ItemSurrogateKey, lineItemIterator, DataWorksheetType.NEW_ENTRIES, this.lineItems[lineItemIterator]);
+                                    if (updateWorksheet)
+                                    {
+                                        WorksheetDataController.UpdateLineItem(lineItem.ItemSurrogateKey, lineItemIterator, DataWorksheetType.NEW_ENTRIES, this.lineItems[lineItemIterator]);
+                                    }
                                 }                               
                             }
 

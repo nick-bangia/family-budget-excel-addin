@@ -53,6 +53,8 @@
             this.txtTxAmount = new System.Windows.Forms.TextBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
+            this.lblTaxDeductible = new System.Windows.Forms.Label();
+            this.chkTaxDeductible = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.categoryBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.subcategoryBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.typeBindingSource)).BeginInit();
@@ -83,7 +85,7 @@
             this.lblCategory.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblCategory.Location = new System.Drawing.Point(12, 43);
             this.lblCategory.Name = "lblCategory";
-            this.lblCategory.Size = new System.Drawing.Size(71, 19);
+            this.lblCategory.Size = new System.Drawing.Size(72, 19);
             this.lblCategory.TabIndex = 11;
             this.lblCategory.Text = "Category:";
             // 
@@ -93,7 +95,7 @@
             this.lblSubcategory.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSubcategory.Location = new System.Drawing.Point(12, 80);
             this.lblSubcategory.Name = "lblSubcategory";
-            this.lblSubcategory.Size = new System.Drawing.Size(92, 19);
+            this.lblSubcategory.Size = new System.Drawing.Size(93, 19);
             this.lblSubcategory.TabIndex = 12;
             this.lblSubcategory.Text = "Subcategory:";
             // 
@@ -103,7 +105,7 @@
             this.lblTxAmount.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblTxAmount.Location = new System.Drawing.Point(12, 147);
             this.lblTxAmount.Name = "lblTxAmount";
-            this.lblTxAmount.Size = new System.Drawing.Size(142, 19);
+            this.lblTxAmount.Size = new System.Drawing.Size(143, 19);
             this.lblTxAmount.TabIndex = 13;
             this.lblTxAmount.Text = "Transaction Amount:";
             // 
@@ -123,7 +125,7 @@
             this.lblPaymentMethod.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPaymentMethod.Location = new System.Drawing.Point(12, 219);
             this.lblPaymentMethod.Name = "lblPaymentMethod";
-            this.lblPaymentMethod.Size = new System.Drawing.Size(123, 19);
+            this.lblPaymentMethod.Size = new System.Drawing.Size(125, 19);
             this.lblPaymentMethod.TabIndex = 15;
             this.lblPaymentMethod.Text = "Payment Method:";
             // 
@@ -133,7 +135,7 @@
             this.lblStatus.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblStatus.Location = new System.Drawing.Point(12, 254);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(53, 19);
+            this.lblStatus.Size = new System.Drawing.Size(52, 19);
             this.lblStatus.TabIndex = 16;
             this.lblStatus.Text = "Status:";
             // 
@@ -146,7 +148,7 @@
             this.cbCategory.Name = "cbCategory";
             this.cbCategory.Size = new System.Drawing.Size(200, 21);
             this.cbCategory.TabIndex = 1;
-            this.cbCategory.ValueMember = "CategoryKey";
+            this.cbCategory.ValueMember = "Key";
             this.cbCategory.SelectedIndexChanged += new System.EventHandler(this.cbCategory_SelectedIndexChanged);
             // 
             // categoryBindingSource
@@ -156,13 +158,13 @@
             // cbSubcategory
             // 
             this.cbSubcategory.DataSource = this.subcategoryBindingSource;
-            this.cbSubcategory.DisplayMember = "SubCategoryName";
+            this.cbSubcategory.DisplayMember = "Name";
             this.cbSubcategory.FormattingEnabled = true;
             this.cbSubcategory.Location = new System.Drawing.Point(182, 78);
             this.cbSubcategory.Name = "cbSubcategory";
             this.cbSubcategory.Size = new System.Drawing.Size(200, 21);
             this.cbSubcategory.TabIndex = 2;
-            this.cbSubcategory.ValueMember = "SubCategoryKey";
+            this.cbSubcategory.ValueMember = "Key";
             // 
             // subcategoryBindingSource
             // 
@@ -192,7 +194,7 @@
             this.cbPaymentMethod.Name = "cbPaymentMethod";
             this.cbPaymentMethod.Size = new System.Drawing.Size(200, 21);
             this.cbPaymentMethod.TabIndex = 5;
-            this.cbPaymentMethod.ValueMember = "PaymentMethodKey";
+            this.cbPaymentMethod.ValueMember = "Key";
             // 
             // paymentMethodBindingSource
             // 
@@ -215,7 +217,7 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(16, 312);
+            this.btnSave.Location = new System.Drawing.Point(16, 328);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 7;
@@ -225,7 +227,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(98, 312);
+            this.btnReset.Location = new System.Drawing.Point(98, 328);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 8;
@@ -235,7 +237,7 @@
             // 
             // btnDelete
             // 
-            this.btnDelete.Location = new System.Drawing.Point(307, 312);
+            this.btnDelete.Location = new System.Drawing.Point(307, 328);
             this.btnDelete.Name = "btnDelete";
             this.btnDelete.Size = new System.Drawing.Size(75, 23);
             this.btnDelete.TabIndex = 9;
@@ -267,11 +269,32 @@
             this.lblDescription.TabIndex = 19;
             this.lblDescription.Text = "Description:";
             // 
+            // lblTaxDeductible
+            // 
+            this.lblTaxDeductible.AutoSize = true;
+            this.lblTaxDeductible.Font = new System.Drawing.Font("Calibri", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTaxDeductible.Location = new System.Drawing.Point(12, 286);
+            this.lblTaxDeductible.Name = "lblTaxDeductible";
+            this.lblTaxDeductible.Size = new System.Drawing.Size(112, 19);
+            this.lblTaxDeductible.TabIndex = 20;
+            this.lblTaxDeductible.Text = "Tax Deductible?";
+            // 
+            // chkTaxDeductible
+            // 
+            this.chkTaxDeductible.AutoSize = true;
+            this.chkTaxDeductible.Location = new System.Drawing.Point(182, 287);
+            this.chkTaxDeductible.Name = "chkTaxDeductible";
+            this.chkTaxDeductible.Size = new System.Drawing.Size(15, 14);
+            this.chkTaxDeductible.TabIndex = 21;
+            this.chkTaxDeductible.UseVisualStyleBackColor = true;
+            // 
             // frmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(394, 346);
+            this.ClientSize = new System.Drawing.Size(394, 363);
+            this.Controls.Add(this.chkTaxDeductible);
+            this.Controls.Add(this.lblTaxDeductible);
             this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.txtDescription);
             this.Controls.Add(this.txtTxAmount);
@@ -332,5 +355,7 @@
         private System.Windows.Forms.BindingSource statusBindingSource;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.Label lblDescription;
+        private System.Windows.Forms.Label lblTaxDeductible;
+        private System.Windows.Forms.CheckBox chkTaxDeductible;
     }
 }

@@ -237,6 +237,8 @@
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\LineItemsController.cs" />
     <Compile Include="Controllers\PaymentMethodsController.cs" />
+    <Compile Include="DataControllers\GoalsDataController.cs" />
+    <Compile Include="Enums\GoalDataColumns.cs" />
     <Compile Include="Enums\SubCategoryDataColumns.cs" />
     <Compile Include="DataControllers\SubCategoriesDataController.cs" />
     <Compile Include="DataControllers\MasterDataController.cs" />
@@ -287,11 +289,23 @@
     <Compile Include="UI\Categories\NewGoal.Designer.cs">
       <DependentUpon>NewGoal.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\Categories\UpdateGoalModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Categories\UpdateGoalModal.Designer.cs">
+      <DependentUpon>UpdateGoalModal.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\LineItems\EditItemModal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UI\LineItems\EditItemModal.Designer.cs">
       <DependentUpon>EditItemModal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LineItems\EnterJournalEntries.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\LineItems\EnterJournalEntries.Designer.cs">
+      <DependentUpon>EnterJournalEntries.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\LineItems\SearchItemsModal.cs">
       <SubType>Form</SubType>
@@ -348,8 +362,14 @@
       <DependentUpon>NewGoal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\Categories\UpdateGoalModal.resx">
+      <DependentUpon>UpdateGoalModal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\LineItems\EditItemModal.resx">
       <DependentUpon>EditItemModal.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LineItems\EnterJournalEntries.resx">
+      <DependentUpon>EnterJournalEntries.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\LineItems\SearchItemsModal.resx">
       <DependentUpon>SearchItemsModal.cs</DependentUpon>
@@ -379,6 +399,8 @@
     <Compile Include="ThisAddIn.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="Properties\DataSources\FamilyBudget.Common.Domain.Goal.datasource" />
+    <None Include="Properties\DataSources\FamilyBudget.Common.Domain.Subcategory.datasource" />
     <None Include="Properties\DataSources\FamilyBudget.Data.Domain.Account.datasource" />
     <None Include="Properties\DataSources\FamilyBudget.Data.Domain.Category.datasource" />
     <None Include="Properties\DataSources\FamilyBudget.Data.Domain.EnumListMember.datasource" />
@@ -416,7 +438,7 @@
   <ProjectExtensions>
     <VisualStudio>
       <FlavorProperties GUID="{BAA0C2D2-18E2-41B9-852F-F413020CAA33}">
-        <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="VSTOTemplates" DebugInfoExeName="#Software\Microsoft\Office\15.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x " AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
+        <ProjectProperties HostName="Excel" HostPackage="{29A7B9D7-A7F1-4328-8EF0-6B2D1A56B2C1}" OfficeVersion="15.0" VstxVersion="4.0" ApplicationType="Excel" Language="cs" TemplatesPath="VSTOTemplates" DebugInfoExeName="#Software\Microsoft\Office\16.0\Excel\InstallRoot\Path#excel.exe" DebugInfoCommandLine="/x " AddItemTemplatesGuid="{51063C3A-E220-4D12-8922-BDA915ACD783}" />
         <Host Name="Excel" GeneratedCodeNamespace="FamilyBudget.AddIn.UI" IconIndex="0">
           <HostItem Name="ThisAddIn" Code="ThisAddIn.cs" CanonicalName="AddIn" CanActivate="false" IconIndex="1" Blueprint="ThisAddIn.Designer.xml" GeneratedCode="ThisAddIn.Designer.cs" />
         </Host>

@@ -175,12 +175,14 @@ namespace FamilyBudget.Data.API.Utilities
                 else if (currentTime >= accessExpires && currentTime < refreshExpires)
                 {
                     // renew access
-                    Login(true);
+                    ApiToken renewedToken = Login(true);
+                    SaveTokenToConfiguration(renewedToken);
                 }
                 else if (currentTime >= refreshExpires)
                 {
                     // login again
-                    Login();
+                    ApiToken newToken = Login();
+                    SaveTokenToConfiguration(newToken);
                 }
             }
         }
@@ -307,6 +309,14 @@ namespace FamilyBudget.Data.API.Utilities
             }            
 
             return responseObject;
+        }
+
+        private static void SaveTokenToConfiguration(ApiToken apiToken)
+        {
+            AddInConfiguration.APIConfiguration.AccessToken = apiToken.accessToken;
+            AddInConfiguration.APIConfiguration.AccessExpires = apiToken.accessExpiresOn.ToString("o");
+            AddInConfiguration.APIConfiguration.RefreshToken = apiToken.refreshToken;
+            AddInConfiguration.APIConfiguration.RefreshExpires = apiToken.refreshExpiresOn.ToString("o");
         }
 
         private static void SetBasicAuthHeader(WebRequest request, String username, String password)

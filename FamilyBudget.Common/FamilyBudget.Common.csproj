@@ -71,6 +71,9 @@
     <Compile Include="Attributes\ComparableAttribute.cs" />
     <Compile Include="Config\AddInConfiguration.cs" />
     <Compile Include="Domain\Account.cs" />
+    <Compile Include="Domain\Goal.cs" />
+    <Compile Include="Domain\GoalSummary.cs" />
+    <Compile Include="Domain\JournalEntry.cs" />
     <Compile Include="Domain\ManagedDataObject.cs" />
     <Compile Include="Enums\DayOfWeek.cs" />
     <Compile Include="Interfaces\IAccountAPI.cs" />

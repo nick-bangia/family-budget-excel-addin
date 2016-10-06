@@ -76,6 +76,9 @@ namespace FamilyBudget.AddIn.Async
                             string description = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.DESCRIPTION].Value2;
                             object oAmount = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.AMOUNT].Value2;
                             decimal amount = oAmount != null ? Convert.ToDecimal(oAmount) : 0.00M;
+                            string enteredTaxDeductible = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.TAX_DEDUCTIBLE].Value2;
+                            bool taxDeductible = String.IsNullOrEmpty(enteredTaxDeductible) ? false : 
+                                ((enteredTaxDeductible.ToLower().Equals("yes") || enteredTaxDeductible.ToLower().Equals("y")) ? true : false);
                             Subcategory categoryInfo = CategoriesController.GetSubCategoryFor(description);
                             string enteredType = listObject.DataBodyRange.Cells[lineItemIterator, (int)DataWorksheetColumns.TYPE].Value2;
                             type = Enum.TryParse<LineItemType>(enteredType, true, out type) ? 
@@ -96,7 +99,7 @@ namespace FamilyBudget.AddIn.Async
 
                             // populate the denormalized line item
                             DenormalizedLineItem lineItem = new DenormalizedLineItem();
-                            lineItem.UniqueKey = null;
+                            lineItem.Key = null;
                             lineItem.Year = date.Year;
                             lineItem.MonthInt = (short)date.Month;
                             lineItem.Day = (short)date.Day;
@@ -106,11 +109,12 @@ namespace FamilyBudget.AddIn.Async
                             lineItem.Description = description;
                             lineItem.Category = categoryInfo != null ? categoryInfo.CategoryName : null;
                             lineItem.CategoryKey = categoryInfo != null ? categoryInfo.CategoryKey : null;
-                            lineItem.SubCategory = categoryInfo != null ? categoryInfo.SubcategoryName : null;
-                            lineItem.SubCategoryKey = categoryInfo != null ? categoryInfo.SubcategoryKey : null;
+                            lineItem.SubCategory = categoryInfo != null ? categoryInfo.Name : null;
+                            lineItem.SubCategoryKey = categoryInfo != null ? categoryInfo.Key : null;
                             lineItem.PaymentMethod = paymentMethodInfo != null ? paymentMethodInfo.PaymentMethodName : defaultPaymentMethodInfo.PaymentMethodName;
-                            lineItem.PaymentMethodKey = paymentMethodInfo != null ? paymentMethodInfo.PaymentMethodKey : defaultPaymentMethodInfo.PaymentMethodKey;
+                            lineItem.PaymentMethodKey = paymentMethodInfo != null ? paymentMethodInfo.Key : defaultPaymentMethodInfo.Key;
                             lineItem.Amount = amount;
+                            lineItem.IsTaxDeductible = taxDeductible;
                             lineItem.Type = type;
                             lineItem.Status = status;
                             lineItem.SubType = amount <= 0 ? LineItemSubType.DEBIT : LineItemSubType.CREDIT;

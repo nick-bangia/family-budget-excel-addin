@@ -1,13 +1,8 @@
-﻿using System.Configuration;
-using FamilyBudget.AddIn.DataControllers;
-using FamilyBudget.AddIn.Utilities;
+﻿using FamilyBudget.AddIn.Utilities;
 using log4net;
 using log4net.Config;
 using NativeExcel = Microsoft.Office.Interop.Excel;
 using Office = Microsoft.Office.Core;
-using FamilyBudget.Common.Config;
-using System;
-using System.Windows.Forms;
 
 namespace FamilyBudget.AddIn.UI
 {

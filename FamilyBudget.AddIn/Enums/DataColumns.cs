@@ -51,5 +51,11 @@ namespace FamilyBudget.AddIn.Enums
 
         [FriendlyName("Status")]
         STATUS = 16,
+
+        [FriendlyName("Goal Amount")]
+        GOAL_AMOUNT = 17,
+
+        [FriendlyName("Tax Deductible?")]
+        IS_TAX_DEDUCTIBLE = 18
     }
 }

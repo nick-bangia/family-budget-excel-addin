@@ -10,15 +10,15 @@ using VstoExcel = Microsoft.Office.Tools.Excel;
 
 namespace FamilyBudget.AddIn.DataControllers
 {
-    internal static class SubCategoriesDataController
+    internal static class GoalsDataController
     {
         #region Properties
         private static VstoExcel.Worksheet vstoDataSheet = null;
-        private static VstoExcel.ListObject subCategoriesListObject = null;
-        private static readonly ILog logger = LogManager.GetLogger("FamilyBudget.AddIn_SubCategoriesManager");
+        private static VstoExcel.ListObject goalsListObject = null;
+        private static readonly ILog logger = LogManager.GetLogger("FamilyBudget.AddIn_GoalsManager");
         #endregion
 
-        public static void PopulateSubcategoriesDataTable(BindingList<Subcategory> subCategories)
+        public static void PopulateGoalsDataTable(BindingList<GoalSummary> goals)
         {
             // log the status
             logger.Info("Beginning population of data sheet...");
@@ -28,47 +28,45 @@ namespace FamilyBudget.AddIn.DataControllers
 
             // disable screen updating, events, & alerts
             WorkbookUtil.ToggleUpdatingAndAlerts(false);
-                        
-            if (subCategoriesListObject == null)
+
+            if (goalsListObject == null)
             {
-                subCategoriesListObject = vstoDataSheet.Controls.AddListObject(vstoDataSheet.get_Range(Properties.Resources.SubCategoriesListObjectRange),
-                    Properties.Resources.SubCategoriesListObjectName);
+                goalsListObject = vstoDataSheet.Controls.AddListObject(vstoDataSheet.get_Range(Properties.Resources.GoalsListObjectRange),
+                    Properties.Resources.GoalsListObjectName);
 
                 // set up headers for list object
                 logger.Info("Setting up headers.");
 
-                subCategoriesListObject.HeaderRowRange[1, (int)SubCategoryDataColumns.PREFIX].Value2 = EnumUtil.GetFriendlyName(SubCategoryDataColumns.PREFIX);
-                subCategoriesListObject.HeaderRowRange[1, (int)SubCategoryDataColumns.SUBCATEGORY].Value2 = EnumUtil.GetFriendlyName(SubCategoryDataColumns.SUBCATEGORY);
-                subCategoriesListObject.HeaderRowRange[1, (int)SubCategoryDataColumns.ACCOUNT_NAME].Value2 = EnumUtil.GetFriendlyName(SubCategoryDataColumns.ACCOUNT_NAME);
-                subCategoriesListObject.HeaderRowRange[1, (int)SubCategoryDataColumns.IS_ALLOCATABLE].Value2 = EnumUtil.GetFriendlyName(SubCategoryDataColumns.IS_ALLOCATABLE);
-                subCategoriesListObject.HeaderRowRange[1, (int)SubCategoryDataColumns.IS_ACTIVE].Value2 = EnumUtil.GetFriendlyName(SubCategoryDataColumns.IS_ACTIVE);
+                goalsListObject.HeaderRowRange[1, (int)GoalDataColumns.NAME].Value2 = EnumUtil.GetFriendlyName(GoalDataColumns.NAME);
+                goalsListObject.HeaderRowRange[1, (int)GoalDataColumns.TOTAL_SAVED].Value2 = EnumUtil.GetFriendlyName(GoalDataColumns.TOTAL_SAVED);
+                goalsListObject.HeaderRowRange[1, (int)GoalDataColumns.GOAL_AMOUNT].Value2 = EnumUtil.GetFriendlyName(GoalDataColumns.GOAL_AMOUNT);
+                goalsListObject.HeaderRowRange[1, (int)GoalDataColumns.TARGET_COMPLETION].Value2 = EnumUtil.GetFriendlyName(GoalDataColumns.TARGET_COMPLETION);
             }
             else
             {
                 logger.Info("Clearing current data.");
 
-                if (subCategoriesListObject.DataBodyRange != null)
+                if (goalsListObject.DataBodyRange != null)
                 {
-                    subCategoriesListObject.DataBodyRange.Clear();
+                    goalsListObject.DataBodyRange.Clear();
                 }
-
-                subCategoriesListObject.Resize(
-                    vstoDataSheet.Range[Properties.Resources.SubCategoriesListTopLeftRange,
-                                        Properties.Resources.SubCategoriesListBottomRightRange]);
+                goalsListObject.Resize(
+                    vstoDataSheet.Range[Properties.Resources.GoalsListTopLeftRange,
+                                        Properties.Resources.GoalsListBottomRightRange]);
             }
 
             // fill in data as an array
             logger.Info("Creating data matrix.");
             
-            int rows = subCategories.Count;
-            int columns = subCategoriesListObject.HeaderRowRange.Columns.Count;
+            int rows = goals.Count;
+            int columns = goalsListObject.HeaderRowRange.Columns.Count;
                         
             var data = new object[rows, columns];
             for (int row = 1; row <= rows; row++)
             {
                 for (int col = 1; col <= columns; col++)
                 {
-                    data[row - 1, col - 1] = GetDataValue(row - 1, col, subCategories);                    
+                    data[row - 1, col - 1] = GetDataValue(row - 1, col, goals);                    
                 }
             }
 
@@ -81,19 +79,19 @@ namespace FamilyBudget.AddIn.DataControllers
             }
 
             // size the list object appropriately
-            subCategoriesListObject.Resize(
-                vstoDataSheet.Range[Properties.Resources.SubCategoriesListTopLeftRange,
-                                    Properties.Resources.SubCategoriesListRightMostColumn + "$" + (rows + 1).ToString()]);
+            goalsListObject.Resize(
+                vstoDataSheet.Range[Properties.Resources.GoalsListTopLeftRange,
+                                    Properties.Resources.GoalsListRightMostColumn + "$" + (rows + 1).ToString()]);
             
             // apply data if it exists
             if (rows > 0)
             {
                 // update the data range of list object
                 logger.Info("Applying data to worksheet.");
-                subCategoriesListObject.DataBodyRange.Value2 = data;
+                goalsListObject.DataBodyRange.Value2 = data;
 
                 // autofit the list object
-                subCategoriesListObject.Range.Columns.AutoFit();
+                goalsListObject.Range.Columns.AutoFit();
             }
 
             // delete the last row, if only 1 row was entered
@@ -115,31 +113,28 @@ namespace FamilyBudget.AddIn.DataControllers
             {
                 vstoDataSheet.Delete();
                 vstoDataSheet = null;
-                subCategoriesListObject = null;
+                goalsListObject = null;
             }
         }
 
-        private static object GetDataValue(int index, int colNum, BindingList<Subcategory> subcategories)
+        private static object GetDataValue(int index, int colNum, BindingList<GoalSummary> goals)
         {
             object value;
 
             // switch through the colNum, and provide the correct data point based on the row index
             switch (colNum)
             {
-                case (int)SubCategoryDataColumns.PREFIX:
-                    value = subcategories[index].Prefix;
+                case (int)GoalDataColumns.NAME:
+                    value = goals[index].Name;
                     break;
-                case (int)SubCategoryDataColumns.SUBCATEGORY:
-                    value = subcategories[index].Name;
+                case (int)GoalDataColumns.TOTAL_SAVED:
+                    value = goals[index].TotalSaved;
                     break;
-                case (int)SubCategoryDataColumns.ACCOUNT_NAME:
-                    value = subcategories[index].AccountName;
+                case (int)GoalDataColumns.GOAL_AMOUNT:
+                    value = goals[index].GoalAmount;
                     break;
-                case (int)SubCategoryDataColumns.IS_ALLOCATABLE:
-                    value = subcategories[index].IsAllocatable ? "Yes" : "No";
-                    break;
-                case (int)SubCategoryDataColumns.IS_ACTIVE:
-                    value = subcategories[index].IsActive ? "Yes" : "No";
+                case (int)GoalDataColumns.TARGET_COMPLETION:
+                    value = goals[index].TargetCompletionDate.ToShortDateString();
                     break;
                 default:
                     value = "N/A";
@@ -159,7 +154,7 @@ namespace FamilyBudget.AddIn.DataControllers
                 NativeExcel.Sheets worksheets = Globals.ThisAddIn.Application.Worksheets;
                 foreach (NativeExcel.Worksheet wrksheet in worksheets)
                 {
-                    if (wrksheet.Name == Properties.Resources.SubCategoriesDataWorksheetName)
+                    if (wrksheet.Name == Properties.Resources.GoalsDataWorksheetName)
                     {
                         // if found, assign it to the dataSheet
                         dataSheet = wrksheet;
@@ -172,7 +167,7 @@ namespace FamilyBudget.AddIn.DataControllers
                 {
                     NativeExcel.Worksheet lastWorksheet = worksheets[worksheets.Count];
                     dataSheet = (NativeExcel.Worksheet)Globals.ThisAddIn.Application.Worksheets.Add(After: lastWorksheet);
-                    dataSheet.Name = Properties.Resources.SubCategoriesDataWorksheetName;
+                    dataSheet.Name = Properties.Resources.GoalsDataWorksheetName;
                 }
 
                 // assign the VSTO object for it to the vstoDataSheet property

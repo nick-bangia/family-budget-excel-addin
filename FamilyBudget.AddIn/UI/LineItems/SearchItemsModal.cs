@@ -138,7 +138,7 @@ namespace FamilyBudget.AddIn.UI
             cbCategory.Visible = cbDay.Visible = cbDayOfWeek.Visible = cbMonth.Visible =
                 cbPaymentMethod.Visible = cbQuarter.Visible = cbStatus.Visible = cbSubCategory.Visible =
                 cbSubType.Visible = cbType.Visible = txtTextValue.Visible = panelAmount.Visible =
-                panelDates.Visible = false;
+                panelDates.Visible = chkTaxDeductible.Visible = false;
 
             switch (currentlySelectedField)
             {
@@ -218,6 +218,10 @@ namespace FamilyBudget.AddIn.UI
                     PositionControl(txtTextValue);
                     txtTextValue.Visible = true;
                     txtTextValue.Text = String.Empty;
+                    break;
+                case SearchFields.TAX_DEDUCTIBLE:
+                    PositionControl(chkTaxDeductible);
+                    chkTaxDeductible.Visible = true;
                     break;
                 default:
                     break;
@@ -351,6 +355,10 @@ namespace FamilyBudget.AddIn.UI
                         isValid = false;
                     }
                     #endregion
+                    break;
+                case SearchFields.TAX_DEDUCTIBLE:
+                    searchCriteria.IsTaxDeductible = chkTaxDeductible.Checked;
+                    criteriaDescBuilder.AppendFormat(" = {0}", chkTaxDeductible.Checked ? "Yes" : "No");
                     break;
                 default:
                     break;

@@ -218,6 +218,26 @@ namespace FamilyBudget.Common.Config
                     get { return GetValue("apiUpdateSubcategories", ConfigType.CONFIG_FILE); }
                 }
 
+                public static string GetGoals
+                {
+                    get { return GetValue("apiGetGoals", ConfigType.CONFIG_FILE);  }
+                }
+
+                public static string AddGoals
+                {
+                    get { return GetValue("apiAddGoals", ConfigType.CONFIG_FILE); }
+                }
+
+                public static string UpdateGoals
+                {
+                    get { return GetValue("apiUpdateGoals", ConfigType.CONFIG_FILE);  }
+                }
+
+                public static string GetGoalSummary
+                {
+                    get { return GetValue("apiGoalSummary", ConfigType.CONFIG_FILE); }
+                }
+
                 public static string GetLineItems
                 {
                     get { return GetValue("apiGetAllLineItems", ConfigType.CONFIG_FILE); }

@@ -73,14 +73,14 @@ namespace FamilyBudget.AddIn.UI
 
             if (choice == DialogResult.Yes)
             {
-                if (String.IsNullOrWhiteSpace(originalLineItem.UniqueKey))
+                if (String.IsNullOrWhiteSpace(originalLineItem.Key))
                 {
                     WorksheetDataController.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
                 }
                 else
                 {
                     // if delete is confirmed, do it, and refresh the data
-                    LineItemsController.DeleteLineItem(originalLineItem.UniqueKey);
+                    LineItemsController.DeleteLineItem(originalLineItem.Key);
                     WorksheetDataController.RemoveLineItem(listObjectIndex, lineItemIndex, worksheetType);
                     LineItemsController.PopulateDataSheet(rebuild: true);
                     WorkbookUtil.RefreshPivotTables();
@@ -106,13 +106,14 @@ namespace FamilyBudget.AddIn.UI
             originalLineItem.SubCategoryKey = (string)cbSubcategory.SelectedValue;
             originalLineItem.Description = txtDescription.Text;
             originalLineItem.Amount = Decimal.Parse(txtTxAmount.Text);
+            originalLineItem.IsTaxDeductible = chkTaxDeductible.Checked;
             originalLineItem.Type = (LineItemType)cbTxType.SelectedValue;
             originalLineItem.PaymentMethod = cbPaymentMethod.Text;
             originalLineItem.PaymentMethodKey = (string)cbPaymentMethod.SelectedValue;
             originalLineItem.Status = (LineItemStatus)cbStatus.SelectedValue;
 
             Guid uniqueKey = Guid.Empty;
-            if (Guid.TryParse(originalLineItem.UniqueKey, out uniqueKey))
+            if (Guid.TryParse(originalLineItem.Key, out uniqueKey))
             {
                 // if the uniqueKey field is a valid Guid, then update the item via the API
                 originalLineItem = LineItemsController.UpdateLineItem(originalLineItem);
@@ -156,7 +157,7 @@ namespace FamilyBudget.AddIn.UI
             originalLineItem = lineItem.Clone() as DenormalizedLineItem;
 
             // check the line item to check if this is a new item, or current item
-            if (String.IsNullOrWhiteSpace(lineItem.UniqueKey))
+            if (String.IsNullOrWhiteSpace(lineItem.Key))
             {
                 this.Text = "New Line Item";
             }
@@ -198,6 +199,9 @@ namespace FamilyBudget.AddIn.UI
 
             // status
             cbStatus.SelectedIndex = (int)lineItem.Status;
+
+            // Tax Deductible
+            chkTaxDeductible.Checked = lineItem.IsTaxDeductible;
         }
     }   
 }

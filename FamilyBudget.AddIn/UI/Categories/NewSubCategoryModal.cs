@@ -4,6 +4,7 @@ using FamilyBudget.AddIn.Controllers;
 using FamilyBudget.Common.Domain;
 using FamilyBudget.Common.Enums;
 using log4net;
+using System.ComponentModel;
 
 namespace FamilyBudget.AddIn.UI
 {
@@ -22,13 +23,12 @@ namespace FamilyBudget.AddIn.UI
             // set up the category drop down
             cbParentCategory.DataSource = CategoriesController.GetCategories(false);
             cbParentCategory.DisplayMember = "CategoryName";
-            cbParentCategory.ValueMember = "CategoryKey";
-
+            cbParentCategory.ValueMember = "Key";
+           
             // set up the accounts drop down
             cbAccount.DataSource = AccountsController.GetAccounts();
             cbAccount.DisplayMember = "AccountName";
-            cbAccount.ValueMember = "AccountKey";
-
+            cbAccount.ValueMember = "Key";
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -37,9 +37,10 @@ namespace FamilyBudget.AddIn.UI
             Subcategory newSubcategory = new Subcategory()
             {
                 CategoryKey = (string)cbParentCategory.SelectedValue,
-                SubcategoryName = txtSubCategoryName.Text,
-                SubcategoryPrefix = txtSubCategoryPrefix.Text,
+                Name = txtSubCategoryName.Text,
+                Prefix = txtSubCategoryPrefix.Text,
                 AccountKey = (string)cbAccount.SelectedValue,
+                IsAllocatable = chkAllocatable.Checked,
                 IsActive = chkEnabled.Checked
             };
 
@@ -50,15 +51,17 @@ namespace FamilyBudget.AddIn.UI
             if (status == OperationStatus.FAILURE)
             {
                 // wasn't able to add the new payment method - notify user
-                errorText = "An error occurred while attempting to add a new Account to the DB:" + Environment.NewLine +
+                errorText = "An error occurred while attempting to add a new subcategory to the DB:" + Environment.NewLine +
                             "Check that the API is available and try again.";
 
                 logger.Error(errorText);
                 MessageBox.Show(errorText);
             }
-
-            // close the form once completed
-            this.Close();
+            else
+            {
+                // successful, so close the modal
+                this.Close();
+            }
         }
     }
 }

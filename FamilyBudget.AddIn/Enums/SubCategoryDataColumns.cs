@@ -13,7 +13,10 @@ namespace FamilyBudget.AddIn.Enums
         [FriendlyName("Account Name")]
         ACCOUNT_NAME = 3,
 
+        [FriendlyName("Is Allocatable")]
+        IS_ALLOCATABLE = 4,
+
         [FriendlyName("Is Active")]
-        IS_ACTIVE = 4
+        IS_ACTIVE = 5
     }
 }
