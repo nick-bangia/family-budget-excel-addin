@@ -38,16 +38,15 @@ namespace FamilyBudget.AddIn.UI
         {
             this.tabFamilyBudget = this.Factory.CreateRibbonTab();
             this.grpNewItems = this.Factory.CreateRibbonGroup();
-            this.grpData = this.Factory.CreateRibbonGroup();
-            this.grpManage = this.Factory.CreateRibbonGroup();
-            this.grpAPIAccess = this.Factory.CreateRibbonGroup();
             this.btnAddNewItems = this.Factory.CreateRibbonButton();
             this.btnPreProcessItems = this.Factory.CreateRibbonButton();
             this.btnSave = this.Factory.CreateRibbonButton();
             this.btnAddJournalEntries = this.Factory.CreateRibbonButton();
+            this.grpData = this.Factory.CreateRibbonGroup();
             this.btnRefresh = this.Factory.CreateRibbonButton();
             this.btnGetPendingItems = this.Factory.CreateRibbonButton();
             this.btnSearch = this.Factory.CreateRibbonButton();
+            this.grpManage = this.Factory.CreateRibbonGroup();
             this.btnAddSubCategory = this.Factory.CreateRibbonButton();
             this.btnNewGoal = this.Factory.CreateRibbonButton();
             this.btnUpdateCategories = this.Factory.CreateRibbonButton();
@@ -55,12 +54,10 @@ namespace FamilyBudget.AddIn.UI
             this.btnAddCategory = this.Factory.CreateRibbonButton();
             this.btnManageAccounts = this.Factory.CreateRibbonButton();
             this.btnManagePaymentMethods = this.Factory.CreateRibbonButton();
-            this.btnRefreshToken = this.Factory.CreateRibbonButton();
             this.tabFamilyBudget.SuspendLayout();
             this.grpNewItems.SuspendLayout();
             this.grpData.SuspendLayout();
             this.grpManage.SuspendLayout();
-            this.grpAPIAccess.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabFamilyBudget
@@ -68,7 +65,6 @@ namespace FamilyBudget.AddIn.UI
             this.tabFamilyBudget.Groups.Add(this.grpNewItems);
             this.tabFamilyBudget.Groups.Add(this.grpData);
             this.tabFamilyBudget.Groups.Add(this.grpManage);
-            this.tabFamilyBudget.Groups.Add(this.grpAPIAccess);
             this.tabFamilyBudget.Label = "Family Budget";
             this.tabFamilyBudget.Name = "tabFamilyBudget";
             this.tabFamilyBudget.Visible = false;
@@ -81,32 +77,6 @@ namespace FamilyBudget.AddIn.UI
             this.grpNewItems.Items.Add(this.btnAddJournalEntries);
             this.grpNewItems.Label = "New Items";
             this.grpNewItems.Name = "grpNewItems";
-            // 
-            // grpData
-            // 
-            this.grpData.Items.Add(this.btnRefresh);
-            this.grpData.Items.Add(this.btnGetPendingItems);
-            this.grpData.Items.Add(this.btnSearch);
-            this.grpData.Label = "Data";
-            this.grpData.Name = "grpData";
-            // 
-            // grpManage
-            // 
-            this.grpManage.Items.Add(this.btnAddSubCategory);
-            this.grpManage.Items.Add(this.btnNewGoal);
-            this.grpManage.Items.Add(this.btnUpdateCategories);
-            this.grpManage.Items.Add(this.btnUpdateGoals);
-            this.grpManage.Items.Add(this.btnAddCategory);
-            this.grpManage.Items.Add(this.btnManageAccounts);
-            this.grpManage.Items.Add(this.btnManagePaymentMethods);
-            this.grpManage.Label = "Manage";
-            this.grpManage.Name = "grpManage";
-            // 
-            // grpAPIAccess
-            // 
-            this.grpAPIAccess.Items.Add(this.btnRefreshToken);
-            this.grpAPIAccess.Label = "Access";
-            this.grpAPIAccess.Name = "grpAPIAccess";
             // 
             // btnAddNewItems
             // 
@@ -142,6 +112,14 @@ namespace FamilyBudget.AddIn.UI
             this.btnAddJournalEntries.OfficeImageId = "ListSetNumberingValue";
             this.btnAddJournalEntries.ShowImage = true;
             // 
+            // grpData
+            // 
+            this.grpData.Items.Add(this.btnRefresh);
+            this.grpData.Items.Add(this.btnGetPendingItems);
+            this.grpData.Items.Add(this.btnSearch);
+            this.grpData.Label = "Data";
+            this.grpData.Name = "grpData";
+            // 
             // btnRefresh
             // 
             this.btnRefresh.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
@@ -165,6 +143,18 @@ namespace FamilyBudget.AddIn.UI
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.OfficeImageId = "PrintPreviewZoomMenu";
             this.btnSearch.ShowImage = true;
+            // 
+            // grpManage
+            // 
+            this.grpManage.Items.Add(this.btnAddSubCategory);
+            this.grpManage.Items.Add(this.btnNewGoal);
+            this.grpManage.Items.Add(this.btnUpdateCategories);
+            this.grpManage.Items.Add(this.btnUpdateGoals);
+            this.grpManage.Items.Add(this.btnAddCategory);
+            this.grpManage.Items.Add(this.btnManageAccounts);
+            this.grpManage.Items.Add(this.btnManagePaymentMethods);
+            this.grpManage.Label = "Manage";
+            this.grpManage.Name = "grpManage";
             // 
             // btnAddSubCategory
             // 
@@ -222,14 +212,6 @@ namespace FamilyBudget.AddIn.UI
             this.btnManagePaymentMethods.OfficeImageId = "AccountingFormat";
             this.btnManagePaymentMethods.ShowImage = true;
             // 
-            // btnRefreshToken
-            // 
-            this.btnRefreshToken.ControlSize = Microsoft.Office.Core.RibbonControlSize.RibbonControlSizeLarge;
-            this.btnRefreshToken.Label = "Refresh Token";
-            this.btnRefreshToken.Name = "btnRefreshToken";
-            this.btnRefreshToken.OfficeImageId = "Recurrence";
-            this.btnRefreshToken.ShowImage = true;
-            // 
             // FamilyBudgetRibbon
             // 
             this.Name = "FamilyBudgetRibbon";
@@ -244,8 +226,6 @@ namespace FamilyBudget.AddIn.UI
             this.grpData.PerformLayout();
             this.grpManage.ResumeLayout(false);
             this.grpManage.PerformLayout();
-            this.grpAPIAccess.ResumeLayout(false);
-            this.grpAPIAccess.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -268,8 +248,6 @@ namespace FamilyBudget.AddIn.UI
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnSave;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnNewGoal;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnManageAccounts;
-        internal Microsoft.Office.Tools.Ribbon.RibbonGroup grpAPIAccess;
-        internal Microsoft.Office.Tools.Ribbon.RibbonButton btnRefreshToken;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnUpdateGoals;
         internal Microsoft.Office.Tools.Ribbon.RibbonButton btnAddJournalEntries;
     }

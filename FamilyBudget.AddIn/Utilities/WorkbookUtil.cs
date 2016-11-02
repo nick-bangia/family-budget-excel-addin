@@ -45,12 +45,6 @@ namespace FamilyBudget.AddIn.Utilities
         {
             RefreshWorkbook(userRefresh: true);
         }
-
-        internal static void btnRefreshToken_Click(object sender, RibbonControlEventArgs e)
-        {
-            // simply login to the API again to refresh the token
-            authenticator.Authenticate();
-        }
         #endregion
 
         #region Internal Methods

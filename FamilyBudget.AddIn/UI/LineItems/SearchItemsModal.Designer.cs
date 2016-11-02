@@ -274,7 +274,7 @@
             this.cbCategory.Name = "cbCategory";
             this.cbCategory.Size = new System.Drawing.Size(201, 21);
             this.cbCategory.TabIndex = 13;
-            this.cbCategory.ValueMember = "CategoryKey";
+            this.cbCategory.ValueMember = "Key";
             this.cbCategory.Visible = false;
             // 
             // CategoryBindingSource
@@ -284,13 +284,13 @@
             // cbSubCategory
             // 
             this.cbSubCategory.DataSource = this.SubCategoryBindingSource;
-            this.cbSubCategory.DisplayMember = "SubCategoryName";
+            this.cbSubCategory.DisplayMember = "Name";
             this.cbSubCategory.FormattingEnabled = true;
             this.cbSubCategory.Location = new System.Drawing.Point(253, 329);
             this.cbSubCategory.Name = "cbSubCategory";
             this.cbSubCategory.Size = new System.Drawing.Size(201, 21);
             this.cbSubCategory.TabIndex = 14;
-            this.cbSubCategory.ValueMember = "SubCategoryKey";
+            this.cbSubCategory.ValueMember = "Key";
             this.cbSubCategory.Visible = false;
             // 
             // SubCategoryBindingSource
@@ -338,7 +338,7 @@
             this.cbPaymentMethod.Name = "cbPaymentMethod";
             this.cbPaymentMethod.Size = new System.Drawing.Size(201, 21);
             this.cbPaymentMethod.TabIndex = 17;
-            this.cbPaymentMethod.ValueMember = "PaymentMethodKey";
+            this.cbPaymentMethod.ValueMember = "Key";
             this.cbPaymentMethod.Visible = false;
             // 
             // PaymentMethodBindingSource

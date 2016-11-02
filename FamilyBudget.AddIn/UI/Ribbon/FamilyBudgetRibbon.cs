@@ -31,7 +31,6 @@ namespace FamilyBudget.AddIn.UI
 
             // Workbook
             this.btnRefresh.Click += new RibbonControlEventHandler(WorkbookUtil.btnRefresh_Click);
-            this.btnRefreshToken.Click += new RibbonControlEventHandler(WorkbookUtil.btnRefreshToken_Click);
         }
     }
 }
